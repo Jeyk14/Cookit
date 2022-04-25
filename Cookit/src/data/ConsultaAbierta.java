@@ -38,7 +38,7 @@ public class ConsultaAbierta {
 
 			objeto = new Object[rowCount][columns];
 
-			System.out.println(query);
+			System.out.println(query+"\n Rows: "+rowCount);
 			consulta = con.prepareStatement(query);
 			resultado = consulta.executeQuery();
 
@@ -46,20 +46,19 @@ public class ConsultaAbierta {
 			while(resultado.next()) {
 				for (int i = 0; i < columns; i++) {
 					objeto[j][i] = resultado.getObject(i+1);
-					System.out.print(objeto[j][i]+" | ");
+					//System.out.println("Pos."+i+" Objeto:"+objeto[j][i]);
 				}
-//				System.out.println("J: "+j+" ... Object: "+resultado.getString(6));
-				System.out.println("/n");
+				//System.out.println("j número "+j);
 				j ++;
 			}
 
 			con.close();
 
 		} catch (SQLException sqle) {
-			System.err.print("Hubo un error durante la ejecuciÃ³n de la consulta\n");
+			System.err.print("Hubo un error durante la ejecución de la consulta\n");
 			sqle.printStackTrace();
 		} catch (Exception ex) {
-			System.err.print("Hubo un error desconocido durante la ejecuciÃ³n de la consulta\n");
+			System.err.print("Hubo un error desconocido durante la ejecución de la consulta\n");
 			ex.printStackTrace();
 		}
 

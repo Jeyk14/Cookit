@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import conexionBD.*;
 import data.BeanCategoria;
-import data.BeanPublicacion;
 import data.BeanReceta;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
@@ -80,6 +79,7 @@ INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id
 		
 		Object[][] result = null; // Will store the result of the query
 		Calendar aux;
+		java.sql.Blob blobAux;
 		
 		// -----------------------------------------------------------------------------
 		
@@ -178,7 +178,7 @@ INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id
 			
 			// run the query
 			con.abrirConexion();
-			result = consult.select(con.getConexion(), query, 9);
+			result = consult.select(con.getConexion(), query, 10);
 						
 			//Load the beans
 			//  usu.id, rec.id, usu.nombre, pub.fecha, cat.nombre,
@@ -200,12 +200,13 @@ INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id
 				recipeList[i].setDislikes((int) result[i][7]);
 				recipeList[i].setTiempo((int) result[i][8]);
 				recipeList[i].setTags((String) result[i][9]);
+				System.out.println("Bucle número "+i);
 			}
 			
 			request.setAttribute("userList", userList);
 			request.setAttribute("catList", catList);			
 			request.setAttribute("recipeList", recipeList);
-			
+						
 			request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
 		
 	}

@@ -5,7 +5,7 @@
 	
 	<%@ page import="data.BeanUsuario" %>
 	
-	<% BeanUsuario loggedUsr = session.getAttribute("LoggedUsr"); %>
+	<% BeanUsuario loggedUsr = (BeanUsuario) session.getAttribute("LoggedUsr"); %>
 
 	<%if(loggedUsr != null){%>
 	
@@ -69,3 +69,5 @@
 	</form>
 	<div class="toggle-search" id="toggle-search"><button>Ocultar</button></div>
 </div>
+
+<div class="separator"></div>

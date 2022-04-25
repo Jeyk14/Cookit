@@ -19,6 +19,7 @@
 		int starRate = 0;
 		int likes = 0;
 		int dislikes = 0;
+		int recipeCont = 0;
 		// header.jsp -> (BeanUsuario) loggedUsr
 		BeanReceta[] recipeList = (BeanReceta[]) request.getAttribute("recipeList");
 		BeanUsuario[] userList = (BeanUsuario[]) request.getAttribute("userList");
@@ -28,11 +29,7 @@
 
 	<jsp:include page="prebuilt/header.jsp" />
 
-	<div class="separator"></div>
-
 	<jsp:include page="prebuilt/special.jsp" />
-
-	<span class="separator"></span>
 
 
 	<div class="content">
@@ -41,21 +38,22 @@
 			if(recipeList != null){
 		%>
 		
-			<% for(int i = 0; i < recipeList.length ; i++){ %>
+			<% while(recipeList[recipeCont] != null){ %>
 			
-			<%	likes = recipeList[i].getLikes();
-				dislikes = recipeList[i].getDislikes();
+			<%	
+				likes = recipeList[recipeCont].getLikes();
+				dislikes = recipeList[recipeCont].getDislikes();
 				
-				//starRate = 5−(((dislikes×100)÷likes)÷10);
+				//starRate = 5−(((dislikes*100)/likes)/10);
 				%>
 				
 				<% //put a new row every 3 elements
-					if( i%3 == 0 && addRow == true ){ %> <div class="row"> <% addRow = false; } %>
+					if( recipeCont%3 == 0 && addRow == true ){ %> <div class="row"> <% addRow = false; } %>
 					
 				<div class="column">
-					<h3 class="col-title"><%= recipeList[i].getTitulo() %></h3>
+					<h3 class="col-title"><%= recipeList[recipeCont].getTitulo() %></h3>
 					<div class="col-img">
-						<img src="loadImg?<%= recipeList[i].getIdReceta() %>" title="<%= catList[i] %>" />
+						<img src="loadImg?<%= recipeList[recipeCont].getIdReceta() %>" title="<%= catList[recipeCont] %>" />
 						<div class="stars">
 						
 							<%	// Count from 0 to 4 while adding stars if rate > i
@@ -63,20 +61,20 @@
 								<% if(starCont > j){ %>
 									<img src="img/star.png"/>
 								<% } else { %>
-									<img src="img/star0.png"/>
+									<img src="img/star_0.png"/>
 								<% } %>
 							<%} %>
 							
 						</div>
 					</div>
-					<div class="col-author"><p><%= userList[i].getNombre() %></p></div>
-					<div class="col-time"> <p><%= recipeList[i].getTiempo() %></p> </div>
+					<div class="col-author"><p><%= userList[recipeCont].getNombre() %></p></div>
+					<div class="col-time"> <p><%= recipeList[recipeCont].getTiempo() %></p> </div>
 				</div>
 					
 				<% //put a new row every 3 elements
-					if( i%3 == 0 && addRow == false ){ %> </div> <% addRow = false; } %>
+					if( recipeCont%3 == 0 && addRow == false ){ %> </div> <% addRow = false; } %>
 				
-			<% } %>
+			<% recipeCont++; } %>
 		
 		<% } else { 
 			// error -> apology

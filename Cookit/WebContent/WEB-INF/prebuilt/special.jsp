@@ -1,5 +1,7 @@
+	<%@ page import="data.BeanReceta"%>
+	
 	<%
-		weekSpecial
+		BeanReceta weekSpecial = (BeanReceta) session.getAttribute("weekSpecial");
 	%>
 	
 	<%
@@ -32,6 +34,8 @@
 		</div>
 	</div>
 	
+	<div class="separator"></div>
+	
 	<%
-		}
+		} // weekspecial == null -> do nothing
 	%>
