@@ -1,0 +1,56 @@
+body {
+
+    --color-red: #F8333C;
+    --color-yel: #F5B700;
+    --color-gre: #A9E5BB;
+    --cream: #F3EAD0;
+    --chocolate: #391C0A;
+
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px;
+    font-family: 'Corbel';
+    overflow: auto;
+
+}
+
+p, h4, h5, h6 {
+    color: #292929;
+}
+
+h1 {
+    text-transform: uppercase;
+    font-size: 40px;
+}
+
+h2 {
+    font-size: 28px;
+    font-weight: 400;
+}
+
+h1, h2 {
+    font-style: italic;
+}
+
+h3 {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 28px;
+}
+
+h4 {
+    font-size: 20px;
+    font-style: italic;
+    font-weight: normal;
+}
+
+button, input[type=submit] {
+    margin: 2vw 25% 2vw 25%;
+    background: var(--color-yel) !important;
+    width: 50%;
+    border: none;
+    border-radius: 10px;
+    height: 2.5em;
+    color: white;
+    font-weight: bold;
+}

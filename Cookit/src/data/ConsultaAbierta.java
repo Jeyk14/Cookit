@@ -4,25 +4,32 @@ import java.sql.*;
 
 public class ConsultaAbierta {
 
+	// TODO: Add SQL inyection protection
 	public Object[][] select(Connection con, String query, int columns) {
 
 		PreparedStatement consulta;
 		ResultSet resultado;
 		Object[][] objeto = null;
+		
+		String queryCount = "";
+		String queryCount2 = "";
+		
+		int rowCount = 0;
+		int j = 0;
 
 		// Replace the select with a count(*)
 		int selectStart = query.indexOf("SELECT") + 6;
 		int selectEnd = query.lastIndexOf("FROM");
-		String queryCount = query.substring(0, selectStart) + " count(*) " + query.substring(selectEnd, query.length());
+		queryCount = query.substring(0, selectStart) + " count(*) " + query.substring(selectEnd, query.length());
+		queryCount2 = queryCount;
 
 		// remove the order by
-		int orderStart = queryCount.indexOf("ORDER BY");
-		int orderEnd = queryCount.indexOf("LIMIT");
-		String queryCount2 = queryCount.substring(0, orderStart) + " "
-				+ queryCount.substring(orderEnd, queryCount.length());
-
-		int rowCount = 0;
-		int j = 0;
+		if(queryCount.contains("ORDER BY")) {
+			int orderStart = queryCount.indexOf("ORDER BY");
+			int orderEnd = queryCount.indexOf("LIMIT");
+			queryCount2 = queryCount.substring(0, orderStart) + " "
+					+ queryCount.substring(orderEnd, queryCount.length());
+		}
 
 		try {
 
@@ -30,7 +37,6 @@ public class ConsultaAbierta {
 			System.out.println(queryCount2);
 			consulta = con.prepareStatement(queryCount2);
 			resultado = consulta.executeQuery();
-
 			
 			if (resultado.next()) {
 				rowCount = resultado.getInt(1);

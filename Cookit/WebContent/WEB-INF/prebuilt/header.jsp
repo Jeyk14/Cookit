@@ -5,17 +5,17 @@
 	
 	<%@ page import="data.BeanUsuario" %>
 	
-	<% BeanUsuario loggedUsr = (BeanUsuario) session.getAttribute("LoggedUsr"); %>
+	<% BeanUsuario myself = (BeanUsuario) session.getAttribute("myself"); %>
 
-	<%if(loggedUsr != null){%>
+	<%if(myself != null){%>
 	
 		<div class="user-info">
-			<h5><%= loggedUsr.getNombre() %></h5>
-			<h5><%= loggedUsr.getEmail() %></h5>
+			<h5><%= myself.getNombre() %></h5>
+			<h5><%= myself.getEmail() %></h5>
 		</div>
 		
 		<div class="session-buttons">
-			<a href="profile?id=<%= loggedUsr.getId() %>">
+			<a href="profile?id=<%= myself.getId() %>">
 				<button>Ver mi perfil</button>
 			</a>
 			<a href="logout">
