@@ -20,6 +20,8 @@
 		</div>
 	
 	<%}%>
+	
+	<div class="side-img"></div>
 
 	<div class="login">
 	

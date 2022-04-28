@@ -13,20 +13,23 @@ import contraseña.Encriptacion;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
 
-/**
- * Servlet implementation class login
- */
 @WebServlet("/login")
 public class login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		String header = "WEB-INF/login.jsp";
+		HttpSession sess = request.getSession();
+		
 		// TODO: Check for cookies. If login cookies exists, fill the form automatically
 		
-		// TODO: If user is already logged -> index
+		// If user is already logged -> index
+		if(sess.getAttribute("myself") != null) {
+			header = "index";
+		}
 		
-		request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
+		request.getRequestDispatcher(header).forward(request, response);
 	}
 
 	/*-
@@ -61,12 +64,13 @@ public class login extends HttpServlet {
 			// form fields correctly fulfilled
 			con.abrirConexion();
 			queryGetUsr += "'"+email+"'";
-			result = consult.select(con.getConexion(), queryGetUsr, 5);
+			result = consult.select(con.getConexion(), queryGetUsr, 6);
 			
 			// Check if email is found in the db
 			if(result.length < 1) {
 				
 				tempMsg = "El correo electrónico o la contraseña no son correctos";
+				System.out.println("result.length < 1");
 				
 			} else {
 				
@@ -80,19 +84,30 @@ public class login extends HttpServlet {
 					myself.setId((int)result[0][0]);
 					myself.setNombre((String)result[0][1]);
 					myself.setEmail((String)result[0][2]);
-					myself.setConfirmado((boolean)result[0][3]);
+					myself.setConfirmado((boolean)result[0][5]);
+					
+					System.out.println((boolean)result[0][5]);
 					
 					sesion.setAttribute("myself", myself);
-					header = "WEB-INF/index.jsp";
+					
+					if(myself.isConfirmado() == false) {
+						header = "confirmEmail";
+					} else {
+						header = "index";
+					}
 					
 					if(rememberMe != null) {
 						// TODO: Add the email and pass to a cookie
 					}
 					
+					
+					
 				} else {
 					
 					// pass != pass in DB -> retry
 					tempMsg = "El correo electrónico o la contraseña no son correctos";
+					System.out.println("Pass:"+pass+" / PassBD: "+(String) result[0][3]+" / Salt: "+(String) result[0][4]+"\n"
+							+ " / "+crypt.comprobarContraseña(pass, (String) result[0][3], (String) result[0][4]));
 					
 				}
 				
@@ -102,7 +117,7 @@ public class login extends HttpServlet {
 		
 		// Send user either back to the login or logged into index
 		if(header != "doget") {
-			request.getRequestDispatcher("index").forward(request, response);
+			request.getRequestDispatcher(header).forward(request, response);
 		} else {
 			if(tempMsg.length() > 1) {
 				request.setAttribute("tempMsg", tempMsg);

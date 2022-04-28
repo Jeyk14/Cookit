@@ -12,28 +12,32 @@
 </head>
 <body>
 
+	<%@ page import="data.BeanUsuario"%>
+	
+	<% if(session.getAttribute("myself") != null){ %>
+	
+	<% 
+		BeanUsuario myself = (BeanUsuario) session.getAttribute("myself");
+	%>
+
+	<div class="side-img"></div>
+
 	<div class="login">
 	
 		<div class="login-content">
 
             <h2 class="form-title recovery-title">Recuperar contraseña</h2>
-            <h4 class="form-subtitle">Envía un codigo de verificación a tu correo electrónico para cambiar la contraseña</h4>
+            <h4 class="form-subtitle">Se ha enviado un código de recuperación a <%= myself.getEmail() %></h4>
 
             <div class="log-form">
 
-                <form class="email-field">
-                    <label for="email-code">Email</label>
-                    <input type="text" id="email" name="email-code" required>
-                    <input type="submit" class="send-email" value="ENVIAR CÓDIGO">
-                </form>
-
                 <form action="" method="post" accept-charset="utf-8">
                     <div class="pass-field">
-                        <label for="recovery-code">Código de recuperacion</label>
+                        <label for="recovery-code">Teclee o pegue aquí su código</label>
                         <input type="text" id="code" name="recovery-code" required>
                     </div>
                     
-                    <input type="submit" class="button-login" value="CONFIRMAR CORREO">
+                    <input type="submit" class="button-login" value="CONFIRMAR MI CORREO">
                 </form>
 
             </div>
@@ -41,6 +45,12 @@
         </div>
 	
 	</div>
+	
+	<% } else { %>
+	
+		 <jsp:forward page = "login" />
+	
+	<% } %>
 
 </body>
 </html>

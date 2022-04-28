@@ -18,6 +18,13 @@
 			<a href="profile?id=<%= myself.getId() %>">
 				<button>Ver mi perfil</button>
 			</a>
+			
+			<% if(!myself.isConfirmado()){ %>
+				<a href="confirmEmail">
+					<button>Confirmar correo</button>
+				</a>
+			<% } %>
+			
 			<a href="logout">
 				<button>Cerrar sesión</button>
 			</a>
