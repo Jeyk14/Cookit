@@ -26,7 +26,9 @@ public class login extends HttpServlet {
 		
 		// If user is already logged -> index
 		if(sess.getAttribute("myself") != null) {
+			
 			header = "index";
+			
 		}
 		
 		request.getRequestDispatcher(header).forward(request, response);
@@ -99,8 +101,6 @@ public class login extends HttpServlet {
 					if(rememberMe != null) {
 						// TODO: Add the email and pass to a cookie
 					}
-					
-					
 					
 				} else {
 					

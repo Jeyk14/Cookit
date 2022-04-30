@@ -79,7 +79,6 @@ INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id
 		
 		Object[][] result = null; // Will store the result of the query
 		Calendar aux;
-		java.sql.Blob blobAux;
 		
 		// -----------------------------------------------------------------------------
 		
@@ -200,7 +199,7 @@ INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id
 				recipeList[i].setDislikes((int) result[i][7]);
 				recipeList[i].setTiempo((int) result[i][8]);
 				recipeList[i].setTags((String) result[i][9]);
-				System.out.println("Bucle número "+i);
+//				System.out.println("Bucle número "+i);
 			}
 			
 			request.setAttribute("userList", userList);

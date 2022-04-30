@@ -33,12 +33,12 @@
 	
 	               <div class="email-field">
 	                   <label for="email">Email</label>
-	                   <input type="text" id="email" name="email" required>
+	                   <input type="text" id="email" name="email" value="jeykantonio@gmail.com" required>
 	               </div>
 	
 	               <div class="pass-field">
 	                   <label for="pass">Contraseña</label>
-	                   <input type="password" id="pass" name="pass" required>
+	                   <input type="password" id="pass" name="pass" value="jeykantonio" required>
 	               </div>
 	
 	               <div class="log-option">

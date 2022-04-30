@@ -34,7 +34,7 @@ public class ConsultaAbierta {
 		try {
 
 			// do a count(*) of que query received
-			System.out.println(queryCount2);
+//			System.out.println(queryCount2);
 			consulta = con.prepareStatement(queryCount2);
 			resultado = consulta.executeQuery();
 			
@@ -44,7 +44,7 @@ public class ConsultaAbierta {
 
 			objeto = new Object[rowCount][columns];
 
-			System.out.println(query+"\n Rows: "+rowCount);
+//			System.out.println(query+"\n Rows: "+rowCount);
 			consulta = con.prepareStatement(query);
 			resultado = consulta.executeQuery();
 

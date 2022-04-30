@@ -19,6 +19,15 @@
 	<% 
 		BeanUsuario myself = (BeanUsuario) session.getAttribute("myself");
 	%>
+	
+	<% if(request.getAttribute("tempMsg") != null){ %>
+	
+		<div class="errorMsg">
+			<h4>Parece que algo ha ido mal...</h4>
+			<p><%= request.getAttribute("tempMsg") %></p>
+		</div>
+	
+	<% } %>
 
 	<div class="side-img"></div>
 
@@ -31,7 +40,7 @@
 
             <div class="log-form">
 
-                <form action="" method="post" accept-charset="utf-8">
+                <form action="confirmEmail" method="post" accept-charset="utf-8">
                     <div class="pass-field">
                         <label for="recovery-code">Teclee o pegue aquí su código</label>
                         <input type="text" id="code" name="recovery-code" required>

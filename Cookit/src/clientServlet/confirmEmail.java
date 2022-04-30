@@ -11,97 +11,114 @@ import javax.servlet.http.HttpSession;
 import conexionBD.Conexion;
 import conexionBD.ModeloSimple;
 import data.BeanUsuario;
-import data.ConsultaAbierta;
 import mail.Email;
 
 @WebServlet("/confirmEmail")
 public class confirmEmail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String header = "WEB-INF/confirmEmail.jsp";
-		HttpSession sess = request.getSession();
-		
-		Email mail = new Email();
-		String code = ""; //The mail confirmation code
-		BeanUsuario myself = (BeanUsuario) sess.getAttribute("myself");
-		String mesage = "";
-		
-		if(myself == null) {
-			// User is not logged -> index
-			header = "WEB-INF/index.jsp";
-		} else {
-			// The user is logged
-			if(myself.isConfirmado()) {
-				// The user's mail is already confirmed -> index
-				header = "WEB-INF/index.jsp";
-			} else {
-				// The user is logged but is not confirmed -> send mail -> confirmEmail.jsp
-				mail.setRemitente("TFGJeyfer2022IESMDC@gmail.com"); //TODO: Borrar contraseña
-				mail.setContrasena("a21_jortnu"); // TODO: Borrar usuario
-				mail.setDestino(myself.getEmail());
-				mail.setAsunto("Cookit! - Confirmación de correo");
-				
-				code = randCode();
-				mesage = "Bienvenido a Cookit!\n Su código de confirmación es:\n\n"+code;
-				sess.setAttribute("code", code); // Save the confirmation code for later
-				
-				mail.setMensaje(mesage);
 
-				mail.enviarCorreo();
-			
-			}
-		}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		
+		HttpSession sess = request.getSession();
+		Email mail = new Email();
+		String mesage = "";
+		BeanUsuario myself;
+		String code = "";
+
+		String header = "WEB-INF/confirmEmail.jsp";
+
+		if (sess.getAttribute("myself") == null) {
+			// User is not logged -> index
+			header = "index";
+		} else {
+			
+			myself = (BeanUsuario) sess.getAttribute("myself");
+			
+			// The user is logged but is not confirmed -> send mail -> confirmEmail.jsp
+			mail.setRemitente("TFGJeyfer2022IESMDC@gmail.com"); // TODO: Borrar contraseña
+			mail.setContrasena("a21_jortnu"); // TODO: Borrar usuario
+			mail.setDestino(myself.getEmail());
+			mail.setAsunto("Cookit! - Confirmación de correo");
+
+			code = randCode();
+			sess.setAttribute("code", code);
+			mesage = "Bienvenido a Cookit!\n Su código de confirmación es:\n\n" + code;
+
+			mail.setMensaje(mesage);
+
+			mail.enviarCorreo();
+			header = "WEB-INF/confirmEmail.jsp";
+			
+		}
+
 		request.getRequestDispatcher(header).forward(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
+		
+		String code = ""; // The mail confirmation code
 		HttpSession sess = request.getSession();
-		ModeloSimple consult;
-		Conexion con;
-		String recoveryCode = request.getParameter("recovery-code");
 		String header = "doget";
-		
-		String code = "";
-		if(sess.getAttribute("code") != null) {
-			code = (String) sess.getAttribute("code");
-		}
-		
-		// Compare if the given code is the same code in the session attribute
-		if(recoveryCode.equals(code)) {
-			// Both codes are the same -> confirm mail
-			
-			con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
-			consult = new ModeloSimple(con.getConexion());
-			consult.modificar("cookit.usuario", "confirmado", "boolean", true);
-			
-			header = "index";
+
+		if (sess.getAttribute("myself") != null && sess.getAttribute("code") != null) {
+
+			if (request.getParameter("recovery-code") != null && !request.getParameter("recovery-code").isEmpty()) {
+
+				ModeloSimple consult;
+				Conexion con;
+				String recoveryCode = request.getParameter("recovery-code");
+				code = (String) sess.getAttribute("code");
+
+				System.out.println("code: "+code+" recoveryCode: "+recoveryCode+"\nEquals? "+recoveryCode.equalsIgnoreCase(code));
+				// Compare if the given code is the same code in the session attribute
+				if (recoveryCode.equalsIgnoreCase(code)) {
+					
+					// Both codes are the same -> confirm mail
+					con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
+					con.abrirConexion();
+					consult = new ModeloSimple(con.getConexion());
+					consult.modificar("cookit.usuario", "confirmado", "boolean", true);
+
+					header = "index";
+
+				} else {
+
+					// Code doesn't match -> message + re-send code and retry
+					// TODO: Give the user 3 tries
+					request.setAttribute("tempMsg",
+							"El codigo que ha introducido no coincide\nSe le va a enviar un nuevo código de inicio");
+
+				}
+				
+			} // no recovery-code -> do nothing
 			
 		} else {
-			// Code doesn't match -> message + re-send code and retry
-			// TODO: is it better to send the mail once and ask the user to re-send it?
-			request.setAttribute("tempMsg", "El codigo que ha introducido no coincide\nSe le ha enviado un nuevo código de inicio");
+			// User is not logged -> doget -> index
 		}
-		// Given code = code in email -> SQL(confirmado = true) -> index
-		
-		doGet(request, response);
+
+		if(header != "doget") {
+			request.getRequestDispatcher(header).forward(request, response);
+		} else {
+			doGet(request, response);
+		}
+
 	}
-	
+
 	private String randCode() {
-		
+
 		String code = "";
-		
+
 		String characters = "123456789ABCDEFGHIJTLMNOPQRSTUVWXYZ123456789";
-		
+
 		for (int i = 0; i < 5; i++) {
 			code += characters.charAt((int) Math.floor(Math.random() * characters.length()));
 		}
-		
+
 		return code;
-		
+
 	}
 
 }
