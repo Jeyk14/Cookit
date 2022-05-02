@@ -3,13 +3,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cookit - Inicio</title>
-
-<link rel="stylesheet" href="css/main.css">
-<link rel="stylesheet" href="css/index.css">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Cookit - Inicio</title>
+	
+	<link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/recipeList.css">
+    <link rel="stylesheet" href="css/index.css">
 
 </head>
 <body>
@@ -19,7 +20,6 @@
 	<%@ page import="data.BeanCategoria"%>
 
 	<%
-		int starCont = 0;
 		int starRate = 0;
 		int likes = 0;
 		int dislikes = 0;
@@ -28,15 +28,47 @@
 		BeanReceta[] recipeList = (BeanReceta[]) request.getAttribute("recipeList");
 		BeanUsuario[] userList = (BeanUsuario[]) request.getAttribute("userList");
 		BeanCategoria[] catList = (BeanCategoria[]) request.getAttribute("catList");
-		boolean addRow = false;
+		
+		int rowCont = 0;
 	%>
 
 	<jsp:include page="prebuilt/header.jsp" />
+	
+	<div class="search-form">
+		<form action="index" method="post">
+			<div class="search">
+                <label for="title-search">Buscar</label>
+                <input type="text" id="title-search" name="title" title="Palabras clave que estés buscando.&#013;Sólo se buscará por el título de la publicación&#013;&#013;Ejemplo: 'puré de ' o 'sopa de '"/>
+            </div>
+
+            <div class="order">
+                <select name="order" id="order">
+                    <option value="none">Sin ordenar</option>
+                    <option value="dateasc">Más recientes</option>
+                    <option value="datedesc">Más antiguas</option>
+                    <option value="titledesc">Ordenar por título descendente (A-Z)</option>
+                    <option value="titleasc">Ordenar por título ascedente (Z-A)</option>
+                    <option value="likesdesc">Mejor valorados primero</option>
+                    <option value="likesasc">Peor valorados primero</option>
+                    <option value="timedesc">Dificiles de preparar</option>
+                    <option value="timeasc">Fáciles de preparar</option>
+                  </select>
+            </div>
+
+            <div class="tag">
+                <label for="tag-search">Buscar tags</label>
+                <input type="text" name="tag" title="Los tags de la receta que estás buscando&#013;Escribe todos los tags separados por coma y un espacio.&#013;Escribir cualquier otro signo que no sea un espacio o añadir más de 6 tags invalidará la búsqueda&#013;&#013;Ejemplo 'ensalada, tomate, remolacha, lechuga'"/>
+            </div>
+			<input type="submit" value="Buscar" />
+		</form>
+	</div>
+
+<div class="separator"></div>
 
 	<jsp:include page="prebuilt/special.jsp" />
 
 
-	<div class="content">
+	<div id="content">
 		<%
 			// show all recipes in 3 columns each
 			if(recipeList != null){
@@ -48,35 +80,54 @@
 				likes = recipeList[recipeCont].getLikes();
 				dislikes = recipeList[recipeCont].getDislikes();
 				
-				//starRate = 5−(((dislikes*100)/likes)/10);
+				if(likes > 0){
+					//starRate = 5-(((dislikes*100)/likes)/10);
+					starRate = dislikes*100;
+					if(dislikes > 0){
+						starRate = starRate / likes;
+					}
+					starRate = starRate / 10;
+					starRate = 5 - starRate;
+				}
 				%>
 				
 				<% //put a new row every 3 elements
-					if( recipeCont%3 == 0 && addRow == true ){ %> <div class="row"> <% addRow = false; } %>
+					if( rowCont == 0){ %> <div class="row"> <% } %>
 					
-				<div class="column">
-					<h3 class="col-title"><%= recipeList[recipeCont].getTitulo() %></h3>
-					<div class="col-img">
-						<img src="loadImg?<%= recipeList[recipeCont].getIdReceta() %>" title="<%= catList[recipeCont] %>" />
-						<div class="stars">
+					<div class="column"> <!-- start column -->
+						<h4 class="col-title"><%= recipeList[recipeCont].getTitulo() %></h4>
+						<div class="col-img"> <!-- start col-img -->
+							<img src="loadImg?<%= recipeList[recipeCont].getIdReceta() %>"
+								title="Categoría: <%= catList[recipeCont] %>&#013;Tags: <%= recipeList[recipeCont].getTags() %>" />
+					
+							<div class="stars"> <!-- start stars -->
+					
+								<%	// Count from 0 to 4 while adding stars if rate > i
+								for(int j = 0; j < 5; j++){%>
+									<% if(starRate > j){ %>
+										<img src="img/star.png"/>
+									<% } else { %>
+										<img src="img/star_0.png"/>
+									<% } %>
+								<%} %>
+					
+							</div> <!-- end stars -->
+					
+						</div> <!-- col-img -->
 						
-							<%	// Count from 0 to 4 while adding stars if rate > i
-							for(int j = 0; j < 5; j++){%>
-								<% if(starCont > j){ %>
-									<img src="img/star.png"/>
-								<% } else { %>
-									<img src="img/star_0.png"/>
-								<% } %>
-							<%} %>
-							
-						</div>
-					</div>
-					<div class="col-author"><p><%= userList[recipeCont].getNombre() %></p></div>
-					<div class="col-time"> <p><%= recipeList[recipeCont].getTiempo() %></p> </div>
-				</div>
+						<div class="col-info"> <!-- start col-info -->
+							<div class="col-author">
+								<p><%= userList[recipeCont].getNombre() %></p>
+							</div>
+							<div class="col-time">
+								<p><%= recipeList[recipeCont].getTiempo() %>m</p>
+							</div>
+						</div> <!-- end col-info -->
+					
+					</div> <!-- end column -->
 					
 				<% //put a new row every 3 elements
-					if( recipeCont%3 == 0 && addRow == false ){ %> </div> <% addRow = false; } %>
+					if( rowCont == 2 ){ %> </div> <!-- end row --> <% rowCont = 0; } else { rowCont ++; }  %>
 				
 			<% recipeCont++; } %>
 		
@@ -92,6 +143,8 @@
 		
 		<% } %>
 	</div>
+	
+	<jsp:include page="prebuilt/footer.jsp" />
 
 </body>
 </html>

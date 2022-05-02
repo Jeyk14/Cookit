@@ -1,16 +1,27 @@
+html, body {
+    max-width: auto;
+}
+
 body {
 
     --color-red: #F8333C;
     --color-yel: #F5B700;
     --color-gre: #A9E5BB;
+
     --cream: #F3EAD0;
     --chocolate: #391C0A;
 
+    --max-width: 1250px;
+    --header-height: 75px;
+
+    --vertical-space: 45px; 
+
     margin: 0px;
-    padding: 0px;
+    padding: var(--header-height) 0px 0px 0px;
     font-size: 16px;
     font-family: 'Corbel';
     overflow: auto;
+    overflow-x: hidden;
 
 }
 
@@ -53,4 +64,155 @@ button, input[type=submit] {
     height: 2.5em;
     color: white;
     font-weight: bold;
+    transition: all 0.5s;
+}
+
+button:hover {
+    background-color: var(--color-red) !important;
+}
+
+img {
+    width: 250px;
+    height: auto;
+}
+
+/**/
+
+#content {
+    max-width: 1024px;
+    margin: auto;
+}
+
+.go-up {
+    background-color: red;
+    content: " ";
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: fixed;
+    right: 50px;
+    bottom: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.go-up .arrow {
+    border-left: 4px solid var(--color-yel);
+    border-top: 4px solid var(--color-yel);
+    content: " ";
+    height: 20px;
+    width: 20px;
+    transform: rotate(45deg);
+    margin-top: 15px;
+}
+
+/* HEADER */
+
+.header {
+
+    background-image: url("../img/madera.jpg");
+    background-size: cover;
+    width: 100vw;
+    height: var(--header-height);
+    position: fixed;
+    z-index: 99;
+    margin: 0px !important;
+    min-width: auto;
+    top: 0;
+    left: 0;
+    display: flexbox;
+    justify-content: center;
+
+}
+
+.header-content {
+    height: var(--header-height);
+    max-width: var(--max-width);
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+}
+
+.header-content h5, .header h4, .header p {
+    color: white;
+}
+
+.header-content button, .header h5 {
+    margin: 0px;
+}
+
+.header-content button {
+    width: auto;
+}
+
+.logo img {
+    width: 150px;
+    height: auto;
+    margin: 2vh 0px -2vh 0px;
+}
+
+.logo {
+    z-index: 99;
+    text-align: center;
+}
+
+.header-info {
+    width: 100%;
+    display: contents;
+    text-align: left;
+}
+
+.header-info > div {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    text-align: center;
+    height: 100%;
+}
+.user-info h4{
+    margin: 0px 0px 7px 0px;
+    font-weight: bold;
+}
+
+.session-buttons{
+    display: flex;
+    flex-direction: row !important;
+    align-items: center !important;
+}
+
+.session-buttons :nth-child(even){
+    margin-left: 5px;
+}
+
+.session-buttons div {
+    height: fit-content;
+    width: auto;
+}
+
+/* ------------ */
+
+.separator {
+    margin: var(--vertical-space) auto var(--vertical-space) auto;
+    width: 75%;
+    content: " ";
+    border-bottom: 2px solid var(--chocolate );
+}
+
+/* ------------ */
+
+.footer {
+    height: 150px;
+    background-color: var(--chocolate);
+    z-index: 0;
+    text-align: center;
+    padding: 25px;
+}
+
+.footer *{
+    color: white;
+}
+
+.footer p {
+    margin: 5px 0 5px 0;
 }

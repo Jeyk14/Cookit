@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import conexionBD.Conexion;
+import data.BeanCategoria;
 import data.BeanReceta;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
@@ -37,11 +38,12 @@ public class profile extends HttpServlet {
 		String header = "WEB-INF/profile.jsp";
 		
 		BeanUsuario myself; // In case this is the logged user's profile
-		BeanUsuario user; // The data of the owner of this profile
+		BeanUsuario user = new BeanUsuario(); // The data of the owner of this profile
 		String queryUsr = "SELECT id, nombre, edad, dieta, nacionalidad, creación FROM cookit.usuario WHERE id = ";
 		Calendar auxCal;
 
 		BeanReceta[] recipeList = new BeanReceta[9]; // this user's recipes
+		BeanCategoria[] catList = new BeanCategoria[9];
 		String queryRecipe = "SELECT rec.id, pub.fecha, cat.nombre, pub.titulo, pub.likes, pub.dislikes, rec.tiempo, rec.tags " + 
 				"FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion " + 
 				"INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id " + 
@@ -113,16 +115,46 @@ public class profile extends HttpServlet {
 		// --------------------------------------------------------------------
 		// SEARCHED'S USER 9 LAST RECIPES
 		
-		// TODO: like the index query, but 9 elements (3 rows) and no special search
-		
-		if(pag > 1) {
-			offset = (pag - 1) * 9;
+		if(user.getNombre() != "" && user.getId() != 0) {
+		// If a user is found, search for thas user's recipes
+			
+			queryRecipe += user.getId() + " "; // Add the user's ID to the search of recipes
+			
+			if(pag > 1) {
+				offset = (pag - 1) * 9;
+			}
+			
+			queryRecipe += " ORDER BY pub.fecha DESC LIMIT 12 OFFSET "+offset;
+			
+			// Like the index query, but 9 elements (3 rows) and no special search
+			
+			con = new Conexion();
+			con.abrirConexion();
+			openQuery = new ConsultaAbierta();
+			result = openQuery.select(con.getConexion(), queryRecipe, 8);
+			
+			for (int i = 0; i < result.length; i++) {
+				
+				recipeList[i] = new BeanReceta();
+				
+				recipeList[i].setId( (int) result[i][0]);
+					auxCal = new GregorianCalendar();
+					auxCal.setTime((java.sql.Date) result[i][1]);
+				recipeList[i].setFecha(auxCal);
+				catList[i].setNombre( (String) result[i][2]);
+				recipeList[i].setTitulo( (String) result[i][3]);
+				recipeList[i].setLikes( (int) result[i][4]);
+				recipeList[i].setDislikes( (int) result[i][5]);
+				recipeList[i].setTiempo( (int) result[i][6]);
+				recipeList[i].setTags( (String) result[i][7]);
+				
+			}
 		}
 		
-		// --------------------------------------------------------------------
-		// ORDER LIMIT AND OFFSET
+		request.setAttribute("recipeList", recipeList);
+		request.setAttribute("catList", catList);
+		request.setAttribute("user", user);
 		
-		queryRecipe += " ORDER BY pub.fecha DESC LIMIT 12 OFFSET "+offset;
 		
 		request.getRequestDispatcher(header).forward(request, response);
 	}
