@@ -44,14 +44,14 @@
             <div class="order">
                 <select name="order" id="order">
                     <option value="none">Sin ordenar</option>
-                    <option value="dateasc">Más recientes</option>
-                    <option value="datedesc">Más antiguas</option>
+                    <option value="dateasc">Recetas más recientes</option>
+                    <option value="datedesc">Recetas más antiguas</option>
                     <option value="titledesc">Ordenar por título descendente (A-Z)</option>
                     <option value="titleasc">Ordenar por título ascedente (Z-A)</option>
                     <option value="likesdesc">Mejor valorados primero</option>
                     <option value="likesasc">Peor valorados primero</option>
-                    <option value="timedesc">Dificiles de preparar</option>
-                    <option value="timeasc">Fáciles de preparar</option>
+                    <option value="timedesc">Lento de preparar</option>
+                    <option value="timeasc">Rápido de preparar</option>
                   </select>
             </div>
 
@@ -94,11 +94,13 @@
 				<% //put a new row every 3 elements
 					if( rowCont == 0){ %> <div class="row"> <% } %>
 					
+					
 					<div class="column"> <!-- start column -->
 						<h4 class="col-title"><%= recipeList[recipeCont].getTitulo() %></h4>
 						<div class="col-img"> <!-- start col-img -->
-							<img src="loadImg?<%= recipeList[recipeCont].getIdReceta() %>"
-								title="Categoría: <%= catList[recipeCont] %>&#013;Tags: <%= recipeList[recipeCont].getTags() %>" />
+							<a href="recipe?id=<%= recipeList[recipeCont].getIdReceta() %>">
+								<img src="loadImg?<%= recipeList[recipeCont].getIdReceta() %>" title="Categoría: <%= catList[recipeCont] %>&#013;Tags: <%= recipeList[recipeCont].getTags() %>" />
+							</a>
 					
 							<div class="stars"> <!-- start stars -->
 					
@@ -117,7 +119,7 @@
 						
 						<div class="col-info"> <!-- start col-info -->
 							<div class="col-author">
-								<p><%= userList[recipeCont].getNombre() %></p>
+								<a href="profile?id=<%= userList[recipeCont].getId() %>"><p><%= userList[recipeCont].getNombre() %></p></a>
 							</div>
 							<div class="col-time">
 								<p><%= recipeList[recipeCont].getTiempo() %>m</p>
@@ -126,8 +128,8 @@
 					
 					</div> <!-- end column -->
 					
-				<% //put a new row every 3 elements
-					if( rowCont == 2 ){ %> </div> <!-- end row --> <% rowCont = 0; } else { rowCont ++; }  %>
+				<% // if already 3 col OR next col is null -> put row end
+					if( rowCont == 2 || recipeList[recipeCont+1] == null ){ %> </div> <!-- end row --> <% rowCont = 0; } else { rowCont ++; }  %>
 				
 			<% recipeCont++; } %>
 		
@@ -142,7 +144,8 @@
 			</div>
 		
 		<% } %>
-	</div>
+		
+		</div> <!-- end #content -->
 	
 	<jsp:include page="prebuilt/footer.jsp" />
 

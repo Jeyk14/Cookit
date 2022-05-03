@@ -28,13 +28,13 @@
 					<% } %>
 	
 					<div class="user-info">
-						<h4>placeholder</h4>
-						<h5>placeholder@placeholder.ph</h5>
+						<h4><%= myself.getNombre() %></h4>
+						<h5><%= myself.getEmail() %></h5>
 					</div>
 	
 					<div class="session-buttons">
-						<div><a href=""><button>Ver mi perfil</button></a></div>
-						<div><a href=""><button>Cerrar sesión</button></a></div>
+						<div><a href="profile?id=<%= myself.getId() %>"><button>Ver mi perfil</button></a></div>
+						<div><a href="logoff"><button>Cerrar sesión</button></a></div>
 					</div>
 				</div>
 			</div>
@@ -69,5 +69,3 @@
 		</div>
 	
 	<% } %>
-
-</div>

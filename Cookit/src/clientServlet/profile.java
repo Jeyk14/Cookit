@@ -39,7 +39,7 @@ public class profile extends HttpServlet {
 		
 		BeanUsuario myself; // In case this is the logged user's profile
 		BeanUsuario user = new BeanUsuario(); // The data of the owner of this profile
-		String queryUsr = "SELECT id, nombre, edad, dieta, nacionalidad, creación FROM cookit.usuario WHERE id = ";
+		String queryUsr = "SELECT id, nombre, edad, dieta, nacionalidad, creacion FROM cookit.usuario WHERE id = ";
 		Calendar auxCal;
 
 		BeanReceta[] recipeList = new BeanReceta[9]; // this user's recipes
@@ -63,7 +63,7 @@ public class profile extends HttpServlet {
 			con.abrirConexion();
 			openQuery = new ConsultaAbierta();
 			
-			result = openQuery.select(con.getConexion(), queryUsr + id, 8);
+			result = openQuery.select(con.getConexion(), queryUsr + id, 6);
 			
 			user = new BeanUsuario();
 			
@@ -128,7 +128,7 @@ public class profile extends HttpServlet {
 			
 			// Like the index query, but 9 elements (3 rows) and no special search
 			
-			con = new Conexion();
+			con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
 			con.abrirConexion();
 			openQuery = new ConsultaAbierta();
 			result = openQuery.select(con.getConexion(), queryRecipe, 8);
@@ -136,6 +136,7 @@ public class profile extends HttpServlet {
 			for (int i = 0; i < result.length; i++) {
 				
 				recipeList[i] = new BeanReceta();
+				catList[i] = new BeanCategoria();
 				
 				recipeList[i].setId( (int) result[i][0]);
 					auxCal = new GregorianCalendar();
