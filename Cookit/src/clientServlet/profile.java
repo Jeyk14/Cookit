@@ -11,11 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import conexionBD.Conexion;
+//import conexionBD.Conexion;
 import data.BeanCategoria;
 import data.BeanReceta;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
+import dbConnection.Connect;
 import toolkit.typeCkecker;
 
 /**
@@ -29,7 +30,7 @@ public class profile extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession sess = request.getSession();
-		Conexion con;
+		Connect con;
 		ConsultaAbierta openQuery;
 		
 		String id = request.getParameter("id"); // The id of the user's profile
@@ -59,7 +60,7 @@ public class profile extends HttpServlet {
 			if(typeCkecker.isInt(id)) {
 			// if id received -> look for the user in the db
 			
-			con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
+			con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
 			con.abrirConexion();
 			openQuery = new ConsultaAbierta();
 			
@@ -87,7 +88,7 @@ public class profile extends HttpServlet {
 			
 			myself = (BeanUsuario) sess.getAttribute("myself");
 			
-			con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
+			con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
 			con.abrirConexion();
 			openQuery = new ConsultaAbierta();
 			
@@ -128,7 +129,7 @@ public class profile extends HttpServlet {
 			
 			// Like the index query, but 9 elements (3 rows) and no special search
 			
-			con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
+			con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
 			con.abrirConexion();
 			openQuery = new ConsultaAbierta();
 			result = openQuery.select(con.getConexion(), queryRecipe, 8);

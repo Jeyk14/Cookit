@@ -8,9 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import conexionBD.Conexion;
-import conexionBD.ModeloSimple;
+//import conexionBD.Conexion;
+//import conexionBD.ModeloSimple;
 import data.BeanUsuario;
+import dbConnection.Connect;
+import dbConnection.SimpleQuery;
 import mail.Email;
 
 @WebServlet("/confirmEmail")
@@ -67,8 +69,10 @@ public class confirmEmail extends HttpServlet {
 
 			if (request.getParameter("recovery-code") != null && !request.getParameter("recovery-code").isEmpty()) {
 
-				ModeloSimple consult;
-				Conexion con;
+//				ModeloSimple consult;
+//				Conexion con;
+				SimpleQuery consult;
+				Connect con;
 				String recoveryCode = request.getParameter("recovery-code");
 				code = (String) sess.getAttribute("code");
 
@@ -77,10 +81,15 @@ public class confirmEmail extends HttpServlet {
 				if (recoveryCode.equalsIgnoreCase(code)) {
 					
 					// Both codes are the same -> confirm mail
-					con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
+//					con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
+//					con.abrirConexion();
+					con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
 					con.abrirConexion();
-					consult = new ModeloSimple(con.getConexion());
-					consult.modificar("cookit.usuario", "confirmado", "boolean", true);
+					
+//					consult = new ModeloSimple(con.getConexion());
+//					consult.modificar("cookit.usuario", "confirmado", "boolean", true);
+					consult = new SimpleQuery(con.getConexion());
+					consult.updateOne("cookit.usuario", "confirmado", "boolean", true);
 
 					header = "index";
 

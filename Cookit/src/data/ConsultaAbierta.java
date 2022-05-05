@@ -14,7 +14,7 @@ public class ConsultaAbierta {
 		String queryCount = "";
 		String queryCount2 = "";
 		
-		int rowCount = 0;
+		int rowCount = 0; 
 		int j = 0;
 
 		// Replace the select with a count(*)

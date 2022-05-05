@@ -144,7 +144,7 @@
         %>
         
         	<div class="modAcc">
-        		<a href="modProfile?id=?"><button>Modificar mi perfil</button></a>
+        		<a href="modProfile?id=<%= myself.getId() %>"><button>Modificar mi perfil</button></a>
         	</div>
         	
         <% } %>
@@ -170,7 +170,7 @@
 				<div class="column">
 					<h4 class="col-title"><%= recipeList[recipeCont].getTitulo() %></h4>
 					<div class="col-img">
-						<img src="loadImg?<%= recipeList[recipeCont].getIdReceta() %>"
+						<img src="LoadRecipeImg?<%= recipeList[recipeCont].getIdReceta() %>"
 							title="Categoría: <%= catList[recipeCont] %>&#013;Tags: <%= recipeList[recipeCont].getTags() %>" />
 				
 						<div class="stars">

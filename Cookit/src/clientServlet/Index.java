@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import conexionBD.*;
+//import conexionBD.*;
 import data.BeanCategoria;
 import data.BeanReceta;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
+import dbConnection.Connect;
+import dbConnection.SimpleQuery;
 
 /**
  * Servlet implementation class inicio
@@ -52,15 +54,15 @@ INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession sesion = request.getSession();
-		Conexion con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
+		//Conexion con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
+		ConsultaAbierta consult = new ConsultaAbierta();
+		Connect con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
 		
 		// The beans that will be used to transport the data
 		BeanUsuario[] userList = new BeanUsuario[12];
 		BeanReceta[] recipeList = new BeanReceta[12];
 		//BeanPublicacion[] indexPost = new BeanPublicacion[12];
 		BeanCategoria[] catList = new BeanCategoria[12];
-		
-		ConsultaAbierta consult = new ConsultaAbierta();
 		
 		// Var used for the search
 		String searchtype = "title"; //Where's being searched

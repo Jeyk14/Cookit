@@ -99,7 +99,7 @@
 						<h4 class="col-title"><%= recipeList[recipeCont].getTitulo() %></h4>
 						<div class="col-img"> <!-- start col-img -->
 							<a href="recipe?id=<%= recipeList[recipeCont].getIdReceta() %>">
-								<img src="loadImg?<%= recipeList[recipeCont].getIdReceta() %>" title="Categoría: <%= catList[recipeCont] %>&#013;Tags: <%= recipeList[recipeCont].getTags() %>" />
+								<img src="loadRecipeImg?<%= recipeList[recipeCont].getIdReceta() %>" title="Categoría: <%= catList[recipeCont] %>&#013;Tags: <%= recipeList[recipeCont].getTags() %>" />
 							</a>
 					
 							<div class="stars"> <!-- start stars -->

@@ -8,10 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import conexionBD.Conexion;
+//import conexionBD.Conexion;
 import contraseña.Encriptacion;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
+import dbConnection.Connect;
 
 @WebServlet("/login")
 public class login extends HttpServlet {
@@ -42,7 +43,7 @@ public class login extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession sesion = request.getSession();
-		Conexion con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
+		Connect con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
 		ConsultaAbierta consult = new ConsultaAbierta();
 		Object[][] result;
 		String queryGetUsr = "SELECT id, nombre, email, pass, salt, confirmado FROM cookit.usuario WHERE email = ";
