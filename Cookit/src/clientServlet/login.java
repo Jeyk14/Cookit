@@ -19,21 +19,22 @@ import dbConnection.Connect;
 @WebServlet("/login")
 public class login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		String header = "WEB-INF/login.jsp";
 		HttpSession sess = request.getSession();
-		
+
 		// TODO: Check for cookies. If login cookies exists, fill the form automatically
-		
+
 		// If user is already logged -> index
-		if(sess.getAttribute("myself") != null) {
-			
+		if (sess.getAttribute("myself") != null) {
+
 			header = "index";
-			
+
 		}
-		
+
 		request.getRequestDispatcher(header).forward(request, response);
 	}
 
@@ -42,7 +43,8 @@ public class login extends HttpServlet {
 	 * 
 	 * if mathches, log the user in and prepare a session for him; if not, send back to login
 	 * */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		HttpSession sesion = request.getSession();
 		Connect con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
@@ -51,91 +53,94 @@ public class login extends HttpServlet {
 		String queryGetUsr = "SELECT id, nombre, email, edad, nacionalidad, dieta, creacion, pass, salt, confirmado FROM cookit.usuario WHERE email = ";
 		CryptSha512 crypt = new CryptSha512();
 		BeanUsuario myself; // The logged user data will be stored here
-		
+
 		String header = "doget"; // where the user will be sent at the end of doPost
 		String tempMsg = "";
-		
+
 		String email = request.getParameter("email");
-		String pass = request.getParameter("pass");
+		String pass = request.getParameter("pass")+"";
 		String rememberMe = request.getParameter("rememberme"); // null = unchecked
-		
+
 		Calendar auxCal = null;
-		
+
 		// Check if user is trying to log in
-		if(email == null || email.isEmpty() || pass == null || pass.isEmpty()) {
-			
+		if (email == null || email.isEmpty() || pass == null || pass.isEmpty()) {
+
 			tempMsg = "Parece que el formulario no está correctamente rellenado";
-			
+
 		} else {
 
 			// form fields correctly fulfilled
 			con.openConnection();
-			queryGetUsr += "'"+email+"'";
+			queryGetUsr += "'" + email + "'";
 			result = consult.select(con.getConexion(), queryGetUsr, 10);
-			
+
 			// Check if email is found in the db
-			if(result.length < 1) {
-				
+			if (result.length < 1) {
+
 				tempMsg = "El correo electrónico o la contraseña no son correctos";
 				System.out.println("result.length < 1");
-				
+
 			} else {
-				
-				// email exists -> check if the given pass is equals to the encrypted pass in the DB
-				if(crypt.comprobarContraseña(pass, (String) result[0][7], (String) result[0][8]) ) {
-					
+
+				// email exists -> check if the given pass is equals to the encrypted pass in
+				// the DB
+				if (crypt.comprobarContraseña(pass, (String) result[0][7], (String) result[0][8])) {
+
 					// everything ok -> log in + add important user info to session
-					
+
 					myself = new BeanUsuario();
-					
-					//id, nombre, email, edad, nacionalidad, dieta, creacion, pass, salt, confirmado
-					myself.setId((int)result[0][0]);
-					myself.setNombre((String)result[0][1]);
-					myself.setEmail((String)result[0][2]);
-					myself.setEdad((int)result[0][3]);
-					myself.setNacionalidad((String)result[0][4]);
-					myself.setDieta((String)result[0][5]);
+
+					// id, nombre, email, edad, nacionalidad, dieta, creacion, pass, salt,
+					// confirmado
+					myself.setId((int) result[0][0]);
+					myself.setNombre((String) result[0][1]);
+					myself.setEmail((String) result[0][2]);
+					myself.setEdad((int) result[0][3]);
+					myself.setNacionalidad((String) result[0][4]);
+					myself.setDieta((String) result[0][5]);
 					auxCal = new GregorianCalendar();
-					auxCal.setTime((java.sql.Date)result[0][6]);
+					auxCal.setTime((java.sql.Date) result[0][6]);
 					myself.setCreacion(auxCal);
-					
-					myself.setConfirmado((boolean)result[0][9]);
-										
+
+					myself.setConfirmado((boolean) result[0][9]);
+
 					sesion.setAttribute("myself", myself);
-					
-					if(myself.isConfirmado() == false) {
+
+					if (myself.isConfirmado() == false) {
 						header = "confirmEmail";
 					} else {
 						header = "index";
 					}
-					
-					if(rememberMe != null) {
+
+					if (rememberMe != null) {
 						// TODO: Add the email and pass to a cookie
 					}
-					
+
 				} else {
-					
+
 					// pass != pass in DB -> retry
-					tempMsg = "El correo electrónico o la contraseña no son correctos";
-					System.out.println("Pass:"+pass+" / PassBD: "+(String) result[0][3]+" / Salt: "+(String) result[0][4]+"\n"
-							+ " / "+crypt.comprobarContraseña(pass, (String) result[0][3], (String) result[0][4]));
-					
+					request.setAttribute("tempMsg", "El correo electrónico o la contraseña no son correctos");
+					request.setAttribute("success", false);
+					System.out.println("Pass "+(String) result[0][7]);
+					System.out.println("Pass:" + pass + " / PassBD: " + (String) result[0][7] + " / Salt: "
+							+ (String) result[0][8] + "\n" + " / "
+							+ crypt.comprobarContraseña(pass, (String) result[0][7], (String) result[0][8]));
+					System.out.println();
+
 				}
-				
+
 			}
-			
+
 		}
-		
+
 		// Send user either back to the login or logged into index
-		if(header != "doget") {
+		if (header != "doget") {
 			request.getRequestDispatcher(header).forward(request, response);
 		} else {
-			if(tempMsg.length() > 1) {
-				request.setAttribute("tempMsg", tempMsg);
-			}
 			doGet(request, response);
 		}
-		
+
 	}
 
 }
