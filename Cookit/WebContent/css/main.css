@@ -207,11 +207,6 @@ img {
     height: 75px;
     background-color: var(--chocolate);
     text-align: center;
-
-    position: absolute;
-    z-index: 99;
-    bottom: 0;
-    left: 0;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;

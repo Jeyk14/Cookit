@@ -11,13 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 public class ChangePass extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.getRequestDispatcher("profile").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
+		String oldPass = request.getParameter("oldpass");
+		String newPass = request.getParameter("newPass");
+		String repepass = request.getParameter("repepass");
+		
 		doGet(request, response);
 	}
 

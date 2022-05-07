@@ -30,7 +30,7 @@ public class profile extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession sess = request.getSession();
-		Connect con;
+		Connect con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
 		ConsultaAbierta openQuery;
 		
 		String id = request.getParameter("id"); // The id of the user's profile
@@ -60,11 +60,11 @@ public class profile extends HttpServlet {
 			if(typeCkecker.isInt(id)) {
 			// if id received -> look for the user in the db
 			
-			con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
-			con.abrirConexion();
+			con.openConnection();
 			openQuery = new ConsultaAbierta();
 			
 			result = openQuery.select(con.getConexion(), queryUsr + id, 6);
+			con.closeConnection();
 			
 			user = new BeanUsuario();
 			
@@ -76,6 +76,7 @@ public class profile extends HttpServlet {
 			auxCal = new GregorianCalendar();
 			auxCal.setTime((java.sql.Date) result[0][5]);
 			user.setCreacion(auxCal);
+			con.closeConnection();
 			
 			} else {
 				// user typed something that isn't a number -> index
@@ -88,8 +89,7 @@ public class profile extends HttpServlet {
 			
 			myself = (BeanUsuario) sess.getAttribute("myself");
 			
-			con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
-			con.abrirConexion();
+			con.openConnection();
 			openQuery = new ConsultaAbierta();
 			
 			result = openQuery.select(con.getConexion(), queryUsr + myself.getId(), 8);
@@ -104,6 +104,7 @@ public class profile extends HttpServlet {
 			auxCal = new GregorianCalendar();
 			auxCal.setTime((java.sql.Date) result[0][5]);
 			user.setCreacion(auxCal); 
+			con.closeConnection();
 			
 		} else {
 			
@@ -129,8 +130,7 @@ public class profile extends HttpServlet {
 			
 			// Like the index query, but 9 elements (3 rows) and no special search
 			
-			con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
-			con.abrirConexion();
+			con.openConnection();
 			openQuery = new ConsultaAbierta();
 			result = openQuery.select(con.getConexion(), queryRecipe, 8);
 			
@@ -151,6 +151,7 @@ public class profile extends HttpServlet {
 				recipeList[i].setTags( (String) result[i][7]);
 				
 			}
+			con.closeConnection();
 		}
 		
 		request.setAttribute("recipeList", recipeList);

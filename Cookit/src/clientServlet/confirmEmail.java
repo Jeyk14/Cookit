@@ -38,8 +38,8 @@ public class confirmEmail extends HttpServlet {
 			myself = (BeanUsuario) sess.getAttribute("myself");
 			
 			// The user is logged but is not confirmed -> send mail -> confirmEmail.jsp
-			mail.setRemitente("TFGJeyfer2022IESMDC@gmail.com"); // TODO: Borrar contraseña
-			mail.setContrasena("a21_jortnu"); // TODO: Borrar usuario
+			mail.setRemitente("TFGJeyfer2022IESMDC@gmail.com");
+			mail.setContrasena("a21_jortnu");
 			mail.setDestino(myself.getEmail());
 			mail.setAsunto("Cookit! - Confirmación de correo");
 
@@ -69,27 +69,22 @@ public class confirmEmail extends HttpServlet {
 
 			if (request.getParameter("recovery-code") != null && !request.getParameter("recovery-code").isEmpty()) {
 
-//				ModeloSimple consult;
-//				Conexion con;
+				BeanUsuario myself = (BeanUsuario) sess.getAttribute("myself");
 				SimpleQuery consult;
 				Connect con;
 				String recoveryCode = request.getParameter("recovery-code");
 				code = (String) sess.getAttribute("code");
 
-				System.out.println("code: "+code+" recoveryCode: "+recoveryCode+"\nEquals? "+recoveryCode.equalsIgnoreCase(code));
+//				System.out.println("code: "+code+" recoveryCode: "+recoveryCode+"\nEquals? "+recoveryCode.equalsIgnoreCase(code));
 				// Compare if the given code is the same code in the session attribute
 				if (recoveryCode.equalsIgnoreCase(code)) {
 					
 					// Both codes are the same -> confirm mail
-//					con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
-//					con.abrirConexion();
 					con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
-					con.abrirConexion();
+					con.openConnection();
 					
-//					consult = new ModeloSimple(con.getConexion());
-//					consult.modificar("cookit.usuario", "confirmado", "boolean", true);
 					consult = new SimpleQuery(con.getConexion());
-					consult.updateOne("cookit.usuario", "confirmado", "boolean", true);
+					consult.updateOne("cookit.usuario", "confirmado", "boolean", true, "id = "+myself.getId());
 
 					header = "index";
 

@@ -1,3 +1,5 @@
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.GregorianCalendar"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -7,9 +9,16 @@
 	<%
 		BeanUsuario myself = new BeanUsuario();
 	
+		String joinDate = "";
+	
 		if(session.getAttribute("myself") != null){
 			myself = (BeanUsuario) session.getAttribute("myself");
+			
+			if(myself.getCreacion() != null){
+				joinDate = myself.getCreacion().get(Calendar.DATE)+"/"+myself.getCreacion().get(Calendar.MONTH)+"/"+myself.getCreacion().get(Calendar.YEAR);
+			}
 		}
+
 	%>
 	
 <html>
@@ -29,6 +38,7 @@
 		<div id="content">
 
         <jsp:include page="prebuilt/header.jsp" />
+        <jsp:include page="prebuilt/tempMsg.jsp"/>
 
         <div class="profile">
 
@@ -36,7 +46,8 @@
 
                 <form method="changeImg" action="POST" enctype="multipart/form-data">
                     <div class="profile-pic">
-                        <img src="LoadImgProfile?id=<%= myself.getId() %>" id="preview">
+                        <!-- <img src="LoadImgProfile?id=<%= myself.getId() %>" id="preview"> -->
+                        <img src="img/placeholder.png" id="preview">
                     </div>
                     <div class="img-buttons">
                         <button style="display:block;width:120px;"
@@ -49,7 +60,7 @@
 
                 <div class="profile-info">
 
-                    <form action="modProfile" method="POST">
+                    <form action="changeProfile" method="POST" accept-charset="UTF-8">
 
                         <div class="username">
                             <label for="newName">Nombre de usuario</label><br>
@@ -65,11 +76,11 @@
                                     title="Correo electrónico&#013;Si cambias tu correo electrónico no podrás crear publicaciones hasta que confirmes el nuevo coreo electrónico" />
                             </li>
                             <li class="time">
-                                <label for="age">Edad</label>
-                                <input type="number" name="newAge" value="<%= myself.getEdad() %>"/>
+                                <label for="age">Edad <%= Integer.valueOf(myself.getEdad()) %></label>
+                                <input type="number" name="newAge" value="<%= Integer.valueOf(myself.getEdad()) %>"/>
                             </li>
                             <li class="joined">
-                                <p>08/04/2022</p>
+                                <p>Me he unido el <%= joinDate %></p>
                             </li>
                             <li class="diet">
                                 <label for="newDiet">Dieta</label>
@@ -92,7 +103,7 @@
 
                             <li>
                                 <label for="oldPass">Contraseña antigua</label>
-                                <input type="password" id="oldPass" name="oldPass" />
+                                <input type="password" id="oldPass" naDATEme="oldPass" />
                             </li>
                             
                             <li>
@@ -116,6 +127,9 @@
             </div>
 
         </div>
+        
+        <script src="js/previewImg.js"></script>
 
+		<jsp:include page="prebuilt/footer.jsp" />
 </body>
 </html>

@@ -54,3 +54,7 @@ form .username #newname{
 .user-param input[type="submit"], .email-form input[type="submit"]{
     margin: 10px 0px 10px 0px;
 }
+
+.joined p {
+	margin: 0px;
+}

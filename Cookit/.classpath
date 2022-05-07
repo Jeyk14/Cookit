@@ -12,9 +12,9 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/postgresql-42.2.19.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet-api-3.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/CorreoElectronicoV1-4.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/EncriptacionV1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.activation.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.mail.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/ConexionV1-3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/EncryptV1-3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/ConnectionV3-3.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

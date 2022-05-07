@@ -1,6 +1,9 @@
 package clientServlet;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,8 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-//import conexionBD.Conexion;
-import contraseña.Encriptacion;
+import crypt.CryptSha512;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
 import dbConnection.Connect;
@@ -46,8 +48,8 @@ public class login extends HttpServlet {
 		Connect con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
 		ConsultaAbierta consult = new ConsultaAbierta();
 		Object[][] result;
-		String queryGetUsr = "SELECT id, nombre, email, pass, salt, confirmado FROM cookit.usuario WHERE email = ";
-		Encriptacion crypt = new Encriptacion();
+		String queryGetUsr = "SELECT id, nombre, email, edad, nacionalidad, dieta, creacion, pass, salt, confirmado FROM cookit.usuario WHERE email = ";
+		CryptSha512 crypt = new CryptSha512();
 		BeanUsuario myself; // The logged user data will be stored here
 		
 		String header = "doget"; // where the user will be sent at the end of doPost
@@ -57,6 +59,8 @@ public class login extends HttpServlet {
 		String pass = request.getParameter("pass");
 		String rememberMe = request.getParameter("rememberme"); // null = unchecked
 		
+		Calendar auxCal = null;
+		
 		// Check if user is trying to log in
 		if(email == null || email.isEmpty() || pass == null || pass.isEmpty()) {
 			
@@ -65,9 +69,9 @@ public class login extends HttpServlet {
 		} else {
 
 			// form fields correctly fulfilled
-			con.abrirConexion();
+			con.openConnection();
 			queryGetUsr += "'"+email+"'";
-			result = consult.select(con.getConexion(), queryGetUsr, 6);
+			result = consult.select(con.getConexion(), queryGetUsr, 10);
 			
 			// Check if email is found in the db
 			if(result.length < 1) {
@@ -78,19 +82,25 @@ public class login extends HttpServlet {
 			} else {
 				
 				// email exists -> check if the given pass is equals to the encrypted pass in the DB
-				if(crypt.comprobarContraseña(pass, (String) result[0][3], (String) result[0][4]) ) {
+				if(crypt.comprobarContraseña(pass, (String) result[0][7], (String) result[0][8]) ) {
 					
 					// everything ok -> log in + add important user info to session
 					
 					myself = new BeanUsuario();
 					
+					//id, nombre, email, edad, nacionalidad, dieta, creacion, pass, salt, confirmado
 					myself.setId((int)result[0][0]);
 					myself.setNombre((String)result[0][1]);
 					myself.setEmail((String)result[0][2]);
-					myself.setConfirmado((boolean)result[0][5]);
+					myself.setEdad((int)result[0][3]);
+					myself.setNacionalidad((String)result[0][4]);
+					myself.setDieta((String)result[0][5]);
+					auxCal = new GregorianCalendar();
+					auxCal.setTime((java.sql.Date)result[0][6]);
+					myself.setCreacion(auxCal);
 					
-					System.out.println((boolean)result[0][5]);
-					
+					myself.setConfirmado((boolean)result[0][9]);
+										
 					sesion.setAttribute("myself", myself);
 					
 					if(myself.isConfirmado() == false) {

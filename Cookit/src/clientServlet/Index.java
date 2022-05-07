@@ -17,7 +17,6 @@ import data.BeanReceta;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
 import dbConnection.Connect;
-import dbConnection.SimpleQuery;
 
 /**
  * Servlet implementation class inicio
@@ -37,7 +36,7 @@ public class Index extends HttpServlet {
 	
 	/*-
 	 
-	 Stars system 5âˆ’(((dislikesÃ—100)Ã·likes)Ã·10)
+	 Stars system 5-(((dislikes×100)÷likes)÷10)
 	 	The rating is celi rounded
 	 	Anything below 0 count as 0 stars
 	 	Anything above 0 count as 1 star
@@ -178,7 +177,7 @@ INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id
 			query += " LIMIT 12 OFFSET "+offset;
 			
 			// run the query
-			con.abrirConexion();
+			con.openConnection();
 			result = consult.select(con.getConexion(), query, 10);
 						
 			//Load the beans
@@ -201,7 +200,7 @@ INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id
 				recipeList[i].setDislikes((int) result[i][7]);
 				recipeList[i].setTiempo((int) result[i][8]);
 				recipeList[i].setTags((String) result[i][9]);
-//				System.out.println("Bucle número "+i);
+//				System.out.println("Bucle "+i);
 			}
 			
 			request.setAttribute("userList", userList);

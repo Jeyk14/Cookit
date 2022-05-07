@@ -3,6 +3,7 @@ body {
     background-image: url("../img/pasta-limon.jpg");
     background-position: center;
     background-size: cover;
+    padding: 0px !important;
 }
 
 /* --------------------- */
