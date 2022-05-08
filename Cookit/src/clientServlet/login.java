@@ -73,7 +73,7 @@ public class login extends HttpServlet {
 			// form fields correctly fulfilled
 			con.openConnection();
 			queryGetUsr += "'" + email + "'";
-			result = consult.select(con.getConexion(), queryGetUsr, 10);
+			result = consult.select(con.getConexion(), queryGetUsr, 10); // TODO: don't get the whole query to check pass+salt
 
 			// Check if email is found in the db
 			if (result.length < 1) {

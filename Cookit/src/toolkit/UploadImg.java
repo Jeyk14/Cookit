@@ -1,11 +1,10 @@
-package profileConfig;
+package toolkit;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,17 +14,15 @@ import javax.servlet.http.Part;
 import data.BeanUsuario;
 import dbConnection.Connect;
 import dbConnection.SimpleQuery;
-import toolkit.typeCkecker;
 
-@MultipartConfig
-@WebServlet("/changeImg")
-public class ChangeImg extends HttpServlet {
+@WebServlet("/UploadImg")
+public class UploadImg extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		request.getRequestDispatcher("profile").forward(request, response);
+		request.getRequestDispatcher("modProfile").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -54,7 +51,7 @@ public class ChangeImg extends HttpServlet {
 
 		// ---------------------------------------
 
-		if (target != null && id != null && request.getPart("image") != null) {
+		if (target != null && id != null) {
 			// target and ID are not null
 
 			if (checkTarget(target) && typeCkecker.isInt(id)) {
@@ -69,7 +66,7 @@ public class ChangeImg extends HttpServlet {
 						// check for the form "multipart/form-data"
 
 						// obtain the file information
-						parteFichero = request.getPart("image");
+						parteFichero = request.getPart("imagen");
 						nombreFichero = Paths.get(parteFichero.getSubmittedFileName()).getFileName().toString();
 						stream = parteFichero.getInputStream();
 						tamanoFichero = stream.available();

@@ -44,7 +44,7 @@
 
             <div class="profile-content">
 
-                <form method="changeImg" action="POST" enctype="multipart/form-data">
+                <form action="changeImg?target=usuario&id=<%= myself.getId() %>" method="POST" enctype="multipart/form-data">
                     <div class="profile-pic">
                         <!-- <img src="LoadImgProfile?id=<%= myself.getId() %>" id="preview"> -->
                         <img src="img/placeholder.png" id="preview">
@@ -53,7 +53,7 @@
                         <button style="display:block;width:120px;"
                             onclick="event.preventDefault(); document.getElementById('getFile').click()">Elegir
                             imagen</button>
-                        <input type='file' id="getFile" style="display:none">
+                        <input type='file' id="getFile" name="image" style="display:none" required>
                         <input type="submit" value="Guardar imagen">
                     </div>
                 </form>

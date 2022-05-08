@@ -89,22 +89,30 @@ public class profile extends HttpServlet {
 			
 			myself = (BeanUsuario) sess.getAttribute("myself");
 			
-			con.openConnection();
-			openQuery = new ConsultaAbierta();
-			
-			result = openQuery.select(con.getConexion(), queryUsr + myself.getId(), 8);
+//			con.openConnection();
+//			openQuery = new ConsultaAbierta();
+//			
+//			result = openQuery.select(con.getConexion(), queryUsr + myself.getId(), 8);
 			
 			user = new BeanUsuario();
 			
-			user.setId((int) result[0][0]);
-			user.setNombre((String) result[0][1]);
-			user.setEdad((int) result[0][2]);
-			user.setDieta((String) result[0][3]);
-			user.setNacionalidad((String) result[0][4]);
-			auxCal = new GregorianCalendar();
-			auxCal.setTime((java.sql.Date) result[0][5]);
-			user.setCreacion(auxCal); 
-			con.closeConnection();
+//			user.setId((int) result[0][0]);
+//			user.setNombre((String) result[0][1]);
+//			user.setEdad((int) result[0][2]);
+//			user.setDieta((String) result[0][3]);
+//			user.setNacionalidad((String) result[0][4]);
+//			auxCal = new GregorianCalendar();
+//			auxCal.setTime((java.sql.Date) result[0][5]);
+//			user.setCreacion(auxCal); 
+//			con.closeConnection();
+			
+			user.setId(myself.getId());
+			user.setNombre(myself.getNombre());
+			user.setEdad(myself.getEdad());
+			user.setDieta(myself.getDieta());
+			user.setNacionalidad(myself.getNacionalidad());
+			user.setCreacion(myself.getCreacion()); 
+//			con.closeConnection();
 			
 		} else {
 			

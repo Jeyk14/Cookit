@@ -4,12 +4,15 @@
 
 - - - - - Pendiente - - - - -
 
+- Añadir estilo CSS a tempMsg
+- En login.java no hacer select a todos los datos para sólo comprobar la contraseña
 - Mejorar la navegabilidad entre las distintas páginas
 - Añadir botón "volver al index" fixed en la esquina superior izquierda en profile.jsp y recipe.jsp
 - La lista de recetas en el perfil de usuario se rompe si sólo hay 1 receta
 - En cada pag comprobar si se va a cargar al usuario myself, si se va a cargar, detener la carga y suar el atributo de sesion
-- Index está roto 
+- Dar al usuario 3 intentos para confirmar su correo. Si fracasa debe esaperar 1 minuto
 
 - - - - - Completado - - - - -
 
+- Index está roto 
 - En modProfile.java doGet() prohibir al usuario acceder si su ID es distinto al ID del perfil a modificar

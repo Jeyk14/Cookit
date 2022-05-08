@@ -114,7 +114,7 @@
             <div class="profile-content">
 
                 <div class="profile-pic">
-                    <img src="loadUsrImg?<%= user.getId() %>" />
+                    <img src="loadImg?id=<%= user.getId() %>&target=user" />
                 </div>
     
                 <div class="profile-info">
