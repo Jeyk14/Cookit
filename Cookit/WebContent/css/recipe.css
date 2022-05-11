@@ -1,0 +1,80 @@
+.recipe {
+    width: 75%;
+    margin: auto;
+}
+
+.recipe form > div {
+    margin: 20px 0px 0px 0px;
+}
+
+/* RECIPE NAME AND SUBTITLE */
+
+.recipe-name {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.recipe-title, .recipe-subtitle {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+}
+
+.recipe-title input {
+    font-size: 25px;
+    font-style: italic;
+}
+
+.recipe-subtitle input {
+    width: 300px;
+}
+
+/* RECIPE INFO IN TWO COLUMNS: IMAGE AND REQUIREMENTS */
+
+.recipe-info {
+    display: flex;
+    flex-direction: row;
+}
+
+.recipe-img {
+    text-align: center;
+}
+
+.requirements {
+    margin: auto;
+}
+
+.requirements div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
+/* RECIPE PROCEDURE */
+
+.procedure {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    margin: auto !important;
+}
+
+/* FORM OPTIONS AND SUBMIT BUTTONS */
+
+.form-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.form-options input {
+    width: auto;
+    align-self: center;
+}
+
+.close {
+    text-align: center;
+    width: 300px;
+    margin: auto;
+}
