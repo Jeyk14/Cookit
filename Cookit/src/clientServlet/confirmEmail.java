@@ -54,6 +54,8 @@ public class confirmEmail extends HttpServlet {
 			
 		}
 
+		sess.setAttribute("curPage", "log");
+		
 		request.getRequestDispatcher(header).forward(request, response);
 	}
 
@@ -91,7 +93,7 @@ public class confirmEmail extends HttpServlet {
 				} else {
 
 					// Code doesn't match -> message + re-send code and retry
-					// TODO: Give the user 3 tries
+					// TODO: Give the user 3 email confirm tries. fail -> wait 60 sec
 					request.setAttribute("tempMsg",
 							"El codigo que ha introducido no coincide\nSe le va a enviar un nuevo código de inicio");
 

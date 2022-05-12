@@ -2,7 +2,7 @@
 	
 	<% BeanUsuario myself = (BeanUsuario) session.getAttribute("myself"); %>
 
-	<%if(myself != null){%>
+	<%if(myself != null){ // logged in%>
 	
 		<div class="header" id="top">
 

@@ -29,6 +29,7 @@ public class ChangePass extends HttpServlet {
 		if(request.getAttribute("success") != null) {
 			if((boolean) request.getAttribute("success") == false) {
 				header = "modProfile";
+				request.getSession().setAttribute("curPage", "profileMod");
 			}
 		}
 		

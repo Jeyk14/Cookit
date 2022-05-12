@@ -51,7 +51,7 @@ public class ConsultaAbierta {
 			// fill the array with the resultSet
 			while(resultado.next()) {
 				for (int i = 0; i < columns; i++) {
-					System.out.println("j="+j+" i="+i+" cols="+columns);
+//					System.out.println("j="+j+" i="+i+" cols="+columns);
 					objeto[j][i] = resultado.getObject(i+1);
 					//System.out.println("Pos."+i+" Objeto:"+objeto[j][i]);
 				}

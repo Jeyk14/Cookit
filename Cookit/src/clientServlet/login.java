@@ -33,6 +33,8 @@ public class login extends HttpServlet {
 
 			header = "index";
 
+		} else {
+			sess.setAttribute("curPage", "log");
 		}
 
 		request.getRequestDispatcher(header).forward(request, response);

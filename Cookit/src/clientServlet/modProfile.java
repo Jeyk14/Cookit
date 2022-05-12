@@ -36,9 +36,11 @@ public class modProfile extends HttpServlet {
 		if (id.equals(Integer.toString(myself.getId()))) {
 			// myID = given ID -> allow modProfile
 			request.setAttribute("id", id);
+			request.getSession().setAttribute("curPage", "profileMod");
 			request.getRequestDispatcher("WEB-INF/modProfile.jsp").forward(request, response);
 		} else {
 			// myID != given ID -> show profile
+			request.getSession().setAttribute("curPage", "profile");
 			request.getRequestDispatcher("profile?id=" + myself.getId()).forward(request, response);
 		}
 	}

@@ -28,6 +28,8 @@ public class CreateRecipe extends HttpServlet {
 		 * estado 2 = published but blocked
 		 */
 		
+		request.getSession().setAttribute("curPage", "recipeMod");
+		
 		request.getRequestDispatcher(header).forward(request, response);
 	}
 

@@ -25,6 +25,7 @@ public class ChangeImg extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		request.getSession().setAttribute("curPage", "profile");
 		request.getRequestDispatcher("profile").forward(request, response);
 	}
 

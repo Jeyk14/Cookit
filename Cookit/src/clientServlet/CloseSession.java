@@ -1,4 +1,4 @@
-package recipeConfig;
+package clientServlet;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -8,25 +8,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class uploadRecipe
+ * Servlet implementation class CloseSession
  */
-@WebServlet("/uploadRecipe")
-public class uploadRecipe extends HttpServlet {
+@WebServlet("/closeSession")
+public class CloseSession extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		request.getSession().setAttribute("curPage", "recipeMod");
-		request.getRequestDispatcher("createRecipe").forward(request, response);
+		request.getSession().setAttribute("curpage", "index");
+		request.getRequestDispatcher("index").forward(request, response);
 	}
 
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO: if save -> add the recipe to the database with the hidden status
-		// TODO: if a recipe with hidden status already exists -> load that recipe
-		// TODO: if upload now -> check all data and insert into database -> profile
-		
-		
-		
+		// TODO: invalidate the session and send the user back to index
 		doGet(request, response);
 	}
 

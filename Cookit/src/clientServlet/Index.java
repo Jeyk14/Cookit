@@ -24,7 +24,65 @@ import dbConnection.Connect;
 @WebServlet("/index")
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
+	/*
+	 * TODO: FOR F SAKE!! Remove al the Ñ from the code and the libraries
+	 * TODO: Add the likes and dislike tables to the database so a user can only like a post once
+	 * 			id, id_usuario, id_publicacion (so every like and dislike has a source and target)
+	 * TODO: Add a block list for users to block eachother. That's another table in the database
+	 * TODO: Add the page buttons: next page, previous page and the page indicator
+	 * TODO: Fix the header to not show "Close session" without a session while looking at someones profile
+	 * TODO: Make the "Volver a inicio" button float on the side of the page ONLY when needed
+	 * TODO: Fix the tempMsg not showing anywhere
+	 * 
+	 * TODO: Implement tempMsg, success and showMsg as session attributes
+	 * TODO: Implement curPage as a session attribute
+	 * 
+	 * */
+	
+	/* Session attributes
+	 * myself : BeanUsuario		The logged user. If null -> anonimous user
+	 * pag : int				The current page on index
+	 * 
+	 * searchtype : String		Indicates what fiels is being searched in the index Ej: titulo, ingredientes, usuario, etc
+	 * searchValue : String		Indicates the value searched in the field that searchtype indicates. Ej: cebolla, pastel, etc
+	 * order : String			Indicates the order of the search in the index
+	 * 
+	 * curPage : String			The page the user is in
+	 * 
+	 * tempMsg : String			A message to show the user
+	 * success : boolean		Determines if tempMessge is a succes message or a failure message
+	 * showMsg : boolean		If true, then show tempMsg and turn back to false
+	 * 
+	 * */
+	
+	/*
+	 * curPage values:
+	 * index - index page
+	 * log - login, confirm email, reset password
+	 * profile - someone's profile page
+	 * myprofile - logged user's profile
+	 * profileMod - modify profile
+	 * recipe - view recipe
+	 * recipeMod - edit recipe, create recipe
+	 * 
+	 * */
+	
+	/*-
+	 
+	 Stars system 5-(((dislikes×100)÷likes)÷10)
+	 	The rating is ceil rounded
+	 	Anything below 0 count as 0 stars
+	 	Anything above 0 count as 1 star
+	 	etc
+	 	Anything abobe 4 count as 5 starsceiling
+	 
+	 SELECT usu.id, usu.nombre, pub.fecha, cat.nombre, rec.img, rec.procedimiento, rec.tiempo, rec.ingredientes, rec.tags
+	FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion
+	INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id
+	INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id
+	 */
+	
 	/*
 	 * Prepare the page using the search values stored on the session
 	 * Session attribute are created if unexistent
@@ -33,23 +91,6 @@ public class Index extends HttpServlet {
 	 * Order by: date, title, likes, time
 	 * 
 	 * */
-	
-	/*-
-	 
-	 Stars system 5-(((dislikes×100)÷likes)÷10)
-	 	The rating is celi rounded
-	 	Anything below 0 count as 0 stars
-	 	Anything above 0 count as 1 star
-	 	etc
-	 	Anything abobe 4 count as 5 starsceiling
-	 
-	 SELECT usu.id, usu.nombre, pub.fecha, cat.nombre, rec.img, rec.procedimiento, rec.tiempo, rec.ingredientes, rec.tags
-FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion
-INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id
-INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id
-	 
-	 
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession sesion = request.getSession();
@@ -206,6 +247,8 @@ INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id
 			request.setAttribute("userList", userList);
 			request.setAttribute("catList", catList);			
 			request.setAttribute("recipeList", recipeList);
+			
+			sesion.setAttribute("curPage", "index");
 						
 			request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
 		

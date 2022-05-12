@@ -1,12 +1,6 @@
 package profileConfig;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Blob;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +20,7 @@ public class ChangeProfile extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.getSession().setAttribute("curPage", "profile");
 		request.getRequestDispatcher("profile").forward(request, response);
 	}
 
@@ -93,7 +88,7 @@ public class ChangeProfile extends HttpServlet {
 		types = new String[changeCount];
 		values = new Object[changeCount];
 		
-		System.out.println("N. cambios "+changeCount);
+		//System.out.println("N. cambios "+changeCount);
 
 		for (int i = 0; i < changes.length(); i++) {
 			if (changes.charAt(i) == '1') {
@@ -140,19 +135,20 @@ public class ChangeProfile extends HttpServlet {
 		switch (returnCode) {
 		case -1:
 			// -1 = the values were wrong
-			tempMsg = "Parece que ha habido un problema, contacte con un administrador para que le podamos ayudar";
+			tempMsg = "Parece que ha habido un problema<br/>Contacte con un administrador para que le podamos ayudar";
 			request.setAttribute("success", false);
 
 			break;
 		case 0:
 			// 0 = no changes / error
-			tempMsg = "Parece que ha habido un problema, no hemos podido actualizar su información personal, inténtelo más tarde";
+			tempMsg = "Parece que ha habido un problema.<br/>No hemos podido actualizar su información personal, inténtelo más tarde";
 			request.setAttribute("success", false);
 			break;
 		default:
 			// Changes -> success
-			tempMsg = "Se han actualizado sus datos";
+			tempMsg = "Se han actualizado sus datos.<br/>Es posible que su información tarden unos segundos en hacerse visible";
 			request.setAttribute("success", true);
+			myself = updateBean(values, changes, myself); // Update the bean
 			break;
 		}
 
@@ -162,6 +158,41 @@ public class ChangeProfile extends HttpServlet {
 		request.setAttribute("id", Integer.toString(myself.getId()));
 
 		doGet(request, response);
+	}
+	
+	private BeanUsuario updateBean(Object[] values, String changes, BeanUsuario myself) {
+		
+		int count = 0;
+		
+		for (int i = 0; i < changes.length(); i++) {
+			if (changes.charAt(i) == '1') {
+				switch (i) {
+				case 0:
+					myself.setNombre( (String) values[count]);
+					count ++;
+					break;
+				case 1:
+					myself.setEmail( (String) values[count]);
+					count++;
+					break;
+				case 2:
+					myself.setEdad( (int) values[count]);
+					count ++;
+					break;
+				case 3:
+					myself.setDieta( (String) values[count]);
+					count ++;
+					break;
+				case 4:
+					myself.setNacionalidad( (String) values[count]);
+					count ++;
+					break;
+				}
+			}
+		}
+		
+		return myself;
+		
 	}
 
 }

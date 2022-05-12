@@ -165,7 +165,7 @@ public class profile extends HttpServlet {
 		request.setAttribute("recipeList", recipeList);
 		request.setAttribute("catList", catList);
 		request.setAttribute("user", user);
-		
+		sess.setAttribute("curPage", "profile");
 		
 		request.getRequestDispatcher(header).forward(request, response);
 	}

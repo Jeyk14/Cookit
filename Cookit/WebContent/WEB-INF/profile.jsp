@@ -17,11 +17,15 @@
 		// header.jsp -> (BeanUsuario) loggedUsr
 		BeanReceta[] recipeList = (BeanReceta[]) request.getAttribute("recipeList");
 		BeanUsuario user = (BeanUsuario) request.getAttribute("user");
-		BeanUsuario myself = (BeanUsuario) session.getAttribute("myself");
+		BeanUsuario myself = new BeanUsuario();
 		BeanCategoria[] catList = (BeanCategoria[]) request.getAttribute("catList");
 		int rowCont = 0;
 		
 		Calendar auxCal = user.getCreacion();
+		
+		if(session.getAttribute("myself") != null){
+			myself = (BeanUsuario) session.getAttribute("myself");
+		}
 		
 	%>
 

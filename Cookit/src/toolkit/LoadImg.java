@@ -35,6 +35,7 @@ public class LoadImg extends HttpServlet {
 						
 			switch (target.toLowerCase()) {
 			case "recipe":
+			case "dish":
 
 				imagenBytes = (byte[]) modelo.selectOne("cookit.receta", "img", "id = " + id);
 				break;
@@ -55,7 +56,9 @@ public class LoadImg extends HttpServlet {
 
 		out = response.getOutputStream();
 
-		out.write(imagenBytes); // return the image
+		if(imagenBytes != null)
+			out.write(imagenBytes); // return the image
+		
 		out.flush();
 	}
 	
