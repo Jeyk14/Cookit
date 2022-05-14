@@ -138,12 +138,8 @@ public class profile extends HttpServlet {
 			simpleQuery = new SimpleQuery(con.getConexion());
 			for (int i = 0; i < result.length; i++) {
 				
-				/*
-				 "SELECT rec.id, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags, pub.id " + 
-				"FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion " + 
-				"INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id " + 
-				"INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id WHERE usu.id = ";
-				 * */
+				// TODO: If logged -> can see your blocked/hidden posts
+				// TODO: hidden posts can be toggled visible
 				
 				int auxLikes = 0;
 				int auxDislikes = 0;

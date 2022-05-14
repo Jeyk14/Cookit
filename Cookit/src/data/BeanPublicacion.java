@@ -42,7 +42,7 @@ public class BeanPublicacion {
 	
 	public int getStars() {
 		
-		//5-(((dislikes×100)÷likes)÷10)
+		//5-(((dislikes*100)/likes)/10)
 		
 		int starRate = 0;
 		

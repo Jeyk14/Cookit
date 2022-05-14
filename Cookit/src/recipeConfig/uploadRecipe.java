@@ -51,8 +51,6 @@ public class uploadRecipe extends HttpServlet {
 		if (submitRecipe == "Publicar") {
 
 			// TODO: IMPORTANT - Test upload the recipe
-			
-			
 
 		} else if (submitRecipe == "Guardar") {
 

@@ -13,6 +13,12 @@
 </head>
 <body>
 
+	<%
+	
+		Object[][] category = (Object[][]) session.getAttribute("categories");
+	
+	%>
+
 	<div id="content">
 
         <jsp:include page="prebuilt/header.jsp" />
@@ -53,6 +59,14 @@
                             title="Escriba los ingredientes separados por coma,&#13;si lo desea tambien indique la cantidad&#13;Ejemplo:hojaldre, agua 100ml, medio tomate, pimiento, 300g de queso parmesano">
                             <label>*Ingredientes</label>
                             <textarea rows="3" cols="30" name="ingredients" required></textarea>
+                        </div>
+                        <div class="category">
+                        	<label for="category">Categoría</label>
+                        	<select name="category" required>
+                        		<% for(int i = 0; i < category.length; i++){  %>
+                        			<option value="<%= (int) category[i][0] %>" title="<%= (String) category[i][2] %>"><%= (String) category[i][1] %></option>
+                        		<% } %>
+                        	</select>
                         </div>
                     </div>
                 </div>

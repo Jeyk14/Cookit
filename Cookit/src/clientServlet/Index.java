@@ -48,6 +48,7 @@ public class Index extends HttpServlet {
 	 * searchtype : String		Indicates what fiels is being searched in the index Ej: titulo, ingredientes, usuario, etc
 	 * searchValue : String		Indicates the value searched in the field that searchtype indicates. Ej: cebolla, pastel, etc
 	 * order : String			Indicates the order of the search in the index
+	 * categories : Object[][]	The whole category table
 	 * 
 	 * curPage : String			The page the user is in
 	 * 
@@ -72,7 +73,7 @@ public class Index extends HttpServlet {
 	
 	/*-
 	 
-	 Stars system 5-(((dislikes×100)÷likes)÷10)
+	 Stars system 5-(((dislikes*100)/likes)/10)
 	 	The rating is ceil rounded
 	 	Anything below 0 count as 0 stars
 	 	Anything above 0 count as 1 star
@@ -116,6 +117,7 @@ public class Index extends HttpServlet {
 		int pag = 1;
 		int offset = 0;
 		
+		// TODO: If estado == oculto // guardado // bloqueado -> not show in list
 		// Select the necessary field to be used
 		String query = "SELECT usu.id, pub.id, usu.nombre, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags " + 
 				"FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion " + 
@@ -129,6 +131,18 @@ public class Index extends HttpServlet {
 		Calendar aux;
 		
 		// -----------------------------------------------------------------------------
+		
+		if(request.getSession().getAttribute("categories") == null) {
+			
+			con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
+			con.openConnection();
+			simpleQuery = new SimpleQuery(con.getConexion());
+			Object[][] categories = simpleQuery.select("cookit.categoria", 
+					new String[] {"id", "nombre", "descripcion"}, "", "", 0, 0);
+			
+			request.getSession().setAttribute("categories", categories);
+			
+		}
 		
 		// The values aren't in the session -> add them to the session
 		if(sesion.getAttribute("searchtype") != null) {

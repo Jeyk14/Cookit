@@ -20,6 +20,18 @@ public class modProfile extends HttpServlet {
 
 		BeanUsuario myself = new BeanUsuario();
 		
+		if(request.getSession().getAttribute("categories") == null) {
+		
+			Connect con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
+			con.openConnection();
+			SimpleQuery simpleQuery = new SimpleQuery(con.getConexion());
+			Object[][] categories = simpleQuery.select("cookit.categoria", 
+					new String[] {"id", "nombre", "descripcion"}, "", "", 0, 0);
+			
+			request.getSession().setAttribute("categories", categories);
+			
+		}
+		
 		String id = "0";
 
 		if(request.getParameter("id") != null) {
