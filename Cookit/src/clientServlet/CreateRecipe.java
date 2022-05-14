@@ -20,13 +20,7 @@ public class CreateRecipe extends HttpServlet {
 			header = "index";
 		}
 		
-		/*
-		 * TODO: if user has a unpublished recipe, load this recipe instead
-		 * For this, change the field oculto to estado
-		 * estado 0 = not published (editing)
-		 * estado 1 = published and visible
-		 * estado 2 = published but blocked
-		 */
+		// TODO: Add a category selector
 		
 		request.getSession().setAttribute("curPage", "recipeMod");
 		

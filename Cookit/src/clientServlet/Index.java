@@ -17,6 +17,7 @@ import data.BeanReceta;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
 import dbConnection.Connect;
+import dbConnection.SimpleQuery;
 
 /**
  * Servlet implementation class inicio
@@ -58,6 +59,7 @@ public class Index extends HttpServlet {
 	
 	/*
 	 * curPage values:
+	 * 
 	 * index - index page
 	 * log - login, confirm email, reset password
 	 * profile - someone's profile page
@@ -96,6 +98,7 @@ public class Index extends HttpServlet {
 		HttpSession sesion = request.getSession();
 		//Conexion con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
 		ConsultaAbierta consult = new ConsultaAbierta();
+		SimpleQuery simpleQuery;
 		Connect con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
 		
 		// The beans that will be used to transport the data
@@ -114,10 +117,13 @@ public class Index extends HttpServlet {
 		int offset = 0;
 		
 		// Select the necessary field to be used
-		String query = "SELECT usu.id, rec.id, usu.nombre, pub.fecha, cat.nombre, pub.titulo, pub.likes, pub.dislikes, rec.tiempo, rec.tags " + 
+		String query = "SELECT usu.id, pub.id, usu.nombre, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags " + 
 				"FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion " + 
 				"INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id " + 
 				"INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id ";
+		
+		String likesQuery;
+		String dislikesQuery;
 		
 		Object[][] result = null; // Will store the result of the query
 		Calendar aux;
@@ -219,29 +225,46 @@ public class Index extends HttpServlet {
 			
 			// run the query
 			con.openConnection();
-			result = consult.select(con.getConexion(), query, 10);
+			result = consult.select(con.getConexion(), query, 8);
 						
 			//Load the beans
-			//  usu.id, rec.id, usu.nombre, pub.fecha, cat.nombre,
-			//  pub.titulo, pub.likes, pub.dislikes, rec.tiempo, rec.tags
+			/*
+			 * String query = "SELECT usu.id, pub.id, usu.nombre, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags " + 
+				"FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion " + 
+				"INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id " + 
+				"INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id "
+			 * */
+			
+			con.openConnection();
+			simpleQuery = new SimpleQuery(con.getConexion());
 			for (int i = 0; i < result.length; i++) {
+				
+				int auxLikes = 0;
+				int auxDislikes = 0;
+				Long auxLong = 0L;
+				
+				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'l' AND id_publicacion = "+(int) result[i][1]);
+				auxLikes = auxLong.intValue();
+				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'd' AND id_publicacion = "+(int) result[i][1]);
+				auxDislikes = auxLong.intValue();
+				
 				userList[i] = new BeanUsuario();
 				recipeList[i] = new BeanReceta();
 				catList[i] = new BeanCategoria();
 				
 				userList[i].setId((int) result[i][0]);
-				recipeList[i].setId((int) result[i][1]);
+				recipeList[i].setIdPublicacion((int) result[i][1] );
 				userList[i].setNombre((String)result[i][2]);
 					aux = new GregorianCalendar();
 					aux.setTime((java.sql.Date)result[i][3]);
 				recipeList[i].setFecha(aux);
 				catList[i].setNombre((String) result[i][4]);
 				recipeList[i].setTitulo((String) result[i][5]);
-				recipeList[i].setLikes((int) result[i][6]);
-				recipeList[i].setDislikes((int) result[i][7]);
-				recipeList[i].setTiempo((int) result[i][8]);
-				recipeList[i].setTags((String) result[i][9]);
-//				System.out.println("Bucle "+i);
+				recipeList[i].setTiempo((int) result[i][6]);
+				recipeList[i].setTags((String) result[i][7]);
+				
+				recipeList[i].setLikes(auxLikes);
+				recipeList[i].setDislikes(auxDislikes);
 			}
 			
 			request.setAttribute("userList", userList);
@@ -250,6 +273,7 @@ public class Index extends HttpServlet {
 			
 			sesion.setAttribute("curPage", "index");
 						
+			con.closeConnection();
 			request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
 		
 	}

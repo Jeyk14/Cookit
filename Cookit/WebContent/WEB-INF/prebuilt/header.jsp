@@ -1,6 +1,8 @@
 	<%@ page import="data.BeanUsuario" %>
 	
-	<% BeanUsuario myself = (BeanUsuario) session.getAttribute("myself"); %>
+	<% BeanUsuario myself = (BeanUsuario) session.getAttribute("myself"); 
+		String curPage = (String) session.getAttribute("curPage");
+	%>
 
 	<%if(myself != null){ // logged in%>
 	

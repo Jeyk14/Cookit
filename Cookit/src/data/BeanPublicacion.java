@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 public class BeanPublicacion {
 	
-	private int id_receta;
+	private int id_publicacion;
 	private int id_usuario;
 	private String titulo;
 	private String subtitulo;
@@ -15,7 +15,7 @@ public class BeanPublicacion {
 	private char estado;
 	
 	public BeanPublicacion() {
-		id_receta = 0;
+		id_publicacion = 0;
 		id_usuario = 0;
 		titulo = "";
 		subtitulo = "";
@@ -26,10 +26,10 @@ public class BeanPublicacion {
 		estado = 'v';
 	}
 	
-	public BeanPublicacion(int id_receta, int id_usuario, String titulo, String subtitulo, int likes, int dislikes,
+	public BeanPublicacion(int id_publicacion, int id_usuario, String titulo, String subtitulo, int likes, int dislikes,
 			boolean destacado, Calendar fecha, char estado) {
 		super();
-		this.id_receta = id_receta;
+		this.id_publicacion = id_publicacion;
 		this.id_usuario = id_usuario;
 		this.titulo = titulo;
 		this.subtitulo = subtitulo;
@@ -39,13 +39,30 @@ public class BeanPublicacion {
 		this.fecha = fecha;
 		this.estado = estado;
 	}
-
-	public int getIdReceta() {
-		return id_receta;
+	
+	public int getStars() {
+		
+		//5-(((dislikes×100)÷likes)÷10)
+		
+		int starRate = 0;
+		
+		if(likes != 0) {
+			starRate = dislikes * 100;
+			starRate = starRate / likes;
+			starRate = starRate / 10;
+			starRate = 5 - starRate;
+		}
+		
+		
+		return starRate;
 	}
 
-	public void setIdReceta(int id_receta) {
-		this.id_receta = id_receta;
+	public int getIdPublicacion() {
+		return id_publicacion;
+	}
+
+	public void setIdPublicacion(int id_receta) {
+		this.id_publicacion = id_receta;
 	}
 
 	public int getId_usuario() {

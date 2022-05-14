@@ -17,6 +17,7 @@ import data.BeanReceta;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
 import dbConnection.Connect;
+import dbConnection.SimpleQuery;
 import toolkit.typeCkecker;
 
 /**
@@ -31,6 +32,7 @@ public class profile extends HttpServlet {
 		
 		HttpSession sess = request.getSession();
 		Connect con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
+		SimpleQuery simpleQuery;
 		ConsultaAbierta openQuery;
 		
 		String id = request.getParameter("id"); // The id of the user's profile
@@ -45,7 +47,7 @@ public class profile extends HttpServlet {
 
 		BeanReceta[] recipeList = new BeanReceta[9]; // this user's recipes
 		BeanCategoria[] catList = new BeanCategoria[9];
-		String queryRecipe = "SELECT rec.id, pub.fecha, cat.nombre, pub.titulo, pub.likes, pub.dislikes, rec.tiempo, rec.tags " + 
+		String queryRecipe = "SELECT rec.id, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags, pub.id " + 
 				"FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion " + 
 				"INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id " + 
 				"INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id WHERE usu.id = ";
@@ -96,16 +98,6 @@ public class profile extends HttpServlet {
 			
 			user = new BeanUsuario();
 			
-//			user.setId((int) result[0][0]);
-//			user.setNombre((String) result[0][1]);
-//			user.setEdad((int) result[0][2]);
-//			user.setDieta((String) result[0][3]);
-//			user.setNacionalidad((String) result[0][4]);
-//			auxCal = new GregorianCalendar();
-//			auxCal.setTime((java.sql.Date) result[0][5]);
-//			user.setCreacion(auxCal); 
-//			con.closeConnection();
-			
 			user.setId(myself.getId());
 			user.setNombre(myself.getNombre());
 			user.setEdad(myself.getEdad());
@@ -140,9 +132,27 @@ public class profile extends HttpServlet {
 			
 			con.openConnection();
 			openQuery = new ConsultaAbierta();
-			result = openQuery.select(con.getConexion(), queryRecipe, 8);
+			result = openQuery.select(con.getConexion(), queryRecipe, 7);
 			
+			con.openConnection();
+			simpleQuery = new SimpleQuery(con.getConexion());
 			for (int i = 0; i < result.length; i++) {
+				
+				/*
+				 "SELECT rec.id, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags, pub.id " + 
+				"FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion " + 
+				"INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id " + 
+				"INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id WHERE usu.id = ";
+				 * */
+				
+				int auxLikes = 0;
+				int auxDislikes = 0;
+				Long auxLong = 0L;
+				
+				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'l' AND id_publicacion = "+(int) result[i][6]);
+				auxLikes = auxLong.intValue();
+				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'd' AND id_publicacion = "+(int) result[i][6]);
+				auxDislikes = auxLong.intValue();
 				
 				recipeList[i] = new BeanReceta();
 				catList[i] = new BeanCategoria();
@@ -153,10 +163,11 @@ public class profile extends HttpServlet {
 				recipeList[i].setFecha(auxCal);
 				catList[i].setNombre( (String) result[i][2]);
 				recipeList[i].setTitulo( (String) result[i][3]);
-				recipeList[i].setLikes( (int) result[i][4]);
-				recipeList[i].setDislikes( (int) result[i][5]);
-				recipeList[i].setTiempo( (int) result[i][6]);
-				recipeList[i].setTags( (String) result[i][7]);
+				recipeList[i].setTiempo( (int) result[i][4]);
+				recipeList[i].setTags( (String) result[i][5]);
+				
+				recipeList[i].setLikes( auxLikes );
+				recipeList[i].setDislikes( auxDislikes);
 				
 			}
 			con.closeConnection();

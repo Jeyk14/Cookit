@@ -22,11 +22,11 @@
 
                 <div class="recipe-name">
                     <div class="recipe-title">
-                        <label for="title">*Título</label>
+                        <label for="title">*T&iacute;tulo</label>
                         <input type="text" name="title" id="title" required>
                     </div>
-                    <div class="recipe-subtitle" title="(Opcional) Una breve descripción sobre la receta o el resultado final">
-                        <label for="title">Subtítulo</label>
+                    <div class="recipe-subtitle" title="(Opcional) Una breve descripciï¿½n sobre la receta o el resultado final">
+                        <label for="title">Subt&iacute;tulo</label>
                         <input type="text" name="subtitle" id="subtitle">
                     </div>
                 </div>
@@ -35,18 +35,18 @@
 
                     <div class="recipe-img">
                         <img src="img/placeholder.png" />
-                        <button onclick="event.preventDefault(); document.getElementById('getImg').click()">Añadir una imagen</button>
+                        <button onclick="event.preventDefault(); document.getElementById('getImg').click()">A&ntilde;adir una imagen</button>
                         <input type="file" name="img" id="getImg" style="display: none;" required>
                     </div>
 
                     <div class="requirements">
                         <div class="tags"
-                            title="Escriba las palabras claves separadas por coma&#13;Ejemplo:pizza, tomate, queso, champiñones, horneado">
+                            title="Escriba las palabras claves separadas por coma&#13;Ejemplo:pizza, tomate, queso, champi&ntilde;ones, horneado">
                             <label>Palabras clave (tags)</label>
                             <textarea rows="3" cols="30" name="tags"></textarea>
                         </div>
                         <div class="cooking-time">
-                            <label>*Tiempo de preparación</label>
+                            <label>*Tiempo de preparaci&oacute;n</label>
                             <input type="number" name="time" value="1" min="1" required/>
                         </div>
                         <div class="ingredients"
@@ -58,14 +58,14 @@
                 </div>
 
                 <div class="procedure"
-                    title="Para mantener las recetas fáciles de seguir, resumelas en 1.000 caracteres">
+                    title="Para mantener las recetas f&aacute;ciles de seguir, resumelas en 1.000 caracteres">
                     <label>*Procedimiento</label>
                     <textarea rows="10" cols="75" name="procedure" required></textarea>
                 </div>
 
                 <div class="form-options">
-                    <input type="submit" value="Publicar ya" />
-                    <input type="submit" value="Guardar" />
+                    <input type="submit" name="submitRecipe" value="Publicar" />
+                    <input type="submit" name="submitRecipe" value="Guardar" />
                 </div>
 
             </form>

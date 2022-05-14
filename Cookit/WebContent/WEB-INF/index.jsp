@@ -77,18 +77,9 @@
 			<% while(recipeList[recipeCont] != null){ %>
 			
 			<%	
-				likes = recipeList[recipeCont].getLikes();
-				dislikes = recipeList[recipeCont].getDislikes();
-				
-				if(likes > 0){
-					//starRate = 5-(((dislikes*100)/likes)/10);
-					starRate = dislikes*100;
-					if(dislikes > 0){
-						starRate = starRate / likes;
-					}
-					starRate = starRate / 10;
-					starRate = 5 - starRate;
-				}
+			
+				starRate = recipeList[recipeCont].getStars();
+
 				%>
 				
 				<% //put a new row every 3 elements

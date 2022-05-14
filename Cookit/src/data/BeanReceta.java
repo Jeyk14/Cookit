@@ -2,7 +2,6 @@ package data;
 
 public class BeanReceta extends BeanPublicacion {
 	private int id_receta;
-//	private int id_publicacion;
 	private int id_categoria;
 	private byte[] img;
 	private String procedimiento;
@@ -13,7 +12,6 @@ public class BeanReceta extends BeanPublicacion {
 	public BeanReceta() {
 		super();
 		id_receta = 0;
-//		id_publicacion = 0;
 		id_categoria = 0;
 		img = null;
 		procedimiento = "";
@@ -25,7 +23,6 @@ public class BeanReceta extends BeanPublicacion {
 	public BeanReceta(int id, int id_categoria, byte[] img, String procedimiento, int tiempo, String ingredientes, String tags) {
 		super();
 		this.id_receta = id;
-//		this.id_publicacion = id_publicacion;
 		this.id_categoria = id_categoria;
 		this.img = img;
 		this.procedimiento = procedimiento;
