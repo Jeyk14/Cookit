@@ -17,6 +17,8 @@ public class modProfile extends HttpServlet {
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		// TODO: (IMPORTANTE) Lo que guardo en la BD luego no me muestra las tildes
 
 		BeanUsuario myself = new BeanUsuario();
 		

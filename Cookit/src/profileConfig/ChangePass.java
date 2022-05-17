@@ -63,8 +63,8 @@ public class ChangePass extends HttpServlet {
 				request.setAttribute("success", false);
 			} else {
 
-				oldStored = (String) simpleQuery.selectOne("cookit.usuario", "pass", "id = " + myself.getId());
-				oldSalt = (String) simpleQuery.selectOne("cookit.usuario", "salt", "id = " + myself.getId());
+				oldStored = (String) simpleQuery.selectOne("cookit.usuario", "pass", "id = " + myself.getId(), "", 0, 0);
+				oldSalt = (String) simpleQuery.selectOne("cookit.usuario", "salt", "id = " + myself.getId(), "", 0, 0);
 
 				System.out.println("Coinciden: "+crypt.comprobarContraseña(oldPass, oldStored, oldSalt));
 				if (crypt.comprobarContraseña(oldPass, oldStored, oldSalt)) {

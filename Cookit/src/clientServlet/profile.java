@@ -145,9 +145,9 @@ public class profile extends HttpServlet {
 				int auxDislikes = 0;
 				Long auxLong = 0L;
 				
-				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'l' AND id_publicacion = "+(int) result[i][6]);
+				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'l' AND id_publicacion = "+(int) result[i][6], "", 0, 0);
 				auxLikes = auxLong.intValue();
-				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'd' AND id_publicacion = "+(int) result[i][6]);
+				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'd' AND id_publicacion = "+(int) result[i][6], "", 0, 0);
 				auxDislikes = auxLong.intValue();
 				
 				recipeList[i] = new BeanReceta();

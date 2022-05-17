@@ -12,7 +12,7 @@ public class BeanPublicacion {
 	private int dislikes;
 	private boolean destacado;
 	private Calendar fecha;
-	private char estado;
+	private String estado;
 	
 	public BeanPublicacion() {
 		id_publicacion = 0;
@@ -23,11 +23,11 @@ public class BeanPublicacion {
 		dislikes = 0;
 		destacado = false;
 		fecha = null;
-		estado = 'v';
+		estado = "";
 	}
 	
 	public BeanPublicacion(int id_publicacion, int id_usuario, String titulo, String subtitulo, int likes, int dislikes,
-			boolean destacado, Calendar fecha, char estado) {
+			boolean destacado, Calendar fecha, String estado) {
 		super();
 		this.id_publicacion = id_publicacion;
 		this.id_usuario = id_usuario;
@@ -121,11 +121,11 @@ public class BeanPublicacion {
 		this.fecha = fecha;
 	}
 
-	public char getEstado() {
+	public String getEstado() {
 		return estado;
 	}
 
-	public void setEstado(char estado) {
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 

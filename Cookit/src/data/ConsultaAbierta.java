@@ -59,8 +59,6 @@ public class ConsultaAbierta {
 				j ++;
 			}
 
-			con.close();
-
 		} catch (SQLException sqle) {
 			System.err.print("Hubo un error durante la ejecución de la consulta\n");
 			sqle.printStackTrace();

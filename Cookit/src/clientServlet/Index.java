@@ -43,12 +43,13 @@ public class Index extends HttpServlet {
 	
 	/* Session attributes
 	 * myself : BeanUsuario		The logged user. If null -> anonimous user
+	 * savedRecipe : BeanReceta	A recipe the user saved previously.
 	 * pag : int				The current page on index
 	 * 
 	 * searchtype : String		Indicates what fiels is being searched in the index Ej: titulo, ingredientes, usuario, etc
 	 * searchValue : String		Indicates the value searched in the field that searchtype indicates. Ej: cebolla, pastel, etc
 	 * order : String			Indicates the order of the search in the index
-	 * categories : Object[][]	The whole category table
+	 * categories : Object[][]	The whole category table. 
 	 * 
 	 * curPage : String			The page the user is in
 	 * 
@@ -99,8 +100,7 @@ public class Index extends HttpServlet {
 		HttpSession sesion = request.getSession();
 		//Conexion con = new Conexion("a21_jortnu", "a21_jortnu", "a21_jortnu");
 		ConsultaAbierta consult = new ConsultaAbierta();
-		SimpleQuery simpleQuery;
-		Connect con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
+		SimpleQuery simpleQuery = new SimpleQuery("a21_jortnu", "a21_jortnu", "a21_jortnu");
 		
 		// The beans that will be used to transport the data
 		BeanUsuario[] userList = new BeanUsuario[12];
@@ -122,7 +122,7 @@ public class Index extends HttpServlet {
 		String query = "SELECT usu.id, pub.id, usu.nombre, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags " + 
 				"FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion " + 
 				"INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id " + 
-				"INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id ";
+				"INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id WHERE pub.estado NOT LIKE 'guardado' AND pub.estado NOT LIKE 'bloqueado' ";
 		
 		String likesQuery;
 		String dislikesQuery;
@@ -134,9 +134,6 @@ public class Index extends HttpServlet {
 		
 		if(request.getSession().getAttribute("categories") == null) {
 			
-			con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
-			con.openConnection();
-			simpleQuery = new SimpleQuery(con.getConexion());
 			Object[][] categories = simpleQuery.select("cookit.categoria", 
 					new String[] {"id", "nombre", "descripcion"}, "", "", 0, 0);
 			
@@ -173,7 +170,7 @@ public class Index extends HttpServlet {
 				if(searchValue.length() < 3) {
 					// not enough words for a search -> do nothing
 				} else {
-					query += " WHERE rec.titulo LIKE '%"+searchValue+"%' ";
+					query += " AND rec.titulo LIKE '%"+searchValue+"%' ";
 				}
 				break;
 				
@@ -181,12 +178,12 @@ public class Index extends HttpServlet {
 				if(searchValue.length() < 3) {
 					// not enough words for a search -> do nothing
 				} else {
-					query += " WHERE usu.nombre LIKE '%"+searchValue+"%' ";
+					query += " AND usu.nombre LIKE '%"+searchValue+"%' ";
 				}
 				break;
 				
 			case "star":
-				query += " WHERE (SELECT (5-((dislikes * 100)/likes)/10) FROM cookit.publicacion WHERE id = pub.id) > "+ (Integer.valueOf(searchValue) - 1)+" ";
+				query += " AND (SELECT (5-((dislikes * 100)/likes)/10) FROM cookit.publicacion WHERE id = pub.id) > "+ (Integer.valueOf(searchValue) - 1)+" ";
 				break;
 			default:
 				// the type is invalid -> do nothing
@@ -238,8 +235,7 @@ public class Index extends HttpServlet {
 			query += " LIMIT 12 OFFSET "+offset;
 			
 			// run the query
-			con.openConnection();
-			result = consult.select(con.getConexion(), query, 8);
+			result = consult.select(simpleQuery.getConnection(), query, 8);
 						
 			//Load the beans
 			/*
@@ -249,17 +245,15 @@ public class Index extends HttpServlet {
 				"INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id "
 			 * */
 			
-			con.openConnection();
-			simpleQuery = new SimpleQuery(con.getConexion());
 			for (int i = 0; i < result.length; i++) {
 				
 				int auxLikes = 0;
 				int auxDislikes = 0;
 				Long auxLong = 0L;
 				
-				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'l' AND id_publicacion = "+(int) result[i][1]);
+				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'l' AND id_publicacion = "+(int) result[i][1], "", 0, 0);
 				auxLikes = auxLong.intValue();
-				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'd' AND id_publicacion = "+(int) result[i][1]);
+				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'd' AND id_publicacion = "+(int) result[i][1], "", 0, 0);
 				auxDislikes = auxLong.intValue();
 				
 				userList[i] = new BeanUsuario();
@@ -287,7 +281,7 @@ public class Index extends HttpServlet {
 			
 			sesion.setAttribute("curPage", "index");
 						
-			con.closeConnection();
+			simpleQuery.closeConnection();
 			request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
 		
 	}

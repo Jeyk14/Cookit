@@ -37,12 +37,12 @@ public class LoadImg extends HttpServlet {
 			case "recipe":
 			case "dish":
 
-				imagenBytes = (byte[]) modelo.selectOne("cookit.receta", "img", "id = " + id);
+				imagenBytes = (byte[]) modelo.selectOne("cookit.receta", "img", "id = " + id, "", 0, 0);
 				break;
 				
 			case "user":
 			case "usr":
-				imagenBytes = (byte[]) modelo.selectOne("cookit.usuario", "img", "id = " + id);
+				imagenBytes = (byte[]) modelo.selectOne("cookit.usuario", "img", "id = " + id, "", 0, 0);
 				break;
 
 			default:
