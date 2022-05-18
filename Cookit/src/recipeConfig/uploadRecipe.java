@@ -56,14 +56,16 @@ public class uploadRecipe extends HttpServlet {
 		String procedure = request.getParameter("procedure");
 		String category = request.getParameter("category");
 		int categoryInt = 0;
+		// Either to save the recipe or to upload it
+		String submitRecipe = request.getParameter("submitRecipe");
 
 		// Used to check if the save query was succesful or not
-		int insertedPost = 0;
-		int updatedPost = 0;
+		int inserted = 0;
+		int updated = 0;
 		int lastId = 0; // The ID of the last post
+		int lastIdAux;
 		
 		boolean success = true;
-		int problemsFound = 0;
 		String tempMsg = "";
 
 		if (typeCkecker.isInt(time)) {
@@ -78,14 +80,14 @@ public class uploadRecipe extends HttpServlet {
 			savedRecipe = (BeanReceta) request.getSession().getAttribute("savedRecipe");
 		}
 
-		// Either to save the recipe or to upload it
-		String submitRecipe = request.getParameter("submitRecipe");
 		Object resultado[][] = null;
 		Calendar auxCal;
 
 		BeanUsuario myself = (BeanUsuario) request.getSession().getAttribute("myself");
 
-		if (submitRecipe == "Publicar") {
+		if (submitRecipe.equals("Publicar")) {
+			
+			System.out.println("entra");
 
 			// TODO: IMPORTANT - Test upload the recipe
 			
@@ -130,14 +132,73 @@ public class uploadRecipe extends HttpServlet {
 			//TODO: if all data correct -> decide either to upload or to update
 			if(success) {
 				
-				if(savedRecipe != null) {
+				System.out.println("todo correcto");
+				
+				if(savedRecipe == null) {
 					// No saved recipe -> insert
 					
+					simpleQuery = new SimpleQuery("a21_jortnu", "a21_jortnu", "a21_jortnu");
+					
+					lastId = (int) simpleQuery.selectOne("cookit.publicacion", "id", "", "id desc", 0, 0);
+					lastIdAux = lastId++;
+					
+					auxCal = Calendar.getInstance();
+					
+
+					inserted = simpleQuery.insert("cookit.publicacion", 
+							new String[] {"id", "id_usuario", "titulo", "subtitulo", "destacado", "fecha", "estado"}, 
+							new String[] {"int", "int", "string", "string", "boolean", "calendar", "string"}, 
+							new Object[] {lastIdAux, myself.getId(), title, subtitle, false, auxCal, "publicado" });
+					
+					System.out.println("Upload recipe: "+simpleQuery.getLastQuery());
+					
+					if(inserted > 1) {
+					// the post was inserted -> insert the recipe
+						
+						lastId = (int) simpleQuery.selectOne("cookit.receta", "id", "", "id desc", 0, 0);
+						lastId++;
+						
+						simpleQuery.insert("cookit.receta",
+								new String[] {"id", "id_publicacion", "id_categoria", "procedimiento", "tiempo", "ingredientes", "tags"},
+								new String[] {"int", "int", "int", "stirng", "int", "string", "string"},
+								new Object[] {lastId, lastIdAux, categoryInt, procedure, time, ingredients, tags});
+						
+						request.getSession().removeAttribute("savedRecipe");
+						
+						System.out.println("The recipe: "+simpleQuery.getLastQuery());
+					
+					}
+					
+					simpleQuery.closeConnection();
 					
 				} else {
 					// saved recipe -> update
 					
+					simpleQuery = new SimpleQuery("a21_jortnu", "a21_jortnu", "a21_jortnu");
+					
+					updated = simpleQuery.update("cookit.publicacion", new String[] { "titulo", "subtitulo", "estado" },
+							new String[] { "string", "string", "string" }, new Object[] { title, subtitle, "publicado" },
+							"id = " + savedRecipe.getIdPublicacion());
+					
+					System.out.println("Upload saved recipe: "+simpleQuery.getLastQuery());
+					
+					simpleQuery.update("cookit.receta",
+							new String[] { "id_categoria", "procedimiento", "tiempo", "ingredientes", "tags" },
+							new String[] { "int", "string", "int", "string", "string" },
+							new Object[] { categoryInt, procedure, timeInt, ingredients, tags },
+							"id_publicacion = " + savedRecipe.getIdPublicacion());
+					
+					System.out.println("The recipe: "+ simpleQuery.getLastQuery());
+					
+					simpleQuery.closeConnection();
+					
 				}
+				
+			} else {
+				// Something went wrong -> do nothing + show message to the user
+				
+				request.getSession().setAttribute("tempMsg", tempMsg);
+				request.getSession().setAttribute("success", success);
 				
 			}
 
@@ -153,17 +214,17 @@ public class uploadRecipe extends HttpServlet {
 				// an already saved post exists -> load the new recipe onto the saved one
 
 				// updtate post
-				updatedPost = simpleQuery.update("cookit.publicacion", new String[] { "titulo", "subtitulo" },
+				updated = simpleQuery.update("cookit.publicacion", new String[] { "titulo", "subtitulo" },
 						new String[] { "string", "string" }, new Object[] { title, subtitle },
 						"id = " + (int) resultado[0][0]);
 				
 				System.out.println(simpleQuery.getLastQuery());
 
-				Object aux = simpleQuery.selectOne(
-						"cookit.receta as rec INNER JOIN cookit.publicacion as pub on rec.id_publicacion = pub.id ",
-						"rec.id = " + (int) resultado[0][0], "", "", 0, 0);
-
-				if (aux != null) {
+//				Object aux = simpleQuery.selectOne(
+//						"cookit.receta as rec INNER JOIN cookit.publicacion as pub on rec.id_publicacion = pub.id ",
+//						"rec.id = " + (int) resultado[0][0], "", "", 0, 0);
+//
+//				if (aux != null) {
 					// a post and it's recipe exists -> update recipe
 					
 					simpleQuery.update("cookit.receta",
@@ -173,16 +234,16 @@ public class uploadRecipe extends HttpServlet {
 							"id_publicacion = " + (int) resultado[0][0]);
 					
 					System.out.println("A "+ simpleQuery.getLastQuery());
-				} else {
-					// a saved post exists without it's recipe -> insert the recipe
-					simpleQuery.insert("cookit.receta",
-							new String[] { "id_publicacion", "id_categoria", "procedimiento", "tiempo", "ingredientes",
-									"tags" },
-							new String[] { "int", "int", "string", "int", "string", "string" },
-							new Object[] { lastId, categoryInt, procedure, timeInt, ingredients, tags });
-					
-					System.out.println("B "+simpleQuery.getLastQuery());
-				}
+//				} else {
+//					// a saved post exists without it's recipe -> insert the recipe
+//					simpleQuery.insert("cookit.receta",
+//							new String[] { "id_publicacion", "id_categoria", "procedimiento", "tiempo", "ingredientes",
+//									"tags" },
+//							new String[] { "int", "int", "string", "int", "string", "string" },
+//							new Object[] { lastId, categoryInt, procedure, timeInt, ingredients, tags });
+//					
+//					System.out.println("B "+simpleQuery.getLastQuery());
+//				}
 
 				simpleQuery.closeConnection();
 
@@ -198,14 +259,14 @@ public class uploadRecipe extends HttpServlet {
 				lastId = (int) simpleQuery.selectOne("cookit.publicacion", "id", "", "id desc", 0, 0);
 				lastId++;
 
-				insertedPost = simpleQuery.insert("cookit.publicacion",
+				inserted = simpleQuery.insert("cookit.publicacion",
 						new String[] { "id", "id_usuario", "titulo", "subtitulo", "destacado", "fecha", "estado" },
 						new String[] { "int", "int", "string", "string", "boolean", "calendar", "string" },
 						new Object[] { lastId, myself.getId(), title, subtitle, false, auxCal, "guardado" });
 
 				System.out.println(simpleQuery.getLastQuery());
 
-				if (insertedPost > 0) {
+				if (inserted > 0) {
 					// If the post was inserted successfully
 
 					// Got the ID of the last inserted post -> insert the recipe as well

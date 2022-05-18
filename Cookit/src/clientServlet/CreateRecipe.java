@@ -19,7 +19,8 @@ public class CreateRecipe extends HttpServlet {
 			throws ServletException, IOException {
 
 		String header = "WEB-INF/createRecipe.jsp";
-		Object[][] auxObj;
+		Object[][] auxResult;
+		Object auxObj = null;
 		BeanReceta savedRecipe;
 		BeanUsuario myself;
 		
@@ -27,8 +28,8 @@ public class CreateRecipe extends HttpServlet {
 		
 		//TODO: If there is an ID URL parameter -> modify recipe if it belongs to the logged user 
 		
-		int lastId; // The last recipe ID to autoincrement
-		int idPost; // The ID of a post withoout recipe
+		int lastId = 0; // The last recipe ID to autoincrement
+		int idPost = 0; // The ID of a post withoout recipe
 
 		if (request.getSession().getAttribute("myself") == null) {
 			// user not logged -> index
@@ -43,32 +44,35 @@ public class CreateRecipe extends HttpServlet {
 				// Get the values of an existing saved recipe and load the data
 				simpleQuery = new SimpleQuery("a21_jortnu", "a21_jortnu", "a21_jortnu");
 
-				auxObj = simpleQuery.select(
+				auxResult = simpleQuery.select(
 						"cookit.receta as rec INNER JOIN cookit.publicacion as pub ON rec.id_publicacion = pub.id",
 						new String[] { "rec.id", "pub.id", "pub.estado", "pub.titulo", "pub.subtitulo", "rec.id_categoria",
 								"rec.tags", "rec.tiempo", "rec.ingredientes", "rec.procedimiento" },
 						"estado LIKE 'guardado' AND pub.id_usuario = "+myself.getId(), "", 0, 0);
 
-				if (auxObj.length > 0) {
+				if (auxResult.length > 0) {
 					// A saved post+recipe was found -> load the bean
 					savedRecipe = new BeanReceta();
-					savedRecipe.setId((int) auxObj[0][0]);
-					savedRecipe.setIdPublicacion((int) auxObj[0][1]);
-					savedRecipe.setEstado((String) auxObj[0][2]);
-					savedRecipe.setTitulo((String) auxObj[0][3]);
-					savedRecipe.setSubtitulo((String) auxObj[0][4]);
-					savedRecipe.setId_categoria((int) auxObj[0][5]);
-					savedRecipe.setTags((String) auxObj[0][6]);
-					savedRecipe.setTiempo((int) auxObj[0][7]);
-					savedRecipe.setIngredientes((String) auxObj[0][8]);
-					savedRecipe.setProcedimiento((String) auxObj[0][9]);
+					savedRecipe.setId((int) auxResult[0][0]);
+					savedRecipe.setIdPublicacion((int) auxResult[0][1]);
+					savedRecipe.setEstado((String) auxResult[0][2]);
+					savedRecipe.setTitulo((String) auxResult[0][3]);
+					savedRecipe.setSubtitulo((String) auxResult[0][4]);
+					savedRecipe.setId_categoria((int) auxResult[0][5]);
+					savedRecipe.setTags((String) auxResult[0][6]);
+					savedRecipe.setTiempo((int) auxResult[0][7]);
+					savedRecipe.setIngredientes((String) auxResult[0][8]);
+					savedRecipe.setProcedimiento((String) auxResult[0][9]);
 
 					request.getSession().setAttribute("savedRecipe", savedRecipe);
 
 				} else {
 					// no post+recipe found -> search for post without recipe (it may happen)
 					
-					idPost = (int) simpleQuery.selectOne("cookit.publicacion", "id", "estado LIKE 'guardado'", "", 0, 0);
+					auxObj = simpleQuery.selectOne("cookit.publicacion", "id", "estado LIKE 'guardado'", "", 0, 0);
+					
+					if(auxObj != null) { idPost = (int) auxObj; };
+					
 					System.out.println("Auxint: "+idPost);
 					
 					if(idPost != 0) {
@@ -78,8 +82,8 @@ public class CreateRecipe extends HttpServlet {
 								new String[] {"id", "id_publicacion ", "id_categoria", "procedimiento", "tiempo", "ingredientes", "tags"}, 
 								new String[] {"int", "int", "int", "string", "int", "string", "string"},
 								new Object[] {lastId +1, idPost, 1, "", 10, "", ""});
-					}
-					// if no post nor recipe -> proceed withoud loading anything
+					} // else -> no post, no recipe -> proceed without loading anything
+					
 				}
 				
 				simpleQuery.closeConnection();
