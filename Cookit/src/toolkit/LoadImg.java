@@ -29,9 +29,7 @@ public class LoadImg extends HttpServlet {
 		
 		if( id != null ) {
 			
-			con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
-			con.openConnection();
-			modelo = new SimpleQuery(con.getConexion());
+			modelo = new SimpleQuery("a21_jortnu", "a21_jortnu", "a21_jortnu");
 						
 			switch (target.toLowerCase()) {
 			case "recipe":
@@ -50,7 +48,7 @@ public class LoadImg extends HttpServlet {
 				break;
 			}
 			
-			con.closeConnection();
+			modelo.closeConnection();
 			
 		}
 

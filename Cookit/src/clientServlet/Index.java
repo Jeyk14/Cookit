@@ -119,7 +119,7 @@ public class Index extends HttpServlet {
 		
 		// TODO: If estado == oculto // guardado // bloqueado -> not show in list
 		// Select the necessary field to be used
-		String query = "SELECT usu.id, pub.id, usu.nombre, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags " + 
+		String query = "SELECT usu.id, rec.id, pub.id, usu.nombre, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags " + 
 				"FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion " + 
 				"INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id " + 
 				"INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id WHERE pub.estado NOT LIKE 'guardado' AND pub.estado NOT LIKE 'bloqueado' ";
@@ -131,6 +131,8 @@ public class Index extends HttpServlet {
 		Calendar aux;
 		
 		// -----------------------------------------------------------------------------
+		
+		sesion.setAttribute("curPage", "index");
 		
 		if(request.getSession().getAttribute("categories") == null) {
 			
@@ -235,7 +237,7 @@ public class Index extends HttpServlet {
 			query += " LIMIT 12 OFFSET "+offset;
 			
 			// run the query
-			result = consult.select(simpleQuery.getConnection(), query, 8);
+			result = consult.select(simpleQuery.getConnection(), query, 9);
 						
 			//Load the beans
 			/*
@@ -244,6 +246,10 @@ public class Index extends HttpServlet {
 				"INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id " + 
 				"INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id "
 			 * */
+			
+			System.out.println("query en index: "+query);
+			System.out.println("result.length "+result.length);
+			
 			
 			for (int i = 0; i < result.length; i++) {
 				
@@ -261,15 +267,16 @@ public class Index extends HttpServlet {
 				catList[i] = new BeanCategoria();
 				
 				userList[i].setId((int) result[i][0]);
-				recipeList[i].setIdPublicacion((int) result[i][1] );
-				userList[i].setNombre((String)result[i][2]);
+				recipeList[i].setId((int) result[i][1]);
+				recipeList[i].setIdPublicacion((int) result[i][2] );
+				userList[i].setNombre((String)result[i][3]);
 					aux = new GregorianCalendar();
-					aux.setTime((java.sql.Date)result[i][3]);
+					aux.setTime((java.sql.Date)result[i][4]);
 				recipeList[i].setFecha(aux);
-				catList[i].setNombre((String) result[i][4]);
-				recipeList[i].setTitulo((String) result[i][5]);
-				recipeList[i].setTiempo((int) result[i][6]);
-				recipeList[i].setTags((String) result[i][7]);
+				catList[i].setNombre((String) result[i][5]);
+				recipeList[i].setTitulo((String) result[i][6]);
+				recipeList[i].setTiempo((int) result[i][7]);
+				recipeList[i].setTags((String) result[i][8]);
 				
 				recipeList[i].setLikes(auxLikes);
 				recipeList[i].setDislikes(auxDislikes);
@@ -278,8 +285,6 @@ public class Index extends HttpServlet {
 			request.setAttribute("userList", userList);
 			request.setAttribute("catList", catList);			
 			request.setAttribute("recipeList", recipeList);
-			
-			sesion.setAttribute("curPage", "index");
 						
 			simpleQuery.closeConnection();
 			request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);

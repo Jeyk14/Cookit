@@ -30,12 +30,18 @@
 					<% } %>
 	
 					<div class="user-info">
-						<h4><%= myself.getNombre() %></h4>
-						<h5><%= myself.getEmail() %></h5>
+						<a href="profile?id=<%= myself.getId() %>">
+							<h4><%= myself.getNombre() %></h4>
+							<h5><%= myself.getEmail() %></h5>
+						</a>
 					</div>
 	
 					<div class="session-buttons">
-						<div><a href="profile?id=<%= myself.getId() %>"><button>Ver mi perfil</button></a></div>
+						<% if(curPage.equals("myprofile")){ 
+								
+							out.print("<div><a href='profile?id="+myself.getId()+"'><button>Ver mi perfil</button></a></div>"); 
+								
+							} %>
 						<div><a href="logoff"><button>Cerrar sesión</button></a></div>
 					</div>
 				</div>
@@ -71,3 +77,9 @@
 		</div>
 	
 	<% } %>
+	
+	<% if(!curPage.equals("index")){
+		
+		out.print("<a href='index'><button class='gotoIndex'>Volver a inicio</button></a>");
+		
+	} %>

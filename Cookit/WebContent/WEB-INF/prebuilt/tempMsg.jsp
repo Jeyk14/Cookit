@@ -4,7 +4,7 @@
 		<% if(session.getAttribute("success") == "true"){ %>
 		
 			<div class="tempMsg successMsg">
-				<h4>Parece que algo ha ido mal...</h4>
+				<h4>Muy bien</h4>
 				<p><%= request.getAttribute("tempMsg") %></p>
 			</div>
 		

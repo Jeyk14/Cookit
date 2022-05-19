@@ -87,7 +87,7 @@ public class login extends HttpServlet {
 
 				// email exists -> check if the given pass is equals to the encrypted pass in
 				// the DB
-				if (crypt.comprobarContraseña(pass, (String) result[0][7], (String) result[0][8])) {
+				if (crypt.check(pass, (String) result[0][7], (String) result[0][8])) {
 
 					// everything ok -> log in + add important user info to session
 
@@ -127,7 +127,7 @@ public class login extends HttpServlet {
 					System.out.println("Pass "+(String) result[0][7]);
 					System.out.println("Pass:" + pass + " / PassBD: " + (String) result[0][7] + " / Salt: "
 							+ (String) result[0][8] + "\n" + " / "
-							+ crypt.comprobarContraseña(pass, (String) result[0][7], (String) result[0][8]));
+							+ crypt.check(pass, (String) result[0][7], (String) result[0][8]));
 					System.out.println();
 
 				}

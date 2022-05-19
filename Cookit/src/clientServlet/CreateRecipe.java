@@ -47,7 +47,7 @@ public class CreateRecipe extends HttpServlet {
 				auxResult = simpleQuery.select(
 						"cookit.receta as rec INNER JOIN cookit.publicacion as pub ON rec.id_publicacion = pub.id",
 						new String[] { "rec.id", "pub.id", "pub.estado", "pub.titulo", "pub.subtitulo", "rec.id_categoria",
-								"rec.tags", "rec.tiempo", "rec.ingredientes", "rec.procedimiento" },
+								"rec.tags", "rec.tiempo", "rec.ingredientes", "rec.procedimiento", "rec.img" },
 						"estado LIKE 'guardado' AND pub.id_usuario = "+myself.getId(), "", 0, 0);
 
 				if (auxResult.length > 0) {
@@ -63,6 +63,7 @@ public class CreateRecipe extends HttpServlet {
 					savedRecipe.setTiempo((int) auxResult[0][7]);
 					savedRecipe.setIngredientes((String) auxResult[0][8]);
 					savedRecipe.setProcedimiento((String) auxResult[0][9]);
+					savedRecipe.setImg((byte[])  auxResult[0][10] );
 
 					request.getSession().setAttribute("savedRecipe", savedRecipe);
 

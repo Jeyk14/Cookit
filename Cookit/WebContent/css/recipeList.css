@@ -34,7 +34,7 @@
     position: relative;
 }
 
-.col-img > img {
+.col-img a img {
     width: 230px;
     height: 230px;
     object-fit: cover;

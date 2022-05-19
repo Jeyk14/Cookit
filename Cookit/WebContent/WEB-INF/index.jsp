@@ -74,7 +74,7 @@
 			if(recipeList != null){
 		%>
 		
-			<% while(recipeList[recipeCont] != null){ %>
+			<% while(recipeList[recipeCont] != null && recipeCont < 12){ %>
 			
 			<%	
 			
@@ -90,7 +90,7 @@
 						<h4 class="col-title"><%= recipeList[recipeCont].getTitulo() %></h4>
 						<div class="col-img"> <!-- start col-img -->
 							<a href="recipe?id=<%= recipeList[recipeCont].getIdReceta() %>">
-								<img src="loadRecipeImg?<%= recipeList[recipeCont].getIdReceta() %>" title="Categoría: <%= catList[recipeCont] %>&#013;Tags: <%= recipeList[recipeCont].getTags() %>" />
+								<img src="loadImg?id=<%= recipeList[recipeCont].getIdReceta() %>&target=recipe" title="Categoría: <%= catList[recipeCont] %>&#013;Tags: <%= recipeList[recipeCont].getTags() %>" onerror="this.onerror=null;this.src='img/broken.jpg'" />
 							</a>
 					
 							<div class="stars"> <!-- start stars -->

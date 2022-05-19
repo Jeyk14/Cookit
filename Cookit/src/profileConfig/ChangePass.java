@@ -66,8 +66,8 @@ public class ChangePass extends HttpServlet {
 				oldStored = (String) simpleQuery.selectOne("cookit.usuario", "pass", "id = " + myself.getId(), "", 0, 0);
 				oldSalt = (String) simpleQuery.selectOne("cookit.usuario", "salt", "id = " + myself.getId(), "", 0, 0);
 
-				System.out.println("Coinciden: "+crypt.comprobarContraseña(oldPass, oldStored, oldSalt));
-				if (crypt.comprobarContraseña(oldPass, oldStored, oldSalt)) {
+				System.out.println("Coinciden: "+crypt.check(oldPass, oldStored, oldSalt));
+				if (crypt.check(oldPass, oldStored, oldSalt)) {
 					// The password given and the old password matches -> check new password
 
 					System.out.println("Son iguales: "+newPass.equals(repepass));
@@ -75,7 +75,7 @@ public class ChangePass extends HttpServlet {
 						// new pass = repeated pass -> change user password
 						newSalt = prepareNewSalt();
 						simpleQuery.updateOne("cookit.usuario", "pass", "string",
-								crypt.encriptar(newPass, newSalt).get(), " id = " + myself.getId());
+								crypt.encrypt(newPass, newSalt).get(), " id = " + myself.getId());
 						simpleQuery.updateOne("cookit.usuario", "salt", "string", newSalt, " id = " + myself.getId());
 
 						System.out.println("newsalt " + newSalt);

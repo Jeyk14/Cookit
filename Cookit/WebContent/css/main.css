@@ -84,6 +84,13 @@ img {
     margin: auto;
 }
 
+.gotoIndex {
+	width: auto;
+	position: fixed;
+	top: 20vh;
+	right: 5vw;
+}
+
 .go-up {
     background-color: red;
     content: " ";

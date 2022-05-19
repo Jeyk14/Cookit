@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="ISO-8859-1"%>
     
 <!DOCTYPE html>
@@ -33,6 +33,7 @@
 	<div id="content">
 
         <jsp:include page="prebuilt/header.jsp" />
+        
         <jsp:include page="prebuilt/tempMsg.jsp" />
 
         <div class="recipe">
@@ -43,7 +44,7 @@
                         <label for="title">*T&iacute;tulo</label>
                         <input type="text" name="title" id="title" <% if(load){ out.print("value='"+savedRecipe.getTitulo()+"'"); } %> required>
                     </div>
-                    <div class="recipe-subtitle" title="(Opcional) Una breve descripci�n sobre la receta o el resultado final">
+                    <div class="recipe-subtitle" title="(Opcional) Una breve descripci%oacute;n sobre la receta o el resultado final">
                         <label for="title">Subt&iacute;tulo</label>
                         <input type="text" name="subtitle" id="subtitle" <% if(load){ out.print("value='"+savedRecipe.getSubtitulo()+"'"); } %>>
                     </div>
@@ -52,9 +53,10 @@
                 <div class="recipe-info">
 
                     <div class="recipe-img">
-                    	<% if(load){ out.print("<img src='loadImg?id="+savedRecipe.getIdReceta()+"&target=recipe' id='preview' />"); } else { out.print("<img src='img/placeholder.png' id='preview' />"); } %>
-                        <button onclick="event.preventDefault(); document.getElementById('getImg').click()">A&ntilde;adir una imagen</button>
-                        <input type="file" name="img" id="getImg" style="display: none;">
+                  			<img src='loadImg?id=<%= savedRecipe.getIdReceta() %>&target=recipe' id='preview' onerror="this.onerror=null;this.src='img/broken.jpg';this.title='Oops... Ha ocurrido un problema. Elija otra imagen'"/>
+                  			<button onclick='event.preventDefault(); document.getElementById("getFile").click()'>A&ntilde;adir una imagen A</button>
+                  			<input type='file' name='img' value="" id='getFile' style='display: none;'>
+                      
                     </div>
 
                     <div class="requirements">
@@ -109,6 +111,8 @@
     </div>
     
     <jsp:include page="prebuilt/footer.jsp" />
+    
+    <script src="js/previewImg.js"></script>
 
 </body>
 </html>
