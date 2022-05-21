@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import javax.mail.Session;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;

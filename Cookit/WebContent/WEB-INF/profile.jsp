@@ -41,9 +41,6 @@
 </head>
 <body>
 
-	
-	
-	
 		<jsp:include page="prebuilt/header.jsp" />
 		
 		<div id="content">

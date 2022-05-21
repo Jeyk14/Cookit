@@ -16,7 +16,6 @@ import data.BeanCategoria;
 import data.BeanReceta;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
-import dbConnection.Connect;
 import dbConnection.SimpleQuery;
 
 /**
@@ -32,27 +31,28 @@ public class Index extends HttpServlet {
 	 * 			id, id_usuario, id_publicacion (so every like and dislike has a source and target)
 	 * TODO: Add a block list for users to block eachother. That's another table in the database
 	 * TODO: Add the page buttons: next page, previous page and the page indicator
-	 * TODO: Fix the header to not show "Close session" without a session while looking at someones profile
+	 * TODO: Fix the header to not show "Close session" without a session while looking at someone's profile
 	 * TODO: Make the "Volver a inicio" button float on the side of the page ONLY when needed
 	 * TODO: Fix the tempMsg not showing anywhere
 	 * 
 	 * TODO: Implement tempMsg, success and showMsg as session attributes
 	 * TODO: Implement curPage as a session attribute
 	 * 
+	 * TODO: (IMPORTANT) Add an import to a jsp that contains a check for all session attributes. If null, initiate attributes
 	 * */
 	
 	/* Session attributes
 	 * myself : BeanUsuario		The logged user. If null -> anonimous user
-	 * savedRecipe : BeanReceta	A recipe the user saved previously.
-	 * pag : int				The current page on index
+	 * savedRecipe : BeanReceta	A recipe the user saved previously while creating one.
 	 * 
+	 * pag : int				The current page on index
 	 * searchtype : String		Indicates what fiels is being searched in the index Ej: titulo, ingredientes, usuario, etc
 	 * searchValue : String		Indicates the value searched in the field that searchtype indicates. Ej: cebolla, pastel, etc
 	 * order : String			Indicates the order of the search in the index
 	 * categories : Object[][]	The whole category table. 
 	 * 
 	 * curPage : String			The page the user is in
-	 * 
+	 *  
 	 * tempMsg : String			A message to show the user
 	 * success : boolean		Determines if tempMessge is a succes message or a failure message
 	 * showMsg : boolean		If true, then show tempMsg and turn back to false
@@ -108,6 +108,9 @@ public class Index extends HttpServlet {
 		//BeanPublicacion[] indexPost = new BeanPublicacion[12];
 		BeanCategoria[] catList = new BeanCategoria[12];
 		
+		Object[][] auxCategory; // The list of categories
+		BeanCategoria[] categories = null;
+		
 		// Var used for the search
 		String searchtype = "title"; //Where's being searched
 		String searchValue = ""; // What's beng searched
@@ -136,8 +139,18 @@ public class Index extends HttpServlet {
 		
 		if(request.getSession().getAttribute("categories") == null) {
 			
-			Object[][] categories = simpleQuery.select("cookit.categoria", 
+			auxCategory = simpleQuery.select("cookit.categoria", 
 					new String[] {"id", "nombre", "descripcion"}, "", "", 0, 0);
+			
+			categories = new BeanCategoria[auxCategory.length];
+			
+			for (int i = 0; i < auxCategory.length; i++) {
+				categories[i] = new BeanCategoria();
+				
+				categories[i].setId((int) auxCategory[i][0]);
+				categories[i].setNombre((String) auxCategory[i][1]);
+				categories[i].setDescripcion((String) auxCategory[i][2]);
+			}
 			
 			request.getSession().setAttribute("categories", categories);
 			
@@ -285,6 +298,8 @@ public class Index extends HttpServlet {
 			request.setAttribute("userList", userList);
 			request.setAttribute("catList", catList);			
 			request.setAttribute("recipeList", recipeList);
+			
+			request.getSession().removeAttribute("viewedPost");
 						
 			simpleQuery.closeConnection();
 			request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);

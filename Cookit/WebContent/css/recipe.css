@@ -1,87 +1,180 @@
-.recipe {
-    width: 75%;
-    margin: auto;
-}
-
-.recipe form > div {
-    margin: 20px 0px 0px 0px;
-}
-
-/* RECIPE NAME AND SUBTITLE */
-
-.recipe-name {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-}
-
-.recipe-title, .recipe-subtitle {
+@charset "ISO-8859-1";
+.recipe-content {
     display: flex;
     flex-direction: column;
-    align-self: center;
 }
 
-.recipe-title input {
-    font-size: 25px;
-    font-style: italic;
+/* - */
+
+.recipe-title {
+    width: fit-content;
+    margin: auto;
+    margin-top: 5%;
 }
 
-.recipe-subtitle input {
-    width: 300px;
+.recipe-title h3 {
+    margin: 0px;
 }
 
-/* RECIPE INFO IN TWO COLUMNS: IMAGE AND REQUIREMENTS */
+/* - */
 
 .recipe-info {
-    display: flex;
-    flex-direction: row;
-}
-
-.recipe-img {
-    text-align: center;
-}
-
-.recipe-img img {
-	width: 250px;
-	height: 250px;
-	object-fit: cover;
-	border-radius: 30px;
-}
-
-.requirements {
-    margin: auto;
-}
-
-.requirements div {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1em;
-}
-
-/* RECIPE PROCEDURE */
-
-.procedure {
-    display: flex;
-    flex-direction: column;
-    width: 75%;
-    margin: auto !important;
-}
-
-/* FORM OPTIONS AND SUBMIT BUTTONS */
-
-.form-options {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
 }
 
-.form-options input {
-    width: auto;
-    align-self: center;
+.recipe-image {
+    width: 45%;
+    height: 50vh;
 }
 
-.close {
-    text-align: center;
-    width: 300px;
+.recipe-image img{
+    /* width: 100%;
+    height: 100%; */
+    width: 450px;
+    height: 300px;
+    object-fit: cover;
+}
+
+.recipe-data {
+    width: 30%;
+}
+
+.recipe-data * {
+    width: 100%;
+}
+
+.tags textarea, .ingredients textarea {
+    resize: none;
+}
+
+.tags p, .ingredients p {
+    margin-bottom: 0px;
+}
+
+.ingredients textarea {
+    height: 20vh;
+}
+
+/* - */
+
+.procedure {
+    width: 65%;
     margin: auto;
+}
+
+.procedure textarea{
+    width: 100%;
+    height: 25vh;
+    resize: none;
+}
+
+/* - */
+
+.like-dislike {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 3vh;
+}
+
+.like-dislike div {
+    width: 25%;
+}
+
+.like-dislike div a button{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: auto;
+}
+
+.like-dislike div a button img {
+    width: 25px;
+}
+
+/* - */
+
+.comment, .new-comment {
+    width: 50%;
+    margin: auto;
+    position: relative;
+}
+
+.comment {
+    margin-bottom: 5vh;
+}
+
+.write-comment h4 {
+    margin: 0px;
+}
+
+.add-comment {
+    margin-bottom: 8vh;
+}
+
+.comment-options {
+    text-align: center;
+}
+
+.comment-options input{
+    width: max-content;
+}
+
+.comment-author{
+    background-color: var(--banana);
+    width: 50%;
+    margin: 0px;
+    padding: 1em;
+}
+
+.comment-author p {
+    margin: 0px;
+}
+
+.comment-date {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    /* justify-content: center; */
+    height: 1.5em;
+    margin-bottom: -1.5em;
+    margin-top: 1.5em;
+}
+.comment-date p {
+    margin: 0px;
+    margin-left: 2em;
+}
+
+.comment-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.comment-body {
+    width: fit-content;
+    width: 100%;
+}
+
+.comment-body textarea {
+    width: 100%;
+    border: none;
+    resize: none;
+    height: 5em;
+    border: 2px solid lightgray;
+}
+
+.comment-edit {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    display: flex;
+    flex-direction: row;
+    width: 25%;
+    justify-content: space-around;
+}
+
+.comment-edit div a button{
+    width: max-content;
 }

@@ -8,6 +8,7 @@ body {
     --color-yel: #F5B700;
     --color-gre: #A9E5BB;
 
+    --banana: #FFE7A0;
     --cream: #F3EAD0;
     --chocolate: #391C0A;
 
@@ -82,13 +83,6 @@ img {
 #content {
     max-width: 1024px;
     margin: auto;
-}
-
-.gotoIndex {
-	width: auto;
-	position: fixed;
-	top: 20vh;
-	right: 5vw;
 }
 
 .go-up {
@@ -207,6 +201,16 @@ img {
     border-bottom: 2px solid var(--chocolate );
 }
 
+.title {
+    background-color: var(--color-red);
+    border: 4px solid red;
+    border-bottom-color: var(--color-yel);
+    border-right-color: var(--color-yel);
+    padding: 3px;
+    color: white;
+    font-style: italic;
+}
+
 /* ------------ */
 
 .footer {
@@ -214,6 +218,11 @@ img {
     height: 75px;
     background-color: var(--chocolate);
     text-align: center;
+
+    position: absolute;
+    z-index: 99;
+    /* bottom: 0; */
+    left: 0;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;

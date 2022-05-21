@@ -2,6 +2,11 @@
 	
 	<% BeanUsuario myself = (BeanUsuario) session.getAttribute("myself"); 
 		String curPage = (String) session.getAttribute("curPage");
+		
+		if(curPage == null){
+			 session.setAttribute("curPage", "recipe");
+			 curPage = "recipe";
+		}
 	%>
 
 	<%if(myself != null){ // logged in%>

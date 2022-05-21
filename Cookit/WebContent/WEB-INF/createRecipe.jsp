@@ -10,7 +10,7 @@
     <title>Cookit - Crear receta</title>
 
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/recipe.css">
+    <link rel="stylesheet" href="css/recipeMod.css">
 </head>
 <body>
 

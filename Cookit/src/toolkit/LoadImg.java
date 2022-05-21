@@ -2,7 +2,6 @@ package toolkit;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.sql.Connection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dbConnection.Connect;
 import dbConnection.SimpleQuery;
 
 @WebServlet("/loadImg")
@@ -19,7 +17,6 @@ public class LoadImg extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Connect con;
 		SimpleQuery modelo;
 		byte[] imagenBytes = null; // Imagen en forma de array de Bytes (recien sacado de la BD)
 		OutputStream out; // Para devolver la imagen (piensa que es un return)
