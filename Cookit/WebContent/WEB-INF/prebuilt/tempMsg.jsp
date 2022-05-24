@@ -1,5 +1,18 @@
-<%if(session.getAttribute("tempMsg") != null){
-	if(session.getAttribute("success") != null){ %>
+<%
+
+	String tempMsg = null;
+	boolean success = false;
+
+	if(session.getAttribute("succes") != null){
+		success = (boolean) session.getAttribute("success");
+	}
+	
+	if(session.getAttribute("tempMsg") != null) {
+		tempMsg = (String) session.getAttribute("tempMessage");
+	}
+%>
+
+<%if(tempMsg != null){ %>
 	
 		<% if(session.getAttribute("success") == "true"){ %>
 		
@@ -15,13 +28,4 @@
 				<p><%= request.getAttribute("tempMsg") %></p>
 			</div>
 		
-		<% } %>
-	
-	<% } else { %>
-	
-		<div class="tempMsg">
-			<h4>Parece que algo ha ido mal...</h4>
-			<p><%= request.getAttribute("tempMsg") %></p>
-		</div>
-		
-	<%  session.removeAttribute("tempMsg"); session.removeAttribute("success"); }}%>
+		<% }  session.removeAttribute("tempMsg"); session.removeAttribute("success"); }%>

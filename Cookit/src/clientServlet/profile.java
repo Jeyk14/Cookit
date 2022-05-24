@@ -44,6 +44,8 @@ public class profile extends HttpServlet {
 		BeanUsuario user = new BeanUsuario(); // The data of the owner of this profile
 		String queryUsr = "SELECT id, nombre, edad, dieta, nacionalidad, creacion FROM cookit.usuario WHERE id = ";
 		Calendar auxCal;
+		
+		int elemCount = 9;
 
 		BeanReceta[] recipeList = new BeanReceta[9]; // this user's recipes
 		BeanCategoria[] catList = new BeanCategoria[9];
@@ -78,6 +80,7 @@ public class profile extends HttpServlet {
 			auxCal = new GregorianCalendar();
 			auxCal.setTime((java.sql.Date) result[0][5]);
 			user.setCreacion(auxCal);
+			
 			con.closeConnection();
 			
 			} else {
@@ -134,9 +137,14 @@ public class profile extends HttpServlet {
 			openQuery = new ConsultaAbierta();
 			result = openQuery.select(con.getConexion(), queryRecipe, 7);
 			
+			if(result.length < 9) {
+				elemCount = result.length;
+			}
+			
 			con.openConnection();
 			simpleQuery = new SimpleQuery(con.getConexion());
-			for (int i = 0; i < result.length; i++) {
+			
+			for (int i = 0; i < elemCount; i++) {
 				
 				// TODO: If logged -> can see your blocked/hidden posts
 				// TODO: hidden posts can be toggled visible

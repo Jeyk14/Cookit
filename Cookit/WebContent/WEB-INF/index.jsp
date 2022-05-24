@@ -30,9 +30,19 @@
 		BeanCategoria[] catList = (BeanCategoria[]) request.getAttribute("catList");
 		
 		int rowCont = 0;
+		
+		int pag = 1;
+		
+		if(session.getAttribute("curpage") != null){
+			pag = (int) session.getAttribute("pag");
+		}
 	%>
 
 	<jsp:include page="prebuilt/header.jsp" />
+	
+	<div class="go-up" id="go-up" style="display: none;" title="Volver arriba">
+        <div class="arrow"></div>
+    </div>
 	
 	<div class="search-form">
 		<form action="index" method="post">
@@ -66,6 +76,7 @@
 <div class="separator"></div>
 
 	<jsp:include page="prebuilt/special.jsp" />
+	<jsp:include page="prebuilt/tempMsg.jsp" />
 
 
 	<div id="content">
@@ -74,7 +85,8 @@
 			if(recipeList != null){
 		%>
 		
-			<% while(recipeList[recipeCont] != null && recipeCont < 12){ %>
+			<% while(recipeCont < 12){ 
+				if(recipeList[recipeCont] != null){%>
 			
 			<%	
 			
@@ -122,7 +134,7 @@
 				<% // if already 3 col OR next col is null -> put row end
 					if( rowCont == 2 || recipeList[recipeCont+1] == null ){ %> </div> <!-- end row --> <% rowCont = 0; } else { rowCont ++; }  %>
 				
-			<% recipeCont++; } %>
+			<% } recipeCont++; } %>
 		
 		<% } else { 
 			// error -> apology
@@ -137,8 +149,24 @@
 		<% } %>
 		
 		</div> <!-- end #content -->
+		
+		<div class="pageSelect">
+			<div class="prePage">
+				<a <% if(pag > 1){ out.print("href='index?pag="+pag+"'"); } %>><button>P&aacute;gina anterior</button></a>
+			</div>
+			
+			<div class="curPage">
+				<p>Página <%= pag %></p>
+			</div>
+			
+			<div class="nextPage">
+				<a href='index?pag=<%= pag + 1 %>'><button>P&aacute;gina siguiente</button></a>
+			</div>
+		</div>
 	
 	<jsp:include page="prebuilt/footer.jsp" />
+	
+	<script src="js/goup.js"></script>
 
 </body>
 </html>

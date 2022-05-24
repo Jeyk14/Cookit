@@ -17,6 +17,7 @@ import data.BeanReceta;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
 import dbConnection.SimpleQuery;
+import toolkit.typeCkecker;
 
 /**
  * Servlet implementation class inicio
@@ -26,12 +27,8 @@ public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	/*
-	 * TODO: FOR F SAKE!! Remove al the Ñ from the code and the libraries
-	 * TODO: Add the likes and dislike tables to the database so a user can only like a post once
-	 * 			id, id_usuario, id_publicacion (so every like and dislike has a source and target)
 	 * TODO: Add a block list for users to block eachother. That's another table in the database
 	 * TODO: Add the page buttons: next page, previous page and the page indicator
-	 * TODO: Fix the header to not show "Close session" without a session while looking at someone's profile
 	 * TODO: Make the "Volver a inicio" button float on the side of the page ONLY when needed
 	 * TODO: Fix the tempMsg not showing anywhere
 	 * 
@@ -117,8 +114,11 @@ public class Index extends HttpServlet {
 		
 		String order = "datedesc"; // The order of the search
 		
+		String getPag = request.getParameter("pag");
 		int pag = 1;
 		int offset = 0;
+		
+		int elemCount = 12;
 		
 		// TODO: If estado == oculto // guardado // bloqueado -> not show in list
 		// Select the necessary field to be used
@@ -136,6 +136,12 @@ public class Index extends HttpServlet {
 		// -----------------------------------------------------------------------------
 		
 		sesion.setAttribute("curPage", "index");
+		
+		if(getPag != null && typeCkecker.isInt(getPag)) {
+			pag = Integer.valueOf(getPag);
+		}
+		
+		System.out.println("pag: "+pag);
 		
 		if(request.getSession().getAttribute("categories") == null) {
 			
@@ -251,6 +257,10 @@ public class Index extends HttpServlet {
 			
 			// run the query
 			result = consult.select(simpleQuery.getConnection(), query, 9);
+			
+			if(result.length < 12) {
+				elemCount = result.length;
+			}
 						
 			//Load the beans
 			/*
@@ -261,10 +271,11 @@ public class Index extends HttpServlet {
 			 * */
 			
 			System.out.println("query en index: "+query);
-			System.out.println("result.length "+result.length);
+			System.out.println("result.length: "+result.length);
+			System.out.println("elemCount: "+elemCount);
 			
 			
-			for (int i = 0; i < result.length; i++) {
+			for (int i = 0; i < elemCount; i++) {
 				
 				int auxLikes = 0;
 				int auxDislikes = 0;

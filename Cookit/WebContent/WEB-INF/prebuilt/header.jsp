@@ -85,6 +85,6 @@
 	
 	<% if(!curPage.equals("index")){
 		
-		out.print("<a href='index'><button class='gotoIndex'>Volver a inicio</button></a>");
+		out.print("<div class='goto'><a href='index'><button class='gotoIndex'>Volver a inicio</button></a></div>");
 		
 	} %>

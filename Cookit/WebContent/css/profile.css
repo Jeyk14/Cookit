@@ -29,3 +29,7 @@
 .profile-info ul li{
     list-style: none;
 }
+
+.modAcc button {
+	width: auto;
+}

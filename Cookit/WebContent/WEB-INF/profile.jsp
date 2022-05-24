@@ -20,6 +20,7 @@
 		BeanUsuario myself = new BeanUsuario();
 		BeanCategoria[] catList = (BeanCategoria[]) request.getAttribute("catList");
 		int rowCont = 0;
+		int pag = 1;
 		
 		Calendar auxCal = user.getCreacion();
 		
@@ -50,7 +51,14 @@
             <div class="profile-content">
 
                 <div class="profile-pic">
-                    <img src="loadImg?id=<%= user.getId() %>&target=user" />
+                    <img src="loadImg?id=<%= user.getId() %>&target=user" onerror="this.onerror=null;this.src='img/broken.jpg'"/>
+                	 <% if(myself.getId() == user.getId()){ %>
+			        
+			        	<div class="modAcc">
+			        		<a href="modProfile?id=<%= myself.getId() %>" ><button>Modificar mi perfil</button></a>
+			        	</div>
+			        	
+			        <% } %>
                 </div>
     
                 <div class="profile-info">
@@ -74,16 +82,6 @@
             </div>
 
         </div>
-        
-        <%
-        	if(myself.getId() == user.getId()){
-        %>
-        
-        	<div class="modAcc">
-        		<a href="modProfile?id=<%= myself.getId() %>"><button>Modificar mi perfil</button></a>
-        	</div>
-        	
-        <% } %>
 
             <div class="separator"></div>
 		
@@ -92,7 +90,8 @@
 			if(recipeList != null){
 		%>
 		
-			<% while(recipeList[recipeCont] != null){ %>
+			<% while(recipeCont < 9){
+				if(recipeList[recipeCont] != null){%>
 			
 			<%	
 				starRate = recipeList[recipeCont].getStars();
@@ -105,8 +104,10 @@
 				<div class="column">
 					<h4 class="col-title"><%= recipeList[recipeCont].getTitulo() %></h4>
 					<div class="col-img">
-						<img src="LoadRecipeImg?<%= recipeList[recipeCont].getIdReceta() %>"
-							title="Categoría: <%= catList[recipeCont] %>&#013;Tags: <%= recipeList[recipeCont].getTags() %>" />
+						<a href="recipe?id=<%= recipeList[recipeCont].getIdReceta() %>">
+						<img src="loadImg?id=<%= recipeList[recipeCont].getIdReceta() %>&target=recipe"
+							title="Categoría: <%= catList[recipeCont].getNombre() %>&#013;Tags: <%= recipeList[recipeCont].getTags() %>" onerror="this.onerror=null;this.src='img/broken.jpg'" />
+							</a>
 				
 						<div class="stars">
 				
@@ -135,7 +136,7 @@
 				<% //put a new row every 3 elements
 				if( rowCont == 2 || recipeList[recipeCont+1] == null ){ %> </div> <!-- end row --> <% rowCont = 0; } else { rowCont ++; } %>
 				
-			<% recipeCont++; } %>
+			<% } recipeCont++; } %>
 		
 		<% } else { 
 			// error -> apology
@@ -148,6 +149,20 @@
 			</div>
 		
 		<% } %>
+		
+		<div class="pageSelect">
+			<div class="prePage">
+				<a <% if(pag > 1){ out.print("href='index?pag="+pag+"'"); } %>><button>P&aacute;gina anterior</button></a>
+			</div>
+			
+			<div class="curPage">
+				<p>Página <%= pag %></p>
+			</div>
+			
+			<div class="nextPage">
+				<a href='index?pag=<%= pag + 1 %>'><button>P&aacute;gina siguiente</button></a>
+			</div>
+		</div>
 	
 	<jsp:include page="prebuilt/footer.jsp" />
 

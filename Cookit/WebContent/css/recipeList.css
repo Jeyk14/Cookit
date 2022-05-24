@@ -59,3 +59,14 @@
 .col-info p {
     margin: 10px 0 0 0;
 }
+
+.pageSelect {
+	width: 60%;
+	margin: auto;
+	display: flex;
+	justify-content: space-around;
+}
+
+.pageSelect .nextPage button, .pageSelect .prePage button{
+	width: auto;
+}
