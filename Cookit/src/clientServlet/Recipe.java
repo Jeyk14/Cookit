@@ -31,11 +31,16 @@ public class Recipe extends HttpServlet {
 		BeanReceta recipe;
 		BeanComentario[] comments;
 		BeanUsuario[] users;
+		BeanUsuario myself;
 		Object[][] results;
-		Object foundRecipe = null;
+		Object result = null;
 		Calendar auxCal;
+		
+		String aux;
 
 		// Check if ID param exists. If not exist -> index
+		
+		//TODO: If user logged -> check if it liked or disliked the recipe
 
 		if (id == null) {
 
@@ -43,14 +48,42 @@ public class Recipe extends HttpServlet {
 		} else {
 			// if id give -> check if ID exist
 
-			foundRecipe = simpleQuery.selectOne("cookit.publicacion", "titulo", "id = " + id, "", 0, 0);
+			result = simpleQuery.selectOne("cookit.publicacion", "titulo", "id = " + id, "", 0, 0);
 
-			if (foundRecipe == null) {
+			if (result == null) {
 
 				target = "index";
 
 			} else {
 				// post with given ID exist -> load recipe and comments
+				
+				// if user logge -> check if the post is already liked
+				if( session.getAttribute("myself") != null) {
+					
+					myself = (BeanUsuario) session.getAttribute("myself");
+					
+					System.out.println("id_usuario = "+myself.getId()+" AND id_publicacion = "+id);
+					
+					result = simpleQuery.selectOne("cookit.likes", "tipo", "id_usuario = "+myself.getId()+" AND id_publicacion = "+id, "", 1, 0);
+					
+					if(result != null) {
+						
+						System.out.println("Liked?: "+(String) result);
+						
+						aux = (String) result;
+						
+						if(aux.equals("L")) {
+								request.setAttribute("liked", 'L');
+								System.out.println("liked");
+							}else {
+								request.setAttribute("liked", 'D');
+								System.out.println("disliked");
+							}
+						
+					} else {System.out.println("neither");}
+					
+					result = null;
+				}
 
 				// TODO: Add a sorter for the comments (fecha - my comments first)
 				// Comments on pages of 20 each
@@ -86,9 +119,6 @@ public class Recipe extends HttpServlet {
 				request.setAttribute("comments", comments);
 				request.setAttribute("users", users);
 
-					
-					System.out.println("patitu");
-
 					recipe = new BeanReceta();
 					results = simpleQuery.select(
 							"cookit.receta AS rec INNER JOIN cookit.publicacion AS pub ON pub.id = rec.id_publicacion",
@@ -121,6 +151,8 @@ public class Recipe extends HttpServlet {
 		
 		// TODO: Divide the time by 60 to show the hours and minutes instead of only minutes
 
+		session.setAttribute("curpage", "recipe");
+		
 		request.getRequestDispatcher(target).forward(request, response);
 	}
 

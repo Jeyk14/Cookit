@@ -39,6 +39,7 @@ public class profile extends HttpServlet {
 		int pag = 1;
 		int offset = 0;
 		String header = "WEB-INF/profile.jsp";
+		String getPag = request.getParameter("pag");
 		
 		BeanUsuario myself; // In case this is the logged user's profile
 		BeanUsuario user = new BeanUsuario(); // The data of the owner of this profile
@@ -58,6 +59,11 @@ public class profile extends HttpServlet {
 		
 		// --------------------------------------------------------------------
 		// GETTING THE PROFILE'S DATA
+		
+		if(getPag != null && typeCkecker.isInt(getPag)) {
+			pag = Integer.valueOf(getPag);
+		}
+		
 		
 		if(id != null) {
 			

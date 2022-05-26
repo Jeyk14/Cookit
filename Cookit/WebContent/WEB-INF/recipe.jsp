@@ -22,12 +22,22 @@
 
 	<%
 	
+	BeanUsuario myself = null;
 	BeanReceta recipe = new BeanReceta();
 	BeanComentario[] comments = null;
 	BeanUsuario[] users = null;
 	BeanCategoria[] categories = null;
 	int contCom = 0;
 	int auxId = 0;
+	
+	char liked = 'x';
+	if(request.getAttribute("liked") != null){
+		liked = (char) request.getAttribute("liked");
+	}
+	
+	if(session.getAttribute("myself") != null){
+		myself = (BeanUsuario) session.getAttribute("myself");
+	}
 		
 	if(request.getAttribute("viewedPost") != null){
 		recipe = (BeanReceta) request.getAttribute("viewedPost");
@@ -105,19 +115,24 @@
                 </div>
 
             </div>
+            
+            <% if(myself != null){ %>
 
             <div class="like-dislike">
                 <div>
-                    <a href="likeIt?type=1"><button>
+                    <a <% if(liked == 'L'){ out.print("class='liked'"); } else { out.print("href='like?type=1&user="+myself.getId()+"&post="+recipe.getIdPublicacion()+"'");}%>><button>
                             <img class="smallimg" src="img/star.png" />Me gusta
                         </button></a>
                 </div>
+                
                 <div>
-                    <a href="likeIt?type=0"><button>
+                    <a <% if(liked == 'D'){ out.print("class='disliked'"); } else { out.print("href='like?type=0&user="+myself.getId()+"&post="+recipe.getIdPublicacion()+"'");}%>><button>
                             <img class="smallimg" src="img/star_0.png" />No me gusta
                         </button></a>
                 </div>
             </div>
+            
+            <% } %>
 
         </div>
 

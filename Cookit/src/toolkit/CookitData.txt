@@ -1,0 +1,42 @@
+- - - - CURPAGE VALUES - - - - 
+index - index page
+log - login, confirm email, reset password
+profile - someone's profile page
+myprofile - logged user's profile
+profileMod - modify profile
+recipe - view recipe
+recipeMod - edit recipe, create recipe
+	  
+	
+	
+	
+- - - - SESSION ATTRIBUTES - - - - 
+myself : BeanUsuario		The logged user. If null -> anonimous user
+savedRecipe : BeanReceta	A recipe the user saved previously while creating one.
+
+pag : int				The current page on index
+searchtype : String		Indicates what fiels is being searched in the index Ej: titulo, ingredientes, usuario, etc
+searchValue : String		Indicates the value searched in the field that searchtype indicates. Ej: cebolla, pastel, etc
+order : String			Indicates the order of the search in the index
+categories : Object[][]	The whole category table. 
+  
+curPage : String		The page the user is in
+   
+tempMsg : String		A message to show the user
+success : boolean		Determines if tempMessge is a succes message or a failure message
+showMsg : boolean		If true, then show tempMsg and turn back to false*/
+	  
+	  
+- - - - STAR FORMULA - - - -
+	  
+Stars system 5-(((dislikes*100)/likes)/10)
+The rating is ceil rounded
+Anything below 0 count as 0 stars
+Anything above 0 count as 1 star
+etc
+Anything abobe 4 count as 5 starsceiling
+	 
+SELECT usu.id, usu.nombre, pub.fecha, cat.nombre, rec.img, rec.procedimiento, rec.tiempo, rec.ingredientes, rec.tags
+FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion
+INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id
+INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id

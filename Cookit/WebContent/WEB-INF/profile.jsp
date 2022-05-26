@@ -28,6 +28,10 @@
 			myself = (BeanUsuario) session.getAttribute("myself");
 		}
 		
+		if(request.getAttribute("pag") != null){
+			pag = (int) request.getAttribute("pag");
+		}
+		
 	%>
 
 <head>
@@ -152,7 +156,7 @@
 		
 		<div class="pageSelect">
 			<div class="prePage">
-				<a <% if(pag > 1){ out.print("href='index?pag="+pag+"'"); } %>><button>P&aacute;gina anterior</button></a>
+				<a <% if(pag > 1){ out.print("href='profile?id="+user.getId()+"&pag="+pag+"'"); } %>><button>P&aacute;gina anterior</button></a>
 			</div>
 			
 			<div class="curPage">
@@ -160,7 +164,7 @@
 			</div>
 			
 			<div class="nextPage">
-				<a href='index?pag=<%= pag + 1 %>'><button>P&aacute;gina siguiente</button></a>
+				<a href="profile?id=<%= user.getId() %>&pag="<%= pag + 1 %>"><button>P&aacute;gina siguiente</button></a>
 			</div>
 		</div>
 	

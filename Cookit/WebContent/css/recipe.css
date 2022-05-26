@@ -94,6 +94,14 @@
     width: 25px;
 }
 
+.liked button, .disliked button{
+	background-color: var(--color-red) !important;
+}
+
+.liked button img, .disliked button img{
+	width: 50px !important;
+}
+
 /* - */
 
 .comment, .new-comment {

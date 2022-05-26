@@ -44,7 +44,7 @@ public class ConsultaAbierta {
 
 			objeto = new Object[rowCount][columns];
 			
-			if(rowCount > 1) {
+			if(rowCount > 0) {
 	
 //			System.out.println(query+"\n Rows: "+rowCount);
 			consulta = con.prepareStatement(query);

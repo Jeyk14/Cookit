@@ -33,7 +33,7 @@
 		
 		int pag = 1;
 		
-		if(session.getAttribute("curpage") != null){
+		if(session.getAttribute("pag") != null){
 			pag = (int) session.getAttribute("pag");
 		}
 	%>
