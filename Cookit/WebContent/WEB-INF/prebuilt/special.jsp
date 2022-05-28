@@ -1,7 +1,7 @@
 	<%@ page import="data.BeanReceta"%>
 	
 	<%
-		BeanReceta special = (BeanReceta) session.getAttribute("weekSpecial");
+		BeanReceta special = (BeanReceta) session.getAttribute("special");
 	%>
 	
 	<%

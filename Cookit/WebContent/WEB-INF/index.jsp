@@ -76,7 +76,6 @@
 <div class="separator"></div>
 
 	<jsp:include page="prebuilt/special.jsp" />
-	<jsp:include page="prebuilt/tempMsg.jsp" />
 
 
 	<div id="content">

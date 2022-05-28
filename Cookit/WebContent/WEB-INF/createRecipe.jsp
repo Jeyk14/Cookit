@@ -33,8 +33,6 @@
 	<div id="content">
 
         <jsp:include page="prebuilt/header.jsp" />
-        
-        <jsp:include page="prebuilt/tempMsg.jsp" />
 
         <div class="recipe">
             <form action="uploadRecipe" method="POST" enctype="multipart/form-data">

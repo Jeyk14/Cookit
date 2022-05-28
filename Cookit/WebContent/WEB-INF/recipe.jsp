@@ -4,23 +4,8 @@
 <%@ page import="data.BeanComentario"%>
 <%@ page import="data.BeanReceta"%>
 <%@ page import="data.BeanCategoria"%>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cookit - Receta</title>
-
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/recipe.css">
-
-</head>
-
-<body>
-
-	<%
+<%
 	
 	BeanUsuario myself = null;
 	BeanReceta recipe = new BeanReceta();
@@ -58,8 +43,23 @@
 	
 	%>
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookit - <%= recipe.getTitulo() %></title>
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/recipe.css">
+
+</head>
+
+<body>
+
     <jsp:include page="prebuilt/header.jsp" />
-    <jsp:include page="prebuilt/tempMsg.jsp"/>
 
     <div id="content" style="margin-top: 6em;">
 

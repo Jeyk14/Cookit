@@ -164,8 +164,10 @@
 			</div>
 			
 			<div class="nextPage">
-				<a href="profile?id=<%= user.getId() %>&pag="<%= pag + 1 %>"><button>P&aacute;gina siguiente</button></a>
+				<a href="profile?id=<%= user.getId() %>&pag=<%= pag + 1 %>"><button>P&aacute;gina siguiente</button></a>
 			</div>
+		</div>
+		
 		</div>
 	
 	<jsp:include page="prebuilt/footer.jsp" />

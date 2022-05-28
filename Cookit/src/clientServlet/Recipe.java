@@ -151,7 +151,7 @@ public class Recipe extends HttpServlet {
 		
 		// TODO: Divide the time by 60 to show the hours and minutes instead of only minutes
 
-		session.setAttribute("curpage", "recipe");
+		session.setAttribute("curPage", "recipe");
 		
 		request.getRequestDispatcher(target).forward(request, response);
 	}

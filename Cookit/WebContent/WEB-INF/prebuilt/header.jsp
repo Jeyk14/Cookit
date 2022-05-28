@@ -1,14 +1,28 @@
 	<%@ page import="data.BeanUsuario" %>
 	
-	<% BeanUsuario myself = (BeanUsuario) session.getAttribute("myself"); 
+	<% 
+		BeanUsuario myself = (BeanUsuario) session.getAttribute("myself"); 
 		String curPage = (String) session.getAttribute("curPage");
+		
+		String tempMsg = null;
+		boolean success = false;
 		
 		if(curPage == null){
 			 session.setAttribute("curPage", "recipe");
 			 curPage = "recipe";
 		}
+		
+		if(session.getAttribute("succes") != null){
+			success = (boolean) session.getAttribute("success");
+		}
+		
+		if(session.getAttribute("tempMsg") != null) {
+			tempMsg = (String) session.getAttribute("tempMessage");
+		}
+		
 	%>
 
+	<%-- The header itself --%>
 	<%if(myself != null){ // logged in%>
 	
 		<div class="header" id="top">
@@ -83,6 +97,18 @@
 	
 	<% } %>
 	
+	<%-- The tempMessage --%>
+	<% if(tempMsg != null){
+		if(!tempMsg.isEmpty()){
+			if(success == true){
+				out.print("<div class='tempMsg successMsg'><p>"+tempMsg+"</p></div>");
+			} else {
+				out.print("<div class='tempMsg errorMsg'><p>"+tempMsg+"</p></div>");
+			}
+		}
+	} %>
+	
+	<%-- The "go to index" button only appears when not in the index --%>
 	<% if(!curPage.equals("index")){
 		
 		out.print("<div class='goto'><a href='index'><button class='gotoIndex'>Volver a inicio</button></a></div>");

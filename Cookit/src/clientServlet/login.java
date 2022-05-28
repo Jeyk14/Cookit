@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,9 +56,10 @@ public class login extends HttpServlet {
 		String queryGetUsr = "SELECT id, nombre, email, edad, nacionalidad, dieta, creacion, pass, salt, confirmado FROM cookit.usuario WHERE email = ";
 		CryptSha512 crypt = new CryptSha512();
 		BeanUsuario myself; // The logged user data will be stored here
-
+		
 		String header = "doget"; // where the user will be sent at the end of doPost
 		String tempMsg = "";
+		boolean success = true;
 
 		String email = request.getParameter("email");
 		String pass = request.getParameter("pass")+"";
@@ -80,6 +82,7 @@ public class login extends HttpServlet {
 			// Check if email is found in the db
 			if (result.length < 1) {
 
+				success = false;
 				tempMsg = "El correo electrónico o la contraseña no son correctos";
 				System.out.println("result.length < 1");
 
@@ -108,6 +111,12 @@ public class login extends HttpServlet {
 					myself.setConfirmado((boolean) result[0][9]);
 
 					sesion.setAttribute("myself", myself);
+					
+					// Add email and password to the cookie
+					response.addCookie(new Cookie("cookitEmail", myself.getEmail()));
+					response.addCookie(new Cookie("cookitPass", (String) result[0][7]));
+					
+					request.setAttribute("cookieMsg", false);
 
 					if (myself.isConfirmado() == false) {
 						header = "confirmEmail";
@@ -124,11 +133,6 @@ public class login extends HttpServlet {
 					// pass != pass in DB -> retry
 					request.setAttribute("tempMsg", "El correo electrónico o la contraseña no son correctos");
 					request.setAttribute("success", false);
-					System.out.println("Pass "+(String) result[0][7]);
-					System.out.println("Pass:" + pass + " / PassBD: " + (String) result[0][7] + " / Salt: "
-							+ (String) result[0][8] + "\n" + " / "
-							+ crypt.check(pass, (String) result[0][7], (String) result[0][8]));
-					System.out.println();
 
 				}
 
