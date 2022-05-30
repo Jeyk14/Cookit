@@ -8,8 +8,7 @@ public class BeanPublicacion {
 	private int id_usuario;
 	private String titulo;
 	private String subtitulo;
-	private int likes;
-	private int dislikes;
+	private int estrellas;
 	private boolean destacado;
 	private Calendar fecha;
 	private String estado;
@@ -19,42 +18,23 @@ public class BeanPublicacion {
 		id_usuario = 0;
 		titulo = "";
 		subtitulo = "";
-		likes = 0;
-		dislikes = 0;
+		estrellas = 0;
 		destacado = false;
 		fecha = null;
 		estado = "";
 	}
 	
-	public BeanPublicacion(int id_publicacion, int id_usuario, String titulo, String subtitulo, int likes, int dislikes,
+	public BeanPublicacion(int id_publicacion, int id_usuario, String titulo, String subtitulo, int estrellas,
 			boolean destacado, Calendar fecha, String estado) {
 		super();
 		this.id_publicacion = id_publicacion;
 		this.id_usuario = id_usuario;
 		this.titulo = titulo;
 		this.subtitulo = subtitulo;
-		this.likes = likes;
-		this.dislikes = dislikes;
+		this.estrellas = estrellas;
 		this.destacado = destacado;
 		this.fecha = fecha;
 		this.estado = estado;
-	}
-	
-	public int getStars() {
-		
-		//5-(((dislikes*100)/likes)/10)
-		
-		int starRate = 0;
-		
-		if(likes != 0) {
-			starRate = dislikes * 100;
-			starRate = starRate / likes;
-			starRate = starRate / 10;
-			starRate = 5 - starRate;
-		}
-		
-		
-		return starRate;
 	}
 
 	public int getIdPublicacion() {
@@ -89,20 +69,12 @@ public class BeanPublicacion {
 		this.subtitulo = subtitulo;
 	}
 
-	public int getLikes() {
-		return likes;
+	public int getEstrellas() {
+		return estrellas;
 	}
 
-	public void setLikes(int likes) {
-		this.likes = likes;
-	}
-
-	public int getDislikes() {
-		return dislikes;
-	}
-
-	public void setDislikes(int dislikes) {
-		this.dislikes = dislikes;
+	public void setEstrellas(int estrellas) {
+		this.estrellas = estrellas;
 	}
 
 	public boolean isDestacado() {

@@ -15,6 +15,7 @@ import data.BeanComentario;
 import data.BeanReceta;
 import data.BeanUsuario;
 import dbConnection.SimpleQuery;
+import toolkit.PrepareSession;
 
 @WebServlet("/recipe")
 public class Recipe extends HttpServlet {
@@ -22,6 +23,9 @@ public class Recipe extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		PrepareSession.prepare(request, response);
+		
 		String target = "WEB-INF/recipe.jsp";
 
 		String id = request.getParameter("id");
@@ -32,6 +36,7 @@ public class Recipe extends HttpServlet {
 		BeanComentario[] comments;
 		BeanUsuario[] users;
 		BeanUsuario myself;
+		BeanUsuario author;
 		Object[][] results;
 		Object result = null;
 		Calendar auxCal;
@@ -123,7 +128,7 @@ public class Recipe extends HttpServlet {
 					results = simpleQuery.select(
 							"cookit.receta AS rec INNER JOIN cookit.publicacion AS pub ON pub.id = rec.id_publicacion",
 							new String[] { "pub.id", "pub.titulo", "pub.subtitulo", "pub.fecha", "rec.procedimiento",
-									"rec.tiempo", "rec.ingredientes", "rec.tags", "rec.id_categoria", "rec.id" },
+									"rec.tiempo", "rec.ingredientes", "rec.tags", "rec.id_categoria", "rec.id", "pub.estrellas" },
 							"pub.id = " + id, "", 1, 0);
 
 					recipe.setIdPublicacion((int) results[0][0]);
@@ -138,8 +143,18 @@ public class Recipe extends HttpServlet {
 					recipe.setTags((String) results[0][7]);
 					recipe.setId_categoria((int) results[0][8]);
 					recipe.setId((int) results[0][9]);
+					recipe.setEstrellas((int) results[0][10]);
 
 					request.setAttribute("viewedPost", recipe);
+					
+					author = new BeanUsuario();
+					
+					results = simpleQuery.select("cookit.usuario", new String[] {"id", "nombre"}, "", "", 1, 0);
+					
+					author.setId((int) results[0][0]);
+					author.setNombre((String) results[0][1]);
+					
+					request.setAttribute("author", author);
 
 					simpleQuery.closeConnection();
 

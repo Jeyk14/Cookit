@@ -1,28 +1,12 @@
-	<%@ page import="data.BeanReceta"%>
+	<%@ page import="data.BeanEspecial"%>
 	
 	<%
-		BeanReceta special = (BeanReceta) session.getAttribute("special");
-	%>
 	
-	<%
-		// Put a random special recipe here
-		if(special != null){
+		if(session.getAttribute("special") != null){
 			
-			int likes = special.getLikes();
-			int dislikes = special.getDislikes();
-			int starCont = 0;
-			int starRate = 0;
-			
-			if(likes > 0){
-				//starRate = 5-(((dislikes*100)/likes)/10);
-				starRate = dislikes*100;
-				if(dislikes > 0){
-					starRate = starRate / likes;
-				}
-				starRate = starRate / 10;
-				starRate = 5 - starRate;
-			}
-			
+			BeanEspecial special = (BeanEspecial) session.getAttribute("special");
+			int starRate = special.getEstrellas();
+
 	%>
 
 	<div class="special">
@@ -31,24 +15,24 @@
             </div>
 
             <div class="special-img">
-                <img src="img/placeholder.png"/>
+            	<a href="recipe?id=<%= special.getIdPublicacion() %>"><img src="loadImg?id=<%= special.getIdReceta() %>&target=recipe" onerror="this.onerror=null;this.src='img/noRecipeImg.jpg';this.title='Oops... Ha ocurrido un problema cargando la imagen'"/></a>
             </div>
 
             <div class="rating">
                 <%	// Count from 0 to 4 while adding stars if rate > i
-								for(int j = 0; j < 5; j++){%>
-									<% if(starCont > j){ %>
-										<img src="img/star.png"/>
-									<% } else { %>
-										<img src="img/star_0.png"/>
-									<% } %>
-								<%} %>
+						for(int j = 0; j < 5; j++){%>
+							<% if(starRate > j){ %>
+								<img src="img/star.png"/>
+							<% } else { %>
+								<img src="img/star_0.png"/>
+							<% } %>
+						<%} %>
             </div>
 
             <div class="special-title">
-                <h2>Placeholder</h2>
-                <h4>De <span class="user-name">Placeholder</span></h4>
-                <p class="tags">ejemplo, prueba, placeholder, muestra, maqueta</p>
+                <a href="profile?id=<%= special.getIdUsuario() %>"><h2><%= special.getTitulo() %></h2></a>
+                <h4>De <span class="user-name"><%= special.getAutor() %></span></h4>
+                <p class="tags"><%= special.getTags() %></p>
             </div>
         </div>
 	

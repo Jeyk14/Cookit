@@ -9,10 +9,7 @@
 	<%@ page import="java.util.Calendar"%>
 
 	<%
-		int starCont = 0;
 		int starRate = 0;
-		int likes = 0;
-		int dislikes = 0;
 		int recipeCont = 0;
 		// header.jsp -> (BeanUsuario) loggedUsr
 		BeanReceta[] recipeList = (BeanReceta[]) request.getAttribute("recipeList");
@@ -55,7 +52,7 @@
             <div class="profile-content">
 
                 <div class="profile-pic">
-                    <img src="loadImg?id=<%= user.getId() %>&target=user" onerror="this.onerror=null;this.src='img/broken.jpg'"/>
+                    <img src="loadImg?id=<%= user.getId() %>&target=user" onerror="this.onerror=null;this.src='img/noRecipeImg.png'"/>
                 	 <% if(myself.getId() == user.getId()){ %>
 			        
 			        	<div class="modAcc">
@@ -98,7 +95,7 @@
 				if(recipeList[recipeCont] != null){%>
 			
 			<%	
-				starRate = recipeList[recipeCont].getStars();
+				starRate = recipeList[recipeCont].getEstrellas();
 				
 				%>
 				
@@ -116,13 +113,13 @@
 						<div class="stars">
 				
 							<%	// Count from 0 to 4 while adding stars if rate > i
-							for(int j = 0; j < 5; j++){%>
-								<% if(starCont > j){ %>
-									<img src="img/star.png"/>
-								<% } else { %>
-									<img src="img/star_0.png"/>
-								<% } %>
-							<%} %>
+								for(int j = 0; j < 5; j++){%>
+									<% if(starRate > j){ %>
+										<img src="img/star.png"/>
+									<% } else { %>
+										<img src="img/star_0.png"/>
+									<% } %>
+								<%} %>
 				
 						</div>
 				

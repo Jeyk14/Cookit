@@ -12,8 +12,9 @@
 	BeanComentario[] comments = null;
 	BeanUsuario[] users = null;
 	BeanCategoria[] categories = null;
+	BeanUsuario author = (BeanUsuario) request.getAttribute("author");
 	int contCom = 0;
-	int auxId = 0;
+	int starRate = 0;
 	
 	char liked = 'x';
 	if(request.getAttribute("liked") != null){
@@ -26,7 +27,7 @@
 		
 	if(request.getAttribute("viewedPost") != null){
 		recipe = (BeanReceta) request.getAttribute("viewedPost");
-		auxId = recipe.getId_categoria();
+		starRate = recipe.getEstrellas();
 	}
 	
 	if(request.getAttribute("comments") != null){
@@ -74,19 +75,44 @@
 
                 <div class="recipe-info">
 
-                    <div style="position: relative;" class="recipe-image">
+                    <div class="recipe-image">
+                    
 	                    <div style="position:absolute; top: -3em; left: -3%;" class="recipe-title title">
 		                    <h3><%= recipe.getTitulo() %></h3>
 	                	</div>
-                        <img src='loadImg?id=<%= recipe.getIdReceta() %>&target=recipe' onerror="this.onerror=null;this.src='img/broken.jpg';this.title='Oops... Ha ocurrido un problema cargando la imagen'"/>
+	                	
+	                	<div class="image">
+	                		<img src='loadImg?id=<%= recipe.getIdReceta() %>&target=recipe' onerror="this.onerror=null;this.src='img/noRecipeImg.jpg';this.title='Oops... Ha ocurrido un problema cargando la imagen'"/>
+	                	
+	                		<div class="stars"> <!-- start stars -->
+					
+								<%	// Count from 0 to 4 while adding stars if rate > i
+								for(int j = 0; j < 5; j++){%>
+									<% if(starRate > j){ %>
+										<img src="img/star.png"/>
+									<% } else { %>
+										<img src="img/star_0.png"/>
+									<% } %>
+								<%} %>
+					
+							</div> <!-- end stars -->
+	                	
+	                	</div>
+	                	
                     	<div class="recipe-subtitle" style="text-align: center; font-style: italic;">
-                			<p>"<%= recipe.getSubtitulo() %>"</p>
+                			<% if(!recipe.getSubtitulo().isEmpty()){ %><p>"<%= recipe.getSubtitulo() %>"</p><% } else { out.print(""); } %>
                 		</div>
+                		
                     </div>
 
                     <div class="recipe-data">
-                        <div class="category" title="<%= categories[auxId].getDescripcion() %>">
-                            <p><%= categories[recipe.getId_categoria()].getNombre() %></p>
+                    
+                    	<div class="author">
+                    	<a href="profile?=<%= author.getId() %>"><h4>Receta de <span style="font-weight: bold;"><%= author.getNombre() %></span></h4></a>
+                    	</div>
+                    
+                        <div class="category" title="<%= categories[recipe.getId_categoria()].getDescripcion() %>">
+                            <p>Categoría: <%= categories[recipe.getId_categoria()].getNombre() %></p>
                         </div>
 
                         <div class="tags">

@@ -18,6 +18,7 @@ import data.BeanUsuario;
 import data.ConsultaAbierta;
 import dbConnection.Connect;
 import dbConnection.SimpleQuery;
+import toolkit.PrepareSession;
 import toolkit.typeCkecker;
 
 /**
@@ -28,11 +29,13 @@ public class profile extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	// TODO: search the user every time? Save the last searched user in a sess attr to reuse the data and reduce the db acces?
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		PrepareSession.prepare(request, response);
 		
 		HttpSession sess = request.getSession();
 		Connect con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
-		SimpleQuery simpleQuery;
 		ConsultaAbierta openQuery;
 		
 		String id = request.getParameter("id"); // The id of the user's profile
@@ -50,7 +53,7 @@ public class profile extends HttpServlet {
 
 		BeanReceta[] recipeList = new BeanReceta[9]; // this user's recipes
 		BeanCategoria[] catList = new BeanCategoria[9];
-		String queryRecipe = "SELECT rec.id, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags, pub.id " + 
+		String queryRecipe = "SELECT rec.id, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags, pub.id, pub.estrellas " + 
 				"FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion " + 
 				"INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id " + 
 				"INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id WHERE usu.id = ";
@@ -148,21 +151,11 @@ public class profile extends HttpServlet {
 			}
 			
 			con.openConnection();
-			simpleQuery = new SimpleQuery(con.getConexion());
 			
 			for (int i = 0; i < elemCount; i++) {
 				
-				// TODO: If logged -> can see your blocked/hidden posts
+				// If logged -> can see your blocked/hidden posts
 				// TODO: hidden posts can be toggled visible
-				
-				int auxLikes = 0;
-				int auxDislikes = 0;
-				Long auxLong = 0L;
-				
-				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'l' AND id_publicacion = "+(int) result[i][6], "", 0, 0);
-				auxLikes = auxLong.intValue();
-				auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)", "tipo LIKE 'd' AND id_publicacion = "+(int) result[i][6], "", 0, 0);
-				auxDislikes = auxLong.intValue();
 				
 				recipeList[i] = new BeanReceta();
 				catList[i] = new BeanCategoria();
@@ -176,8 +169,7 @@ public class profile extends HttpServlet {
 				recipeList[i].setTiempo( (int) result[i][4]);
 				recipeList[i].setTags( (String) result[i][5]);
 				
-				recipeList[i].setLikes( auxLikes );
-				recipeList[i].setDislikes( auxDislikes);
+				recipeList[i].setEstrellas((int) result[i][6]);
 				
 			}
 			con.closeConnection();

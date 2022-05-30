@@ -73,10 +73,11 @@
 		</form>
 	</div>
 
-<div class="separator"></div>
+	<div class="separator"></div>
 
 	<jsp:include page="prebuilt/special.jsp" />
 
+	<div class="separator"></div>
 
 	<div id="content">
 		<%
@@ -89,7 +90,7 @@
 			
 			<%	
 			
-				starRate = recipeList[recipeCont].getStars();
+				starRate = recipeList[recipeCont].getEstrellas();
 
 				%>
 				
@@ -101,7 +102,7 @@
 						<h4 class="col-title"><%= recipeList[recipeCont].getTitulo() %></h4>
 						<div class="col-img"> <!-- start col-img -->
 							<a href="recipe?id=<%= recipeList[recipeCont].getIdReceta() %>">
-								<img src="loadImg?id=<%= recipeList[recipeCont].getIdReceta() %>&target=recipe" title="Categoría: <%= catList[recipeCont] %>&#013;Tags: <%= recipeList[recipeCont].getTags() %>" onerror="this.onerror=null;this.src='img/broken.jpg'" />
+								<img src="loadImg?id=<%= recipeList[recipeCont].getIdReceta() %>&target=recipe" title="Categoría: <%= catList[recipeCont].getNombre() %>&#013;Tags: <%= recipeList[recipeCont].getTags() %>" onerror="this.onerror=null;this.src='img/noRecipeImg.jpg'" />
 							</a>
 					
 							<div class="stars"> <!-- start stars -->

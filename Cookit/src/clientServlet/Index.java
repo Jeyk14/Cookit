@@ -17,6 +17,7 @@ import data.BeanReceta;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
 import dbConnection.SimpleQuery;
+import toolkit.PrepareSession;
 import toolkit.typeCkecker;
 
 /**
@@ -35,9 +36,6 @@ public class Index extends HttpServlet {
 	 * TODO: Implement tempMsg, success and showMsg as session attributes TODO:
 	 * Implement curPage as a session attribute
 	 * 
-	 * TODO: (IMPORTANT) Add an import to a jsp that contains a check for all
-	 * session attributes. If null, initiate attributes
-	 * 
 	 */
 
 	/*
@@ -49,6 +47,9 @@ public class Index extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		// Prepare the session attributes and check for cookies to log in
+				PrepareSession.prepare(request, response);
 
 		HttpSession sesion = request.getSession();
 		ConsultaAbierta consult = new ConsultaAbierta();
@@ -59,8 +60,8 @@ public class Index extends HttpServlet {
 		BeanReceta[] recipeList = new BeanReceta[12];
 		BeanCategoria[] catList = new BeanCategoria[12];
 
-		Object[][] auxCategory; // The list of categories
-		BeanCategoria[] categories = null;
+//		Object[][] auxCategory; // The list of categories
+//		BeanCategoria[] categories = null;
 
 		// Var used for the search
 		String searchtype = "title"; // Where's being searched
@@ -76,13 +77,10 @@ public class Index extends HttpServlet {
 
 		// TODO: If estado == oculto // guardado // bloqueado -> not show in list
 		// Select the necessary field to be used
-		String query = "SELECT usu.id, rec.id, pub.id, usu.nombre, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags "
+		String query = "SELECT usu.id, rec.id, pub.id, usu.nombre, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags, pub.estrellas "
 				+ "FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion "
 				+ "INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id "
 				+ "INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id WHERE pub.estado NOT LIKE 'guardado' AND pub.estado NOT LIKE 'bloqueado' ";
-
-		String likesQuery;
-		String dislikesQuery;
 
 		Object[][] result = null; // Will store the result of the query
 		Calendar aux;
@@ -97,24 +95,24 @@ public class Index extends HttpServlet {
 		}
 
 		// get the categories
-		if (request.getSession().getAttribute("categories") == null) {
-
-			auxCategory = simpleQuery.select("cookit.categoria", new String[] { "id", "nombre", "descripcion" }, "", "",
-					0, 0);
-
-			categories = new BeanCategoria[auxCategory.length];
-
-			for (int i = 0; i < auxCategory.length; i++) {
-				categories[i] = new BeanCategoria();
-
-				categories[i].setId((int) auxCategory[i][0]);
-				categories[i].setNombre((String) auxCategory[i][1]);
-				categories[i].setDescripcion((String) auxCategory[i][2]);
-			}
-
-			request.getSession().setAttribute("categories", categories);
-
-		}
+//		if (request.getSession().getAttribute("categories") == null) {
+//
+//			auxCategory = simpleQuery.select("cookit.categoria", new String[] { "id", "nombre", "descripcion" }, "", "",
+//					0, 0);
+//
+//			categories = new BeanCategoria[auxCategory.length];
+//
+//			for (int i = 0; i < auxCategory.length; i++) {
+//				categories[i] = new BeanCategoria();
+//
+//				categories[i].setId((int) auxCategory[i][0]);
+//				categories[i].setNombre((String) auxCategory[i][1]);
+//				categories[i].setDescripcion((String) auxCategory[i][2]);
+//			}
+//
+//			request.getSession().setAttribute("categories", categories);
+//
+//		}
 
 		// The search values aren't in the session -> add them to the session
 		if (sesion.getAttribute("searchtype") != null) {
@@ -157,8 +155,7 @@ public class Index extends HttpServlet {
 			break;
 
 		case "star":
-			query += " AND (SELECT (5-((dislikes * 100)/likes)/10) FROM cookit.publicacion WHERE id = pub.id) > "
-					+ (Integer.valueOf(searchValue) - 1) + " ";
+			query += " AND pub.estrellas > " + (Integer.valueOf(searchValue) - 1) + " ";
 			break;
 		default:
 			// the type is invalid -> do nothing
@@ -210,7 +207,7 @@ public class Index extends HttpServlet {
 		query += " LIMIT 12 OFFSET " + offset;
 
 		// run the query to get the recipes
-		result = consult.select(simpleQuery.getConnection(), query, 9);
+		result = consult.select(simpleQuery.getConnection(), query, 10);
 
 		if (result.length < 12) {
 			elemCount = result.length;
@@ -219,21 +216,10 @@ public class Index extends HttpServlet {
 		// Put the recipes in the bean
 		for (int i = 0; i < elemCount; i++) {
 
-			int auxLikes = 0;
-			int auxDislikes = 0;
-			Long auxLong = 0L;
-
-			auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)",
-					"tipo LIKE 'l' AND id_publicacion = " + (int) result[i][1], "", 0, 0);
-			auxLikes = auxLong.intValue();
-			auxLong = (long) simpleQuery.selectOne("cookit.likes", "count(*)",
-					"tipo LIKE 'd' AND id_publicacion = " + (int) result[i][1], "", 0, 0);
-			auxDislikes = auxLong.intValue();
-
 			userList[i] = new BeanUsuario();
 			recipeList[i] = new BeanReceta();
 			catList[i] = new BeanCategoria();
-
+						
 			userList[i].setId((int) result[i][0]);
 			recipeList[i].setId((int) result[i][1]);
 			recipeList[i].setIdPublicacion((int) result[i][2]);
@@ -246,8 +232,7 @@ public class Index extends HttpServlet {
 			recipeList[i].setTiempo((int) result[i][7]);
 			recipeList[i].setTags((String) result[i][8]);
 
-			recipeList[i].setLikes(auxLikes);
-			recipeList[i].setDislikes(auxDislikes);
+			recipeList[i].setEstrellas((int) result[i][9]);
 		}
 		
 		// Search for a special recipe
