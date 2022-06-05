@@ -78,6 +78,7 @@ public class uploadRecipe extends HttpServlet {
 		int inserted = 0;
 		int updated = 0;
 		int lastId = 0; // The ID of the last post
+		int recipeId = 0;
 		int lastIdAux;
 
 		boolean success = true;
@@ -112,11 +113,6 @@ public class uploadRecipe extends HttpServlet {
 			image = filePart.getInputStream();
 			fileSize = image.available();
 			mimeType = getServletContext().getMimeType(fileName);
-			
-//			System.out.println("filePart "+filePart);
-//			System.out.println("fileName "+fileName);
-//			System.out.println("image "+image);
-//			System.out.println("fileSize"+fileSize);
 
 			if (mimeType != null) {
 
@@ -125,7 +121,7 @@ public class uploadRecipe extends HttpServlet {
 
 					if (fileSize > maxSize) {
 						// The size of the IMG is under the max permitted size
-						tempMsg = "El archivo es demasiado grande (tamaño máximo: " + (maxSize / 1000) + "kB)";
+						tempMsg = "El archivo es demasiado grande (tama&ntilde;o m&aacute;ximo: " + (maxSize / 1000) + "kB)";
 						success = false;
 						image = null;
 					}
@@ -143,72 +139,62 @@ public class uploadRecipe extends HttpServlet {
 
 		if (submitRecipe.equals("Publicar")) {
 
-			System.out.println("entra");
-
-			// TODO: IMPORTANT - Test upload the recipe
-
 			if (title.length() > 30 || title.length() < 2) {
 				success = false;
-				tempMsg = "El título debe tener entre 2 y 30 caracteres";
+				tempMsg = "El t&iacute;tulo debe tener entre 2 y 30 caracteres";
 			}
 
 			if (subtitle.length() > 80) {
 				success = false;
-				tempMsg = "El subtítulo no debe tener más de 30 caracteres";
+				tempMsg = "El subt&iacute;tulo no debe tener m&aacute;s de 30 caracteres";
 			}
 
 			if (tags.length() > 200) {
 				success = false;
-				tempMsg = "Las palabras clave superan el límite de caracteres";
+				tempMsg = "Las palabras clave superan el l&iacute;mite de caracteres";
 			}
 
 			if (!typeCkecker.isInt(time)) {
 				success = false;
-				tempMsg = "El tiempo de preparación debe ser un número";
+				tempMsg = "El tiempo de preparaci&iacute;n debe ser un n&uacute;mero";
 			}
 
 			if (ingredients.length() > 400 || ingredients.length() < 0) {
 				success = false;
-				tempMsg = "Los ingredientes superan el límite de 400 caracteres";
+				tempMsg = "Los ingredientes superan el l&iacute;mite de 400 caracteres";
 			}
 
 			if (procedure.length() > 500) {
 				success = false;
-				tempMsg = "El procedimiento supera el límite de 400 caracteres";
+				tempMsg = "El procedimiento supera el l&iacute;mite de 400 caracteres";
 			}
 
 			if (!typeCkecker.isInt(category)) {
 				success = false;
-				tempMsg = "Hay un problema con la categoría elegida, vuelva a intentarlo";
+				tempMsg = "Hay un problema con la categor&iacute;a elegida, vuelva a intentarlo";
 			} else if (Integer.valueOf(category) < 1 || Integer.valueOf(category) > 6) {
 				success = false;
-				tempMsg = "La categoría no es correcta";
+				tempMsg = "La categor&iacute;a no es correcta";
 			}
 
 			// if all data correct -> decide either to upload or to update
 			if (success) {
 
-				System.out.println("todo correcto");
-
 				if (savedRecipe == null) {
 					// No saved recipe -> insert
-
+					
 					simpleQuery = new SimpleQuery("a21_jortnu", "a21_jortnu", "a21_jortnu");
 
 					lastId = (int) simpleQuery.selectOne("cookit.publicacion", "id", "", "id desc", 1, 0);
 					lastIdAux = lastId + 1;
 					
-					System.out.println("Last ID: "+lastId+" y lastIdAux: "+lastIdAux);
-
 					auxCal = Calendar.getInstance();
 
 					inserted = simpleQuery.insert("cookit.publicacion",
 							new String[] { "id", "id_usuario", "titulo", "subtitulo", "destacado", "fecha", "estado" },
 							new String[] { "int", "int", "string", "string", "boolean", "calendar", "string" },
 							new Object[] { lastIdAux, myself.getId(), title, subtitle, false, auxCal, "publicado" });
-
-					System.out.println("Subir publicacion: " + simpleQuery.getLastQuery());
-
+					
 					if (inserted > 0) {
 						// the post was inserted -> insert the recipe
 
@@ -239,7 +225,7 @@ public class uploadRecipe extends HttpServlet {
 					simpleQuery.closeConnection();
 
 				} else {
-					// saved recipe -> update
+					// saved recipe exists -> update
 
 					simpleQuery = new SimpleQuery("a21_jortnu", "a21_jortnu", "a21_jortnu");
 
@@ -247,25 +233,28 @@ public class uploadRecipe extends HttpServlet {
 							new String[] { "string", "string", "string" },
 							new Object[] { title, subtitle, "publicado" }, "id = " + savedRecipe.getIdPublicacion());
 
-					System.out.println("Upload saved recipe: " + simpleQuery.getLastQuery());
-
 					if(fileSize > 0) {
+						
 						simpleQuery.update("cookit.receta",
 								new String[] { "id_categoria", "img", "procedimiento", "tiempo", "ingredientes", "tags" },
 								new String[] { "int", "stream", "string", "int", "string", "string" },
 								new Object[] { categoryInt, image, procedure, timeInt, ingredients, tags },
 								"id_publicacion = " + savedRecipe.getIdPublicacion());
+						
 					}else {
+						
 						simpleQuery.update("cookit.receta",
 								new String[] { "id_categoria", "procedimiento", "tiempo", "ingredientes", "tags" },
 								new String[] { "int", "string", "int", "string", "string" },
 								new Object[] { categoryInt, procedure, timeInt, ingredients, tags },
 								"id_publicacion = " + savedRecipe.getIdPublicacion());
+
 					}
 
 
 					simpleQuery.closeConnection();
 					
+					request.getSession().removeAttribute("savedRecipe");
 					request.getSession().setAttribute("allDone", 1);
 
 				}
@@ -273,14 +262,14 @@ public class uploadRecipe extends HttpServlet {
 			} else {
 				// Something went wrong -> do nothing + show message to the user
 
-				request.getSession().setAttribute("tempMsg", tempMsg);
-				request.getSession().setAttribute("success", success);
+				request.setAttribute("tempMsg", tempMsg);
+				request.setAttribute("success", success);
 
 			}
 
 		} else if (submitRecipe.equals("Guardar")) {
 			// Create a post with status hidden and add the data to that post
-
+			
 			simpleQuery = new SimpleQuery("a21_jortnu", "a21_jortnu", "a21_jortnu");
 
 			resultado = simpleQuery.select("cookit.publicacion", new String[] { "id", "fecha" }, "estado = 'guardado'",
@@ -288,30 +277,50 @@ public class uploadRecipe extends HttpServlet {
 
 			if (resultado.length > 0) {
 				// an already saved post exists -> load the new recipe onto the saved one
-
+				
 				// update post
 				updated = simpleQuery.update("cookit.publicacion", new String[] { "titulo", "subtitulo" },
 						new String[] { "string", "string" }, new Object[] { title, subtitle },
 						"id = " + (int) resultado[0][0]);
-
+				
 				if(fileSize > 0) {
+
 					simpleQuery.update("cookit.receta",
 							new String[] { "id_categoria", "img", "procedimiento", "tiempo", "ingredientes", "tags" },
 							new String[] { "int", "stream", "string", "int", "string", "string" },
 							new Object[] { categoryInt, image, procedure, timeInt, ingredients, tags },
 							"id_publicacion = " + (int) resultado[0][0]);
+
 				} else {
+
 					simpleQuery.update("cookit.receta",
 							new String[] { "id_categoria", "procedimiento", "tiempo", "ingredientes", "tags" },
 							new String[] { "int", "string", "int", "string", "string" },
 							new Object[] { categoryInt, procedure, timeInt, ingredients, tags },
 							"id_publicacion = " + (int) resultado[0][0]);
+
 				}
 
 				simpleQuery.closeConnection();
 
 				auxCal = new GregorianCalendar();
 				auxCal.setTime((java.sql.Date) resultado[0][1]);
+				
+				savedRecipe = new BeanReceta();
+				
+				savedRecipe.setId((int) resultado[0][0]);
+				savedRecipe.setTitulo(title);
+				savedRecipe.setSubtitulo(subtitle);
+				savedRecipe.setFecha(auxCal);
+				savedRecipe.setId_categoria(Integer.valueOf(category));
+				savedRecipe.setProcedimiento(procedure);
+				savedRecipe.setTiempo(Integer.valueOf(time));
+				savedRecipe.setIngredientes(ingredients);
+				savedRecipe.setTags(tags);
+				savedRecipe.setImg(Convert.toByteArray(image, fileSize));
+				savedRecipe.setIdPublicacion((int) resultado[0][0]);
+				
+				request.getSession().setAttribute("savedRecipe", savedRecipe);
 
 			} else {
 				// no saved recipes exists -> insert the new recipe
@@ -322,12 +331,11 @@ public class uploadRecipe extends HttpServlet {
 				lastId = (int) simpleQuery.selectOne("cookit.publicacion", "id", "", "id desc", 0, 0);
 				lastId++;
 
+
 				inserted = simpleQuery.insert("cookit.publicacion",
 						new String[] { "id", "id_usuario", "titulo", "subtitulo", "destacado", "fecha", "estado" },
 						new String[] { "int", "int", "string", "string", "boolean", "calendar", "string" },
 						new Object[] { lastId, myself.getId(), title, subtitle, false, auxCal, "guardado" });
-
-				System.out.println("Guardar en un nuevo registro: "+simpleQuery.getLastQuery());
 				
 				if (inserted > 0) {
 					// If the post was inserted successfully
@@ -352,6 +360,7 @@ public class uploadRecipe extends HttpServlet {
 					
 					savedRecipe = new BeanReceta();
 					
+					savedRecipe.setId(lastId);
 					savedRecipe.setTitulo(title);
 					savedRecipe.setSubtitulo(subtitle);
 					savedRecipe.setFecha(auxCal);
@@ -361,26 +370,29 @@ public class uploadRecipe extends HttpServlet {
 					savedRecipe.setIngredientes(ingredients);
 					savedRecipe.setTags(tags);
 					savedRecipe.setImg(Convert.toByteArray(image, fileSize));
+					savedRecipe.setIdPublicacion(lastId);
+					
+					request.getSession().setAttribute("savedRecipe", savedRecipe);
 
 				}
 
 			}
-
-			savedRecipe = new BeanReceta();
-
-			savedRecipe.setTitulo(title);
-			savedRecipe.setSubtitulo(subtitle);
-			savedRecipe.setFecha(auxCal);
-			savedRecipe.setId_categoria(Integer.valueOf(category));
-			savedRecipe.setProcedimiento(procedure);
-			savedRecipe.setTiempo(Integer.valueOf(time));
-			savedRecipe.setIngredientes(ingredients);
-			savedRecipe.setTags(tags);
-			savedRecipe.setImg(Convert.toByteArray(image, fileSize));
+//
+//			savedRecipe = new BeanReceta();
+//
+//			savedRecipe.setTitulo(title);
+//			savedRecipe.setSubtitulo(subtitle);
+//			savedRecipe.setFecha(auxCal);
+//			savedRecipe.setId_categoria(Integer.valueOf(category));
+//			savedRecipe.setProcedimiento(procedure);
+//			savedRecipe.setTiempo(Integer.valueOf(time));
+//			savedRecipe.setIngredientes(ingredients);
+//			savedRecipe.setTags(tags);
+//			savedRecipe.setImg(Convert.toByteArray(image, fileSize));
 
 			// TODO: Check if saving the recipe in an attribute is necessary to not lose it
 			// After saving the recipe, load it again in the form
-			request.setAttribute("savedRecipe", savedRecipe);
+//			request.setAttribute("savedRecipe", savedRecipe);
 
 		} else {
 			// no save / no upload -> do nothing

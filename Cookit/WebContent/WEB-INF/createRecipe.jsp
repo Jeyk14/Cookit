@@ -15,11 +15,13 @@
 <body>
 
 <%@ page import="data.BeanReceta"%>
+<%@ page import="data.BeanCategoria"%>
 
 	<%
 	
-		Object[][] category = (Object[][]) session.getAttribute("categories");
-		
+		//Object[][] category = (Object[][]) session.getAttribute("categories");
+	BeanCategoria[] category = (BeanCategoria[]) session.getAttribute("categories");	
+	
 		BeanReceta savedRecipe = new BeanReceta();
 		boolean load = false;
 		
@@ -60,10 +62,10 @@
                     <div class="requirements">
                     
                     <div class="category">
-                        	<label for="category" title="Elija la categoría correcta para que su receta sea encontrada más facilmente&#13;Utilizar una categoría errónea puede resultar en el bloqueo de su publicación por parte de los administradores&#13;&#13;Ante la duda utilice la categoría general">Categoría</label>
+                        	<label for="category" title="Elija la categor&iacute;a correcta para que su receta sea encontrada m&aacute;s facilmente&#13;Utilizar una categor&iacute;a err&oacute;nea puede resultar en el bloqueo de su publicaci&oacute;n por parte de los administradores&#13;&#13;Ante la duda utilice la categor&iacute;a general">Categor&iacute;a</label>
                         	<select name="category" required>
                         		<% for(int i = 0; i < category.length; i++){  %>
-                        			<option value="<%= (int) category[i][0] %>" title="<%= (String) category[i][2] %>" <% if(load){if(i == savedRecipe.getId_categoria()){ out.print("selected"); }} %> ><%= (String) category[i][1] %></option>
+                        			<option value="<%= (int) category[i].getId() %>" title="<%= (String) category[i].getDescripcion() %>" <% if(load){if(i == savedRecipe.getId_categoria()){ out.print("selected"); }} %> ><%= (String) category[i].getNombre() %></option>
                         		<% } %>
                         	</select>
                         </div>
@@ -101,7 +103,7 @@
             </form>
 
             <div class="close">
-                <a href="WEB/INF/profie.jsp"><button>Salir</button></a>
+                <a href="profile"><button>Salir</button></a>
             </div>
 
         </div>

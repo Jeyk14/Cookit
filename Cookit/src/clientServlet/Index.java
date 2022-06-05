@@ -27,14 +27,12 @@ import toolkit.typeCkecker;
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/*
-	 * TODO: Add a block list for users to block eachother. That's another table in
-	 * the database TODO: Add the page buttons: next page, previous page and the
-	 * page indicator TODO: Make the "Volver a inicio" button float on the side of
-	 * the page ONLY when needed TODO: Fix the tempMsg not showing anywhere
+	/*-
+	 * TODO: Add a block list for users to block eachother. That's another table in the database 
+	 * TODO: Fix the tempMsg not showing anywhere
 	 * 
-	 * TODO: Implement tempMsg, success and showMsg as session attributes TODO:
-	 * Implement curPage as a session attribute
+	 * TODO: Implement tempMsg, success and showMsg as session attributes 
+	 * TODO: Count the max number of pages to show "Página X de Y" on the page controls
 	 * 
 	 */
 
@@ -47,9 +45,9 @@ public class Index extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		// Prepare the session attributes and check for cookies to log in
-				PrepareSession.prepare(request, response);
+		PrepareSession.prepare(request, response);
 
 		HttpSession sesion = request.getSession();
 		ConsultaAbierta consult = new ConsultaAbierta();
@@ -59,9 +57,6 @@ public class Index extends HttpServlet {
 		BeanUsuario[] userList = new BeanUsuario[12];
 		BeanReceta[] recipeList = new BeanReceta[12];
 		BeanCategoria[] catList = new BeanCategoria[12];
-
-//		Object[][] auxCategory; // The list of categories
-//		BeanCategoria[] categories = null;
 
 		// Var used for the search
 		String searchtype = "title"; // Where's being searched
@@ -75,7 +70,6 @@ public class Index extends HttpServlet {
 
 		int elemCount = 12;
 
-		// TODO: If estado == oculto // guardado // bloqueado -> not show in list
 		// Select the necessary field to be used
 		String query = "SELECT usu.id, rec.id, pub.id, usu.nombre, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags, pub.estrellas "
 				+ "FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion "
@@ -93,26 +87,6 @@ public class Index extends HttpServlet {
 		if (getPag != null && typeCkecker.isInt(getPag)) {
 			pag = Integer.valueOf(getPag);
 		}
-
-		// get the categories
-//		if (request.getSession().getAttribute("categories") == null) {
-//
-//			auxCategory = simpleQuery.select("cookit.categoria", new String[] { "id", "nombre", "descripcion" }, "", "",
-//					0, 0);
-//
-//			categories = new BeanCategoria[auxCategory.length];
-//
-//			for (int i = 0; i < auxCategory.length; i++) {
-//				categories[i] = new BeanCategoria();
-//
-//				categories[i].setId((int) auxCategory[i][0]);
-//				categories[i].setNombre((String) auxCategory[i][1]);
-//				categories[i].setDescripcion((String) auxCategory[i][2]);
-//			}
-//
-//			request.getSession().setAttribute("categories", categories);
-//
-//		}
 
 		// The search values aren't in the session -> add them to the session
 		if (sesion.getAttribute("searchtype") != null) {
@@ -208,10 +182,21 @@ public class Index extends HttpServlet {
 
 		// run the query to get the recipes
 		result = consult.select(simpleQuery.getConnection(), query, 10);
+		
+		System.out.println(query);
+		System.out.println("index length "+result.length);
 
 		if (result.length < 12) {
 			elemCount = result.length;
 		}
+
+		if (elemCount < 1) {
+			request.setAttribute("success", "false");
+			request.setAttribute("tempMsg", "No se han encontrado resultados");
+			request.setAttribute("showMsg", true);
+		}
+		
+		System.out.println("elem count "+elemCount);
 
 		// Put the recipes in the bean
 		for (int i = 0; i < elemCount; i++) {
@@ -219,7 +204,7 @@ public class Index extends HttpServlet {
 			userList[i] = new BeanUsuario();
 			recipeList[i] = new BeanReceta();
 			catList[i] = new BeanCategoria();
-						
+
 			userList[i].setId((int) result[i][0]);
 			recipeList[i].setId((int) result[i][1]);
 			recipeList[i].setIdPublicacion((int) result[i][2]);
@@ -234,9 +219,9 @@ public class Index extends HttpServlet {
 
 			recipeList[i].setEstrellas((int) result[i][9]);
 		}
-		
+
 		// Search for a special recipe
-		// TODO: Every week add a recipe with the most likes in the special table 
+		// TODO: Every week add a recipe with the most likes in the special table
 
 		request.setAttribute("userList", userList);
 		request.setAttribute("catList", catList);
@@ -245,6 +230,7 @@ public class Index extends HttpServlet {
 		request.getSession().removeAttribute("viewedPost");
 
 		simpleQuery.closeConnection();
+		
 		request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
 
 	}

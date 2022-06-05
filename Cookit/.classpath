@@ -14,7 +14,7 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/CorreoElectronicoV1-4.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.activation.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.mail.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/ConnectionV1-5.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/EncryptV1.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/ConnectionV1-6.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

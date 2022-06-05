@@ -39,28 +39,30 @@ public class PrepareSession {
 		String pass = "";
 
 		// Search for Cookit related cookies
-		for (int i = 0; i < cookies.length; i++) {
-			cookie = cookies[i];
+		if (cookies != null) {
+			for (int i = 0; i < cookies.length; i++) {
+				cookie = cookies[i];
 
-			switch (cookie.getName()) {
-			case "cookitEmail":
-				email = cookie.getValue();
-				break;
-			case "cookitPass":
-				pass = cookie.getValue();
-				break;
+				switch (cookie.getName()) {
+				case "cookitEmail":
+					email = cookie.getValue();
+					break;
+				case "cookitPass":
+					pass = cookie.getValue();
+					break;
+				}
+
 			}
-
 		}
 
 		// Log in automatically if the user have the log data in the cookies
 		if (!email.isEmpty() && !pass.isEmpty()) {
 			results = sq.select("cookit.usuario", new String[] { "id", "nombre", "email", "pass", "edad", "dieta",
-					"nacionalidad", "creacion", "confirmado"}, "email like '" + email + "'", "", 1, 0);
-			
+					"nacionalidad", "creacion", "confirmado" }, "email like '" + email + "'", "", 1, 0);
+
 			if (results != null) {
 				// result not null -> user with given email is found
-				
+
 				if (pass.equals((String) results[0][3])) {
 					// email and pass matches the user in DB -> automatic login
 					myself = new BeanUsuario();
@@ -75,7 +77,7 @@ public class PrepareSession {
 					auxCal.setTime((java.sql.Date) results[0][7]);
 					myself.setCreacion(auxCal);
 					myself.setConfirmado((boolean) results[0][8]);
-					
+
 					sess.setAttribute("myself", myself);
 					sess.setAttribute("cookieMsg", false);
 
@@ -88,14 +90,15 @@ public class PrepareSession {
 		// Get the categories
 		if (sess.getAttribute("categories") == null) {
 
-			results = sq.select("cookit.categoria", new String[] { "nombre", "descripcion" }, "", "", 0, 0);
+			results = sq.select("cookit.categoria", new String[] { "id", "nombre", "descripcion" }, "", "", 0, 0);
 
 			categories = new BeanCategoria[results.length];
 
 			for (int i = 0; i < results.length; i++) {
 				categories[i] = new BeanCategoria();
-				categories[i].setNombre((String) results[i][0]);
-				categories[i].setDescripcion((String) results[i][1]);
+				categories[i].setId((int) results[i][0]);
+				categories[i].setNombre((String) results[i][1]);
+				categories[i].setDescripcion((String) results[i][2]);
 			}
 
 			sess.setAttribute("categories", categories);

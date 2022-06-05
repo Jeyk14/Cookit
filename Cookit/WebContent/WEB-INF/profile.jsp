@@ -19,6 +19,11 @@
 		int rowCont = 0;
 		int pag = 1;
 		
+		String estado = "";
+		
+		Boolean isMyself = (boolean) request.getAttribute("isMyself");
+		boolean isFound = (boolean) request.getAttribute("isFound");
+		
 		Calendar auxCal = user.getCreacion();
 		
 		if(session.getAttribute("myself") != null){
@@ -46,6 +51,8 @@
 		<jsp:include page="prebuilt/header.jsp" />
 		
 		<div id="content">
+		
+		<% if(isFound == true ){ %>
 		
 		<div class="profile">
 
@@ -92,15 +99,27 @@
 		%>
 		
 			<% while(recipeCont < 9){
-				if(recipeList[recipeCont] != null){%>
-			
-			<%	
+				if(recipeList[recipeCont] != null){
+					
 				starRate = recipeList[recipeCont].getEstrellas();
-				
-				%>
-				
-				<% //put a new row every 3 elements
-						if( rowCont == 0){ %> <div class="row"> <% } %>
+
+				 //put a new row every 3 elements
+						if( rowCont == 0){ %> <div class="row"> <% } 
+				 
+						switch(recipeList[recipeCont].getEstado()){
+						case "bloqueado":
+							estado = "<div class='status'><img src='img/blocked.png' title='¡La publicación está bloqueada!&#13Contecte con el equipo de Cookit para solucionarlo'></div>";
+							break;
+						case "guardado":
+							estado = "<div class='status'><a href='createRecipe'><img src='img/saved.png' title='La publicación no se ha publicado&#13Haga clic para continuar la edición de esta receta'></a></div>";
+							break;
+						case "ocultado":
+							estado = "<div class='status'><a href='changeStatus?id="+recipeList[recipeCont].getIdPublicacion()+"&status=1'><img src='img/hidden.png' title='La publicación está oculta.&#13Pulsa para mostrarla'></a></div>";
+							break;
+						case "publicado":
+							estado = "<div class='status'><a href='changeStatus?id="+recipeList[recipeCont].getIdPublicacion()+"status=0'><img src='img/visible.png' title='La publicación está pública.&#13Pulsa para ocultarla'></a></div>";
+							break;
+						}%>
 					
 				<div class="column">
 					<h4 class="col-title"><%= recipeList[recipeCont].getTitulo() %></h4>
@@ -109,6 +128,8 @@
 						<img src="loadImg?id=<%= recipeList[recipeCont].getIdReceta() %>&target=recipe"
 							title="Categoría: <%= catList[recipeCont].getNombre() %>&#013;Tags: <%= recipeList[recipeCont].getTags() %>" onerror="this.onerror=null;this.src='img/broken.jpg'" />
 							</a>
+							
+						<% if(isMyself){out.print(estado);} %>
 				
 						<div class="stars">
 				
@@ -164,6 +185,19 @@
 				<a href="profile?id=<%= user.getId() %>&pag=<%= pag + 1 %>"><button>P&aacute;gina siguiente</button></a>
 			</div>
 		</div>
+		
+		<% } else { //User not found%>
+		
+			<div class="notFound">
+			
+				<h3>Ups... Parece que no hemos encontrado lo que buscas</h3>
+				<p>El usuario que buscas no existe o no se encuentra disponible</p>
+				<br>
+				<p>Lamentamos mucho el inconveniente</p>
+				
+			</div>
+		
+		<% } %>
 		
 		</div>
 	

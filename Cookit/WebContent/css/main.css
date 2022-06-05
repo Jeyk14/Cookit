@@ -2,7 +2,7 @@ html, body {
     max-width: auto;
 }
 
-body {
+html {
 
     --color-red: #F8333C;
     --color-yel: #F5B700;
@@ -24,6 +24,10 @@ body {
     overflow: auto;
     overflow-x: hidden;
 
+}
+
+body {
+	background-color: white;
 }
 
 p, h4, h5, h6 {
@@ -127,8 +131,6 @@ a {
     min-width: auto;
     top: 0;
     left: 0;
-    display: flexbox;
-    justify-content: center;
 
 }
 
