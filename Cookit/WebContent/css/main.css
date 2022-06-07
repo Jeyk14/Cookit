@@ -2,7 +2,7 @@ html, body {
     max-width: auto;
 }
 
-html {
+body, html {
 
     --color-red: #F8333C;
     --color-yel: #F5B700;
@@ -18,16 +18,22 @@ html {
     --vertical-space: 45px; 
 
     margin: 0px;
-    padding: var(--header-height) 0px 0px 0px;
-    font-size: 16px;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    font-size: 14px !important;
     font-family: 'Corbel';
     overflow: auto;
     overflow-x: hidden;
 
 }
 
+html {
+	background-color: var(--chocolate);
+}
+
 body {
 	background-color: white;
+    padding-top: var(--header-height);
 }
 
 p, h4, h5, h6 {
@@ -55,26 +61,22 @@ h3 {
 }
 
 h4 {
-    font-size: 20px;
+    font-size: 20px!important;
     font-style: italic;
     font-weight: normal;
 }
 
 button, input[type=submit] {
-    /*margin: 2vw 25% 2vw 25%;*/
-
     background: var(--color-yel) !important;
-    width: 50%;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px !important;
     height: 2.5em;
-    color: white;
-    font-weight: bold;
     transition: all 0.5s;
 }
 
 button:hover {
     background-color: var(--color-red) !important;
+    border-color: transparent !important;
 }
 
 img {
@@ -83,7 +85,8 @@ img {
 }
 
 a {
-	text-decoration: none;
+	text-decoration: none !important;
+	color: initial !important;
 }
 
 /**/
@@ -117,45 +120,31 @@ a {
     margin-top: 15px;
 }
 
+#cookit-search-toggle {
+	position: absolute;
+	right: 20px;
+	margin-top: 15px;
+}
+
 /* HEADER */
 
 .header {
 
     background-image: url("../img/madera.jpg");
     background-size: cover;
-    width: 100vw;
     height: var(--header-height);
-    position: fixed;
     z-index: 99;
-    margin: 0px !important;
     min-width: auto;
-    top: 0;
-    left: 0;
-
-}
-
-.header-content {
     height: var(--header-height);
-    max-width: var(--max-width);
-    margin: auto;
-    display: flex;
-    justify-content: space-around;
 }
 
-.header-content h5, .header h4, .header p {
+.header p {
     color: white;
 }
 
-.header-content button, .header h5 {
-    margin: 0px;
-}
-
-.header-content button {
-    width: auto;
-}
 
 .logo img {
-    width: 150px;
+    width: 115px;
     height: auto;
     margin: 2vh 0px -2vh 0px;
 }
@@ -165,39 +154,42 @@ a {
     text-align: center;
 }
 
-.header-info {
-    width: 100%;
-    display: contents;
-    text-align: left;
+.cookit-navigation nav div > ul li {
+    background-color: var(--color-yel);
+    padding: 0.5em;
 }
 
-.header-info > div {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
-    text-align: center;
-    height: 100%;
-}
-.user-info h4{
-    margin: 0px 0px 7px 0px;
-    font-weight: bold;
+.cookit-navigation nav div > ul li:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
-.session-buttons{
-    display: flex;
-    flex-direction: row !important;
-    align-items: center !important;
+.cookit-navigation nav div > ul li:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
-.session-buttons :nth-child(even){
-    margin-left: 5px;
-}
+@media (max-width: 576px) { 
+    
+    .cookit-navigation nav div > ul li:first-child, .cookit-navigation nav div > ul li:last-child {
+        border-radius: 0px;
+    }
+    
+    button.navbar-toggler{
+    margin: auto;
+    }
 
-.session-buttons div {
-    height: fit-content;
-    width: auto;
-}
+    .logo {
+        width: auto;
+        margin: initial;
+    }
+
+    .logo img {
+        min-width: 100%;
+        margin: 0px auto 0px auto;
+    }
+
+ }
 
 /* ------------ */
 
@@ -206,16 +198,6 @@ a {
     width: 75%;
     content: " ";
     border-bottom: 2px solid var(--chocolate );
-}
-
-.goto {
-	position: fixed;
-	right: 4%;
-	top: 15%;
-}
-
-.goto button {
-	width: auto;
 }
 
 .title {
@@ -235,11 +217,7 @@ a {
     height: 75px;
     background-color: var(--chocolate);
     text-align: center;
-
-    position: absolute;
     z-index: 90;
-    /* bottom: 0; */
-    left: 0;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -249,3 +227,44 @@ a {
     color: white;
     margin: 5px 0 5px 0;
 }
+
+/* *************************************************** */
+
+.search-form {
+    /*height: 125px;*/
+    margin-bottom: var(--vertical-space);
+    display: flex;
+    justify-content: center;
+    background-color: var(--color-gre);
+    background-image: url("../img/ensalada.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.search-form form {
+    width: 50%;
+    height: 100%;
+    text-align: center;
+    background-color: #ffffffAA;
+}
+
+.search-form form *{
+    margin: 5px;
+}
+
+.search-form form .tag input{
+    height: 2em;
+}
+
+.search-form form input[type="submit"]{
+    margin: 0px 0px 10px 0px;
+    width: 150px;
+}
+
+#cookit-search {
+	background-image: url("../img/search.png");
+	background-repeat: no-repeat;
+	background-size: contain;
+	padding-left: 2em;
+}
+

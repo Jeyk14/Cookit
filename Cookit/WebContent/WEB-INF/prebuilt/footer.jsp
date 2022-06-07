@@ -1,4 +1,4 @@
-<div class="footer">
+<div class="footer mt-4">
 
         <div class="copyright">
             <h4>Copyright Cookit!© 2022</h4>

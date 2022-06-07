@@ -20,7 +20,7 @@ special : BeanEspecial		The weekly special recipe (chosen by the system or an ad
 
 pag : int				The current page on index
 searchtype : String		Indicates what fiels is being searched in the index Ej: titulo, ingredientes, usuario, etc
-searchValue : String		Indicates the value searched in the field that searchtype indicates. Ej: cebolla, pastel, etc
+searchValue : String	Indicates the value searched in the field that searchtype indicates. Ej: cebolla, pastel, etc
 order : String			Indicates the order of the search in the index
 categories : Object[][]	The whole category table. 
   
@@ -54,3 +54,13 @@ SQL NOTES:
 
 - Add "stars tinyint" to cookit.receta
 - Add sql function to change the recipe stars on cookit.likes updates
+
+<option value="none">Sin ordenar</option>
+                    <option value="dateasc"><i class="bi bi-sort-up"></i> Recetas más recientes</option>
+                    <option value="datedesc"><i class="bi bi-sort-down-alt"></i> Recetas más antiguas</option>
+                    <option value="titledesc"><i class="bi bi-sort-alpha-down"> Ordenar por título descendente</i></option>
+                    <option value="titleasc"><i class="bi bi-sort-alpha-down-alt"> Ordenar por título ascedente</i></option>
+                    <option value="likesdesc"><i class="bi bi-star-fill"></i> Mejor valorados primero</option>
+                    <option value="likesasc"><i class="bi bi-star-half"></i> Peor valorados primero</option>
+                    <option value="timedesc"><i class="bi bi-hourglass-split"></i> Lento de preparar</option>
+                    <option value="timeasc"><i class="bi bi-stopwatch"></i> Rápido de preparar</option>

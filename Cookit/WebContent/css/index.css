@@ -1,38 +1,3 @@
-.search-form {
-    height: 125px;
-    margin-bottom: var(--vertical-space);
-    display: flex;
-    justify-content: center;
-    background-color: var(--color-gre);
-    background-image: url("../img/ensalada.jpg");
-    background-size: cover;
-    background-position: center;
-}
-
-.search-form form {
-    width: 50%;
-    height: 100%;
-    text-align: center;
-    background-color: #ffffffAA;
-}
-
-.search-form form *{
-    margin: 5px;
-}
-
-.search-form form .search, .search-form form .order {
-    display: contents;
-}
-
-.search-form form .tag input{
-    height: 2em;
-}
-
-.search-form form input[type="submit"]{
-    margin: 0px;
-    width: 150px;
-}
-
 
 /* SPECIAL DISH */
 .special {

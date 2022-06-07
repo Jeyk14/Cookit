@@ -1,94 +1,73 @@
-	<%@ page import="data.BeanUsuario" %>
-	
-	<% 
-		BeanUsuario myself = (BeanUsuario) session.getAttribute("myself"); 
-		String curPage = (String) session.getAttribute("curPage");
-		
-		if(curPage == null){ // <----- ???
-			 session.setAttribute("curPage", "recipe");
-			 curPage = "recipe";
-		}
-		
-	%>
+<%@ page import="data.BeanUsuario"%>
 
-	<%-- The header itself --%>
-	<%if(myself != null){ // logged in%>
-	
-		<div class="header" id="top">
+<%
+	BeanUsuario myself = (BeanUsuario) session.getAttribute("myself");
+String curPage = (String) session.getAttribute("curPage");
 
-			<div class="header-content">
-				<div class="logo">
-					<img src="img/placeholder.png" />
-				</div>
-	
-				<div class="header-info">
+if (curPage == null) { // <----- ???
+	session.setAttribute("curPage", "recipe");
+	curPage = "recipe";
+}
+%>
 
-					<% if(!myself.isConfirmado()){ %>
-						<div class="header-create">
-							<p><a href="confirmEmail">Confirma tu correo</a> para publicar una receta</p>
-						</div>
-					<% } else { %>
+<div class="header fixed-top ">
+<div class="row ">
 
-						<div class="header-create">
-							<a href="createRecipe">
-								<button>Crear receta</button>
-							</a>
-						</div>
+	<div class="col-3">
+		<div class="logo">
+			<img src="img/placeholder.png">
+		</div>
+	</div>
 
+	<div class="col"></div>
+
+	<div class="col-7 cookit-navigation">
+		<nav class=" navbar navbar-expand-sm ">
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav ms-auto">
+				<li class="nav-item active"><a class="nav-link" href="index">
+							<i class="bi bi-house-door-fill"></i> Ir al inicio
+					</a></li>
+					<%
+						if (myself != null) {
+					%>
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+						role="button" data-toggle="dropdown" aria-haspopup="true"
+						aria-expanded="false"> <i class="bi bi-person-circle"></i> <%= myself.getNombre() %> </a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="profile"> <i class="bi bi-person-lines-fill"></i> Ver mi perfil </a> <a
+								class="dropdown-item" href="modProfile"> <i class="bi bi-wrench-adjustable"></i> Modificar mi perfil</a>
+							<div class="dropdown-divider"></div>
+							<% if(!myself.isConfirmado()){ %>
+								<a class="dropdown-item text-danger" href="modProfile"> <i class="bi bi-wrench-adjustable"></i> ¡Confirmar mi correo!</a>
+								<div class="dropdown-divider"></div>
+							<% } %>
+							<a class="dropdown-item" href="logoff"> <i class="bi bi-x-square-fill"></i> Cerrar sesión</a>
+						</div></li>
+					<%
+						} else {
+					%>
+					<li class="nav-item"><a class="nav-link" href="signin"> <i class="bi bi-person-plus-fill"></i> Registrarme </a></li>
+					<li class="nav-item"><a class="nav-link" href="login"> <i class="bi bi-door-open-fill"></i> Iniciar sesión </a></li>
+					<%
+						}
+					%>
+					<% if(myself != null){ %>
+					<li class="nav-item"><a class="nav-link" href=createRecipe> <i class="bi bi-pencil"></i> Crear una receta </a></li>
 					<% } %>
-	
-					<div class="user-info">
-						<a href="profile?id=<%= myself.getId() %>">
-							<h4><%= myself.getNombre() %></h4>
-							<h5><%= myself.getEmail() %></h5>
-						</a>
-					</div>
-	
-					<div class="session-buttons">
-						<% if(curPage.equals("myprofile")){ 
-								
-							out.print("<div><a href='profile?id="+myself.getId()+"'><button>Ver mi perfil</button></a></div>"); 
-								
-							} %>
-						<div><a href="logoff"><button>Cerrar sesión</button></a></div>
-					</div>
-				</div>
+				</ul>
 			</div>
-		</div>
-	
-	<% } else { %>
+		</nav>
+	</div>
+	<div class="col-1"></div>
 
-		<div class="header" id="top">
-
-			<div class="header-content">
-				<div class="logo">
-					<img src="img/placeholder.png" />
-				</div>
-	
-				<div class="header-info">
-
-					<div class="header-create">
-						<p><a href="login">Inicia sesión</a> para publicar una receta</p>
-					</div>
-	
-					<div class="user-info">
-						<h4>&nbsp;</h4>
-						<h5>&nbsp;</h5>
-					</div>
-	
-					<div class="session-buttons">
-						<div><a href="login"><button>Iniciar sesión</button></a></div>
-						<div><a href="signin"><button>Crear cuenta</button></a></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	
-	<% } %>
-	
-	<%-- The "go to index" button only appears when not in the index --%>
-	<% if(!curPage.equals("index")){
-		
-		out.print("<div class='goto'><a href='index'><button class='gotoIndex'>Volver a inicio</button></a></div>");
-		
-	} %>
+</div>
+</div>
