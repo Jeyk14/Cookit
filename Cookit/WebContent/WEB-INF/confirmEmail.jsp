@@ -7,11 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cookit - Confirmar email</title>
+    
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/main.css">
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <jsp:include page="prebuilt/boostrap.jsp" />
     
 </head>
 <body>
@@ -24,14 +24,7 @@
 		BeanUsuario myself = (BeanUsuario) session.getAttribute("myself");
 	%>
 	
-	<% if(request.getAttribute("tempMsg") != null){ %>
-	
-		<div class="errorMsg">
-			<h4>Parece que algo ha ido mal...</h4>
-			<p><%= request.getAttribute("tempMsg") %></p>
-		</div>
-	
-	<% } %>
+	<jsp:include page="prebuilt/tempMsg.jsp" />
 
 	<div class="side-img"></div>
 
@@ -39,8 +32,8 @@
 	
 		<div class="login-content">
 
-            <h2 class="form-title recovery-title">Recuperar contraseña</h2>
-            <h4 class="form-subtitle">Se ha enviado un código de recuperación a <%= myself.getEmail() %></h4>
+            <h2 class="form-title recovery-title">Confirmar correo electrónico</h2>
+            <h4 class="form-subtitle">Se ha enviado un código de confirmación a <%= myself.getEmail() %></h4>
 
             <div class="log-form">
 
@@ -52,6 +45,10 @@
                     
                     <input type="submit" class="button-login" value="CONFIRMAR MI CORREO">
                 </form>
+                
+                <a href="confirmEmail"><button class="button-login">Volver a enviar</button></a>
+                <a href="index" style="text-decoration: underline !important;">No quiero confirmar mi correo ahora</a>
+                
 
             </div>
 

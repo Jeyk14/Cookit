@@ -2,7 +2,7 @@
 
 <%
 	BeanUsuario myself = (BeanUsuario) session.getAttribute("myself");
-String curPage = (String) session.getAttribute("curPage");
+	String curPage = (String) session.getAttribute("curPage");
 
 if (curPage == null) { // <----- ???
 	session.setAttribute("curPage", "recipe");
@@ -47,7 +47,7 @@ if (curPage == null) { // <----- ???
 								class="dropdown-item" href="modProfile"> <i class="bi bi-wrench-adjustable"></i> Modificar mi perfil</a>
 							<div class="dropdown-divider"></div>
 							<% if(!myself.isConfirmado()){ %>
-								<a class="dropdown-item text-danger" href="modProfile"> <i class="bi bi-wrench-adjustable"></i> ¡Confirmar mi correo!</a>
+								<a class="dropdown-item text-danger" href="confirmEmail"> <i class="bi bi-wrench-adjustable"></i> ¡Confirmar mi correo!</a>
 								<div class="dropdown-divider"></div>
 							<% } %>
 							<a class="dropdown-item" href="logoff"> <i class="bi bi-x-square-fill"></i> Cerrar sesión</a>

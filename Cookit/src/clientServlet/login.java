@@ -112,9 +112,11 @@ public class login extends HttpServlet {
 
 					sesion.setAttribute("myself", myself);
 					
-					// Add email and password to the cookie
-					response.addCookie(new Cookie("cookitEmail", myself.getEmail()));
-					response.addCookie(new Cookie("cookitPass", (String) result[0][7]));
+					if(rememberMe != null) {
+						// Add email and password to the cookie
+						response.addCookie(new Cookie("cookitEmail", myself.getEmail()));
+						response.addCookie(new Cookie("cookitPass", (String) result[0][7]));
+					}
 					
 					request.setAttribute("cookieMsg", false);
 

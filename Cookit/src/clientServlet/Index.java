@@ -28,10 +28,7 @@ public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/*-
-	 * TODO: Add a block list for users to block eachother. That's another table in the database 
-	 * TODO: Fix the tempMsg not showing anywhere
-	 * 
-	 * TODO: Implement tempMsg, success and showMsg as session attributes 
+	 * TODO: Add a block list for users to block eachother. That's another table in the database 	 * 
 	 * TODO: Count the max number of pages to show "Página X de Y" on the page controls
 	 * 
 	 */
@@ -188,12 +185,6 @@ public class Index extends HttpServlet {
 
 		if (result.length < 12) {
 			elemCount = result.length;
-		}
-
-		if (elemCount < 1) {
-			request.setAttribute("success", "false");
-			request.setAttribute("tempMsg", "No se han encontrado resultados");
-			request.setAttribute("showMsg", true);
 		}
 		
 		System.out.println("elem count "+elemCount);

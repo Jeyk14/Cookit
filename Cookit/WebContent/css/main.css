@@ -268,3 +268,50 @@ a {
 	padding-left: 2em;
 }
 
+/* ----------------------------------------------------- */
+
+.successMsg {
+	background-color: var(--color-gre) ;
+}
+
+.errorMsg {
+	background-color: var(--color-red) ;
+}
+.errorMsg * {
+	color: white;
+}
+
+.infoMsg {
+	background-color: white;
+}
+
+.tempMsg {
+    position: absolute;
+width: 26%;
+left: 37.5%;
+top: 20%;
+-webkit-animation: disappear 3s forwards;
+animation: disappear 5s forwards;
+cursor: default;
+pointer-events: none;
+z-index: 99;
+text-align: center;
+border-top-left-radius: 15px;
+border-bottom-right-radius: 15px;
+padding: 10px;
+}
+
+.tempMsg * {
+	margin: 0px;
+}
+
+@keyframes disappear {
+    0%   {opacity: 1;}
+    90%  {opacity: 1;}
+    100% {opacity: 0; display: hidden;}
+}
+@-webkit-keyframes disappear {
+    0%   {opacity: 1;}
+    90%  {opacity: 1;}
+    100% {opacity: 0; display: hidden;}
+}

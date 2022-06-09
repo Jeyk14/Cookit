@@ -46,27 +46,25 @@
 
 	<jsp:include page="prebuilt/special.jsp" />
 
+	<jsp:include page="prebuilt/tempMsg.jsp" />
+
 	<div class="separator"></div>
 
 	<div id="content">
-		<%
-			// show all recipes in 3 columns each
+	
+		<%// show all recipes in 3 columns each
 		if (recipeList != null) {
 		%>
 		<div class="container">
 
 			<%
 				while (recipeCont < 12) {
+
 				if (recipeList[recipeCont] != null) {
-			%>
+					starRate = recipeList[recipeCont].getEstrellas();
+					//put a new row every 3 elements
 
-			<%
-				starRate = recipeList[recipeCont].getEstrellas();
-			%>
-
-			<%
-				//put a new row every 3 elements
-			if (rowCont == 0) {
+					if (rowCont == 0) {
 			%>
 			<div class="cookit-row row">
 				<%
@@ -144,16 +142,12 @@
 			} else {
 			rowCont++;
 			}
-			%>
 
-			<%
-				}
+			}
 			recipeCont++;
 			}
-			%>
 
-			<%
-				} else {
+			} else {
 			// error -> apology
 			%>
 

@@ -13,7 +13,7 @@ cookitEmail		The email of the user
 cookitPass		The password of the user
 	
 - - - - SESSION ATTRIBUTES - - - - 
-myself : BeanUsuario		The logged user. If null -> anonimous user
+myself : BeanUsuario		The logged user. If null -> anonymous user
 savedRecipe : BeanReceta	A recipe the user saved previously while creating one.
 cookieMsg : boolean			If true, show the user the cookie policy message
 special : BeanEspecial		The weekly special recipe (chosen by the system or an administrator)
@@ -27,8 +27,10 @@ categories : Object[][]	The whole category table.
 curPage : String		The page the user is in
    
 tempMsg : String		A message to show the user
-success : boolean		Determines if tempMessge is a succes message or a failure message
+success : boolean		Determines if tempMessge is a success message or a failure message
 showMsg : boolean		If true, then show tempMsg and turn back to false*/
+
+mailCode : String		The code sent to the email of the user to confirm it
 	  
 	  
 - - - - STAR FORMULA - - - -

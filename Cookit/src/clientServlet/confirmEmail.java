@@ -13,17 +13,19 @@ import javax.servlet.http.HttpSession;
 import data.BeanUsuario;
 import dbConnection.Connect;
 import dbConnection.SimpleQuery;
-import mail.Email;
+import toolkit.YahooEmail;
 
 @WebServlet("/confirmEmail")
 public class confirmEmail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	// A user with an unconfirmed email logged -> ask to confirm email until they do confirm it
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		HttpSession sess = request.getSession();
-		Email mail = new Email();
+		YahooEmail mail = new YahooEmail();
 		String mesage = "";
 		BeanUsuario myself;
 		String code = "";
@@ -33,23 +35,26 @@ public class confirmEmail extends HttpServlet {
 		if (sess.getAttribute("myself") == null) {
 			// User is not logged -> index
 			header = "index";
+			request.setAttribute("tempMsg", "Debes estar registrado para utilizar esta función");
+			request.setAttribute("success", "false");
+			request.setAttribute("showMsg", true);
 		} else {
 			
 			myself = (BeanUsuario) sess.getAttribute("myself");
 			
 			// The user is logged but is not confirmed -> send mail -> confirmEmail.jsp
-			mail.setRemitente("TFGJeyfer2022IESMDC@gmail.com");
-			mail.setContrasena("a21_jortnu");
-			mail.setDestino(myself.getEmail());
-			mail.setAsunto("Cookit! - Confirmación de correo");
+			mail.setFrom("jeykantonio@yahoo.com");
+			mail.setPassword("ngimadoxqciwjumi");
+			mail.setTo(myself.getEmail());
+			mail.setSubject("Cookit! - Confirmación de correo");
 
 			code = randCode();
 			sess.setAttribute("code", code);
 			mesage = "Bienvenido a Cookit!\n Su código de confirmación es:\n\n" + code;
 
-			mail.setMensaje(mesage);
+			mail.setMessage(mesage);
 
-			mail.enviarCorreo();
+			mail.sendMail();
 			header = "WEB-INF/confirmEmail.jsp";
 			
 		}
@@ -77,25 +82,29 @@ public class confirmEmail extends HttpServlet {
 				String recoveryCode = request.getParameter("recovery-code");
 				code = (String) sess.getAttribute("code");
 
-//				System.out.println("code: "+code+" recoveryCode: "+recoveryCode+"\nEquals? "+recoveryCode.equalsIgnoreCase(code));
 				// Compare if the given code is the same code in the session attribute
 				if (recoveryCode.equalsIgnoreCase(code)) {
 					
 					// Both codes are the same -> confirm mail
-					con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
-					con.openConnection();
 					
-					consult = new SimpleQuery(con.getConexion());
+					consult = new SimpleQuery("a21_jortnu", "a21_jortnu", "a21_jortnu");
 					consult.updateOne("cookit.usuario", "confirmado", "boolean", true, "id = "+myself.getId());
+					consult.closeConnection();
+					
+					myself.setConfirmado(true);
 
 					header = "index";
+					
+					request.setAttribute("tempMsg", "¡Ha confirmado su correo electrónico!&#13;Disfrute de todas las funciones de Cookit!");
+					request.setAttribute("success", "true");
+					request.setAttribute("showMsg", true);
 
 				} else {
 
 					// Code doesn't match -> message + re-send code and retry
-					// TODO: Give the user 3 email confirm tries. fail -> wait 60 sec
-					request.setAttribute("tempMsg",
-							"El codigo que ha introducido no coincide\nSe le va a enviar un nuevo código de inicio");
+					request.setAttribute("tempMsg", "El código escrito no coincide, se le ha enviado otro código");
+					request.setAttribute("success", "false");
+					request.setAttribute("showMsg", true);
 
 				}
 				
@@ -119,7 +128,7 @@ public class confirmEmail extends HttpServlet {
 
 		String characters = "123456789ABCDEFGHIJTLMNOPQRSTUVWXYZ123456789";
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 6; i++) {
 			code += characters.charAt((int) Math.floor(Math.random() * characters.length()));
 		}
 

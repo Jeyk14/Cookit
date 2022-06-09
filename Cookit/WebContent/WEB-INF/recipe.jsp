@@ -113,7 +113,7 @@
                     <div class="recipe-data">
                     
                     	<div class="author">
-                    	<a href="profile?=<%= author.getId() %>"><h4>Receta de <span style="font-weight: bold;"><%= author.getNombre() %></span></h4></a>
+                    	<a href="profile?id=<%= author.getId() %>"><h4>Receta de <span style="font-weight: bold;"><%= author.getNombre() %></span></h4></a>
                     	</div>
                     
                         <div class="category" title="<%= categories[recipe.getId_categoria()].getDescripcion() %>">

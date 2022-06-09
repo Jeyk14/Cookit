@@ -22,11 +22,19 @@ if(request.getAttribute("tempMsg") != null) {
 <%-- The tempMessage --%>
 	<% if(showMsg == true){
 		if(!tempMsg.isEmpty()){
-			switch(success){
+			switch(success.toLowerCase()){
 			case "true":
+			case "t":
+			case "yes":
+			case "y":
+			case "si":
+			case "s":
 				out.print("<div class='tempMsg successMsg'><p>"+tempMsg+"</p></div>");
 				break;
 			case "false":
+			case "f":
+			case "no":
+			case "n":
 				out.print("<div class='tempMsg errorMsg'><p>"+tempMsg+"</p></div>");
 				break;
 			default:
