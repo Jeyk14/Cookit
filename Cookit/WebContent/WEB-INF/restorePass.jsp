@@ -1,14 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     
-    <%@ page import="data.BeanUsuario"%>
-    
-    <%
-    
-    BeanUsuario myself = (BeanUsuario) session.getAttribute("myself");
-    
-    %>
-    
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,6 +16,8 @@
 </head>
 <body>
 
+	<jsp:include page="prebuilt/tempMsg.jsp" />
+
 	<div class="login">
 	
 		<div class="login-content">
@@ -31,22 +25,27 @@
             <h2 class="form-title recovery-title">Recuperar contraseña</h2>
             <h4 class="form-subtitle">Envía un codigo de verificación a tu correo electrónico para saber que eres tu y sólo tu</h4>
 
-            <div class="log-form">
+            <div class="log-form col">
+	            <div class="row">
+	            	<form class="email-field" action="restorePass" method="post" accept-charset="utf-8">
+	            		<label for="target-email">Email</label>
+	                    <input type="email" id="email" name="target-email" required>
+	                    <input type="submit" class="send-email" name="submit" value="ENVIAR CÓDIGO">
+	            	</form>
+	            </div>
+	            
+	            <div class="row">
+		            <form class="email-field" action="restorePass" method="post" accept-charset="utf-8">
+		
+		                   <label for="recovery-code">Código de recuperacion</label>
+		                   <input type="text" id="code" name="recovery-code" >
+		                  
+		                   <input type="submit" class="button-login" name="submit" value="RESTAURAR MI CONTRASEÑA">
+		               </form>
+	            </div>
+	        </div>
 
-                <form class="email-field" action="restorePass" method="post">
-                    <label for="email-code">Email</label>
-                    <input type="text" id="email" name="target-email" <%= myself.getEmail() %>required>
-                    <input type="submit" class="send-email" name="submit" value="ENVIAR CÓDIGO">
-
-                        <label for="recovery-code">Código de recuperacion</label>
-                        <input type="text" id="code" name="recovery-code" required>
-                    
-                    <input type="submit" class="button-login" name="submit" value="CONFIRMAR CORREO">
-                </form>
-
-            </div>
-
-        </div>
+		</div>
 	
 	</div>
 

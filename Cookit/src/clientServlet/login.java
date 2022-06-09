@@ -27,8 +27,6 @@ public class login extends HttpServlet {
 		String header = "WEB-INF/login.jsp";
 		HttpSession sess = request.getSession();
 
-		// TODO: Check for cookies. If login cookies exists, fill the form automatically
-
 		// If user is already logged -> index
 		if (sess.getAttribute("myself") != null) {
 
@@ -70,7 +68,11 @@ public class login extends HttpServlet {
 		// Check if user is trying to log in
 		if (email == null || email.isEmpty() || pass == null || pass.isEmpty()) {
 
-			tempMsg = "Parece que el formulario no está correctamente rellenado";
+			// No data given -> do nothing
+			if(request.getAttribute("tempMsg") != null) {
+
+			}
+			
 
 		} else {
 
@@ -82,9 +84,9 @@ public class login extends HttpServlet {
 			// Check if email is found in the db
 			if (result.length < 1) {
 
-				success = false;
-				tempMsg = "El correo electrónico o la contraseña no son correctos";
-				System.out.println("result.length < 1");
+				request.setAttribute("tempMsg", "El correo electrónico o la contraseña no son correctos");
+				request.setAttribute("success", "false");
+				request.setAttribute("showMsg", true);
 
 			} else {
 
@@ -113,7 +115,7 @@ public class login extends HttpServlet {
 					sesion.setAttribute("myself", myself);
 					
 					if(rememberMe != null) {
-						// Add email and password to the cookie
+						// Add email and password to the cookie if user clicked remember-me
 						response.addCookie(new Cookie("cookitEmail", myself.getEmail()));
 						response.addCookie(new Cookie("cookitPass", (String) result[0][7]));
 					}
@@ -134,7 +136,8 @@ public class login extends HttpServlet {
 
 					// pass != pass in DB -> retry
 					request.setAttribute("tempMsg", "El correo electrónico o la contraseña no son correctos");
-					request.setAttribute("success", false);
+					request.setAttribute("success", "false");
+					request.setAttribute("showMsg", true);
 
 				}
 

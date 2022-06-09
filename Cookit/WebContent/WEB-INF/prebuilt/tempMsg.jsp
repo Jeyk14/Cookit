@@ -1,7 +1,7 @@
 <%
 
 boolean showMsg = false;
-String tempMsg = null;
+String tempMsg = "";
 String success = "false";
 
 if(request.getAttribute("success") != null){

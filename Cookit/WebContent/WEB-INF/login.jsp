@@ -50,7 +50,7 @@
 	
 	           </form>
 	
-	           <div class="goto-registro">¿No tienes cuenta? Regístrate <a href="registro.html">aquí</a></div>
+	           <div class="goto-registro">¿No tienes cuenta? Regístrate <a href="signin">aquí</a></div>
 	
 	       </div>
 
