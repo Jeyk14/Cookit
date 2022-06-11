@@ -30,7 +30,7 @@
 	            	<form class="email-field" action="restorePass" method="post" accept-charset="utf-8">
 	            		<label for="target-email">Email</label>
 	                    <input type="email" id="email" name="target-email" required>
-	                    <input type="submit" class="send-email" name="submit" value="ENVIAR CÓDIGO">
+	                    <input type="submit" class="send-email" name="submit" value="ENVIAR CLAVE">
 	            	</form>
 	            </div>
 	            

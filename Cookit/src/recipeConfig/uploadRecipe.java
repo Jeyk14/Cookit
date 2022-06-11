@@ -69,16 +69,13 @@ public class uploadRecipe extends HttpServlet {
 		int maxSize = 5000 * 1024; // max file size
 		int fileSize = 0;
 		String mimeType;
-		Boolean imgSuccess = true;
 
 		// Either to save the recipe or to upload it
 		String submitRecipe = request.getParameter("submitRecipe");
 
 		// Used to check if the save query was succesful or not
 		int inserted = 0;
-		int updated = 0;
 		int lastId = 0; // The ID of the last post
-		int recipeId = 0;
 		int lastIdAux;
 
 		boolean success = true;
@@ -229,7 +226,7 @@ public class uploadRecipe extends HttpServlet {
 
 					simpleQuery = new SimpleQuery("a21_jortnu", "a21_jortnu", "a21_jortnu");
 
-					updated = simpleQuery.update("cookit.publicacion", new String[] { "titulo", "subtitulo", "estado" },
+					simpleQuery.update("cookit.publicacion", new String[] { "titulo", "subtitulo", "estado" },
 							new String[] { "string", "string", "string" },
 							new Object[] { title, subtitle, "publicado" }, "id = " + savedRecipe.getIdPublicacion());
 
@@ -279,7 +276,7 @@ public class uploadRecipe extends HttpServlet {
 				// an already saved post exists -> load the new recipe onto the saved one
 				
 				// update post
-				updated = simpleQuery.update("cookit.publicacion", new String[] { "titulo", "subtitulo" },
+				simpleQuery.update("cookit.publicacion", new String[] { "titulo", "subtitulo" },
 						new String[] { "string", "string" }, new Object[] { title, subtitle },
 						"id = " + (int) resultado[0][0]);
 				

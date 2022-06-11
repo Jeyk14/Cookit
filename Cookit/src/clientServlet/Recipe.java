@@ -42,11 +42,7 @@ public class Recipe extends HttpServlet {
 		Calendar auxCal;
 		
 		String aux;
-
-		// Check if ID param exists. If not exist -> index
 		
-		//TODO: If user logged -> check if it liked or disliked the recipe
-
 		if (id == null) {
 
 			target = "index";

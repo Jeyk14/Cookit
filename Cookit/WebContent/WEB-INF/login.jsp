@@ -25,7 +25,7 @@
 	
 	           <h2 class="form-title">Iniciar sesión en cookit</h2>
 	
-	           <form class="log-form" action="" method="post" accept-charset="utf-8">
+	           <form class="log-form" action="login" method="post" accept-charset="utf-8">
 	
 	               <div class="email-field">
 	                   <label for="email">Email</label>

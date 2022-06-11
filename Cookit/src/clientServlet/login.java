@@ -16,6 +16,9 @@ import crypt.CryptSha512;
 import data.BeanUsuario;
 import data.ConsultaAbierta;
 import dbConnection.Connect;
+import dbConnection.SimpleQuery;
+import toolkit.RandNum;
+import toolkit.YahooEmail;
 
 @WebServlet("/login")
 public class login extends HttpServlet {
@@ -23,6 +26,8 @@ public class login extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		System.out.println("login get");
 
 		String header = "WEB-INF/login.jsp";
 		HttpSession sess = request.getSession();
@@ -36,6 +41,53 @@ public class login extends HttpServlet {
 			sess.setAttribute("curPage", "log");
 		}
 
+		if (request.getSession().getAttribute("changed") != null) {
+			// the user comes with a freshly changed password -> show them a message to
+			// check the email
+
+			SimpleQuery sq = new SimpleQuery("a21_jortnu", "a21_jortnu", "a21_jortnu");
+			CryptSha512 crypt = new CryptSha512();
+			String newPass = "";
+			String newCryptPass = "";
+			String newSalt = "";
+			YahooEmail yemail = new YahooEmail();
+
+			newPass = RandNum.getCode(10);
+			newSalt = RandNum.getCode(10);
+			newCryptPass = crypt.encrypt(newPass, newSalt).get();
+
+			BeanUsuario tempUsr = null;
+			tempUsr = (BeanUsuario) request.getSession().getAttribute("tempUsr");
+			
+			System.out.println("TempUsr es null? "+tempUsr == null);
+			
+			sq.updateOne("cookit.usuario", "salt", "string", newSalt, "id = " + tempUsr.getId());
+			sq.updateOne("cookit.usuario", "pass", "string", newCryptPass, "id = " + tempUsr.getId());
+
+			String from = "jeykantonio@yahoo.com";
+			String pass = "ngimadoxqciwjumi";
+			String to = tempUsr.getEmail();
+			String subject = "Tu nueva contrase\u00f1a en Cookit!";
+			String message = "Hace poco decidiste cambiar tu contrase\u00f1a en Cookit.\nTu nueva contrase\u00f1a es: "
+					+ newPass;
+
+			yemail = new YahooEmail(from, pass, to, subject, message);
+			yemail.sendMail();
+
+			// tell the user to check their email
+			request.setAttribute("tempMsg", "Se ha enviado un correo electr&oacute;nico a " + tempUsr.getEmail()
+					+ " con tu nueva y flamante contrase&ntilde;a de Cookit!");
+			request.setAttribute("success", "true");
+			request.setAttribute("showMsg", true);
+
+			request.getSession().removeAttribute("tempUsr");
+
+			request.getSession().removeAttribute("mailCode");
+
+			request.getSession().removeAttribute("changed");
+
+		}
+
 		request.getRequestDispatcher(header).forward(request, response);
 	}
 
@@ -46,6 +98,8 @@ public class login extends HttpServlet {
 	 * */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		System.out.println("login post");
 
 		HttpSession sesion = request.getSession();
 		Connect con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
@@ -54,13 +108,11 @@ public class login extends HttpServlet {
 		String queryGetUsr = "SELECT id, nombre, email, edad, nacionalidad, dieta, creacion, pass, salt, confirmado FROM cookit.usuario WHERE email = ";
 		CryptSha512 crypt = new CryptSha512();
 		BeanUsuario myself; // The logged user data will be stored here
-		
+
 		String header = "doget"; // where the user will be sent at the end of doPost
-		String tempMsg = "";
-		boolean success = true;
 
 		String email = request.getParameter("email");
-		String pass = request.getParameter("pass")+"";
+		String pass = request.getParameter("pass") + "";
 		String rememberMe = request.getParameter("rememberme"); // null = unchecked
 
 		Calendar auxCal = null;
@@ -69,22 +121,21 @@ public class login extends HttpServlet {
 		if (email == null || email.isEmpty() || pass == null || pass.isEmpty()) {
 
 			// No data given -> do nothing
-			if(request.getAttribute("tempMsg") != null) {
+			if (request.getAttribute("tempMsg") != null) {
 
 			}
-			
 
 		} else {
 
 			// form fields correctly fulfilled
 			con.openConnection();
 			queryGetUsr += "'" + email + "'";
-			result = consult.select(con.getConexion(), queryGetUsr, 10); // TODO: don't get the whole query to check pass+salt
+			result = consult.select(con.getConexion(), queryGetUsr, 10);
 
 			// Check if email is found in the db
 			if (result.length < 1) {
 
-				request.setAttribute("tempMsg", "El correo electrónico o la contraseña no son correctos");
+				request.setAttribute("tempMsg", "El correo electr&oacute;nico o la contrase&ntilde;a no son correctos");
 				request.setAttribute("success", "false");
 				request.setAttribute("showMsg", true);
 
@@ -113,13 +164,13 @@ public class login extends HttpServlet {
 					myself.setConfirmado((boolean) result[0][9]);
 
 					sesion.setAttribute("myself", myself);
-					
-					if(rememberMe != null) {
+
+					if (rememberMe != null) {
 						// Add email and password to the cookie if user clicked remember-me
 						response.addCookie(new Cookie("cookitEmail", myself.getEmail()));
 						response.addCookie(new Cookie("cookitPass", (String) result[0][7]));
 					}
-					
+
 					request.setAttribute("cookieMsg", false);
 
 					if (myself.isConfirmado() == false) {
@@ -128,14 +179,10 @@ public class login extends HttpServlet {
 						header = "index";
 					}
 
-					if (rememberMe != null) {
-						// TODO: Add the email and pass to a cookie
-					}
-
 				} else {
 
 					// pass != pass in DB -> retry
-					request.setAttribute("tempMsg", "El correo electrónico o la contraseña no son correctos");
+					request.setAttribute("tempMsg", "El correo electr&oacute;nico o la contrase&ntilde;a no son correctos");
 					request.setAttribute("success", "false");
 					request.setAttribute("showMsg", true);
 

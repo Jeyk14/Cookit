@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 //import conexionBD.Conexion;
 //import conexionBD.ModeloSimple;
 import data.BeanUsuario;
-import dbConnection.Connect;
 import dbConnection.SimpleQuery;
 import toolkit.YahooEmail;
 
@@ -50,7 +49,7 @@ public class confirmEmail extends HttpServlet {
 
 			code = randCode();
 			sess.setAttribute("code", code);
-			mesage = "Bienvenido a Cookit!\n Su código de confirmación es:\n\n" + code;
+			mesage = "Bienvenido a Cookit!\n Su código de confirmaci&oacute;n es:\n\n" + code;
 
 			mail.setMessage(mesage);
 
@@ -78,7 +77,6 @@ public class confirmEmail extends HttpServlet {
 
 				BeanUsuario myself = (BeanUsuario) sess.getAttribute("myself");
 				SimpleQuery consult;
-				Connect con;
 				String recoveryCode = request.getParameter("recovery-code");
 				code = (String) sess.getAttribute("code");
 

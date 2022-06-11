@@ -28,11 +28,6 @@ import toolkit.typeCkecker;
 public class profile extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	// TODO: search the user every time? Save the last searched user in a sess attr
-	// to reuse the data and reduce the db acces?
-	// TODO: If estado = guardado, bloqueado, ocultado -> show blue/red/gray icon
-	// respectively
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -61,10 +56,10 @@ public class profile extends HttpServlet {
 
 		BeanReceta[] recipeList = new BeanReceta[9]; // this user's recipes
 		BeanCategoria[] catList = new BeanCategoria[9];
-		String queryRecipe = "SELECT rec.id, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags, pub.id, pub.estrellas, pub.estado "
-				+ "FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion "
-				+ "INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id "
-				+ "INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id WHERE usu.id = ";
+//		String queryRecipe = "SELECT rec.id, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags, pub.id, pub.estrellas, pub.estado "
+//				+ "FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion "
+//				+ "INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id "
+//				+ "INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id WHERE usu.id = ";
 
 		Object[][] result = null;
 
@@ -164,7 +159,7 @@ public class profile extends HttpServlet {
 		if (isFound) {
 			// If a user is found, search for thas user's recipes
 
-			queryRecipe += user.getId() + " "; // Add the user's ID to the search of recipes
+//			queryRecipe += user.getId() + " "; // Add the user's ID to the search of recipes
 
 			if (pag > 1) {
 				offset = (pag - 1) * 9;
