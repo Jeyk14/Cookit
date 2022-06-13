@@ -124,7 +124,7 @@ public class Recipe extends HttpServlet {
 					results = simpleQuery.select(
 							"cookit.receta AS rec INNER JOIN cookit.publicacion AS pub ON pub.id = rec.id_publicacion",
 							new String[] { "pub.id", "pub.titulo", "pub.subtitulo", "pub.fecha", "rec.procedimiento",
-									"rec.tiempo", "rec.ingredientes", "rec.tags", "rec.id_categoria", "rec.id", "pub.estrellas" },
+									"rec.tiempo", "rec.ingredientes", "rec.tags", "rec.id_categoria", "rec.id", "pub.estrellas", "pub.id_usuario" },
 							"pub.id = " + id, "", 1, 0);
 
 					recipe.setIdPublicacion((int) results[0][0]);
@@ -145,7 +145,7 @@ public class Recipe extends HttpServlet {
 					
 					author = new BeanUsuario();
 					
-					results = simpleQuery.select("cookit.usuario", new String[] {"id", "nombre"}, "", "", 1, 0);
+					results = simpleQuery.select("cookit.usuario", new String[] {"id", "nombre"}, "id = "+(int) results[0][11], "", 1, 0);
 					
 					author.setId((int) results[0][0]);
 					author.setNombre((String) results[0][1]);
@@ -159,8 +159,6 @@ public class Recipe extends HttpServlet {
 			simpleQuery.closeConnection();
 
 		}
-		
-		// TODO: Divide the time by 60 to show the hours and minutes instead of only minutes
 
 		session.setAttribute("curPage", "recipe");
 		

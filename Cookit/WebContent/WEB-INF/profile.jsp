@@ -53,6 +53,8 @@ if (request.getAttribute("pag") != null) {
 	<jsp:include page="prebuilt/header.jsp" />
 
 	<jsp:include page="prebuilt/search.jsp" />
+	
+	<jsp:include page="prebuilt/tempMsg.jsp" />
 
 	<div id="content">
 

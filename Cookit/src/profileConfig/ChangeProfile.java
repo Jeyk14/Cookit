@@ -39,10 +39,7 @@ public class ChangeProfile extends HttpServlet {
 		int changeCount = 0;
 		int returnCode = 0;
 
-		BeanUsuario myself = (BeanUsuario) request.getSession().getAttribute("myself");
-		
-		System.out.println(myself.getId());
-		
+		BeanUsuario myself = (BeanUsuario) request.getSession().getAttribute("myself");		
 
 		String tempMsg = "";
 		Connect con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
@@ -135,26 +132,25 @@ public class ChangeProfile extends HttpServlet {
 		switch (returnCode) {
 		case -1:
 			// -1 = the values were wrong
-			tempMsg = "Parece que ha habido un problema<br/>Contacte con un administrador para que le podamos ayudar";
-			request.setAttribute("success", false);
-
+			request.setAttribute("tempMsg", "Parece que ha habido un problema<br/>Contacte con un administrador para que le podamos ayudar");
+			request.setAttribute("success", "false");
+			request.setAttribute("showMsg", true);
+			
 			break;
 		case 0:
 			// 0 = no changes / error
-			tempMsg = "Parece que ha habido un problema.<br/>No hemos podido actualizar su información personal, inténtelo más tarde";
-			request.setAttribute("success", false);
+			request.setAttribute("tempMsg", "Parece que ha habido un problema.<br/>No hemos podido actualizar su información personal, inténtelo más tarde");
+			request.setAttribute("success", "false");
+			request.setAttribute("showMsg", true);
 			break;
 		default:
 			// Changes -> success
-			tempMsg = "Se han actualizado sus datos.<br/>Es posible que su información tarden unos segundos en hacerse visible";
-			request.setAttribute("success", true);
+			request.setAttribute("tempMsg", "Se han actualizado sus datos.<br/>Es posible que su información tarden unos segundos en hacerse visible");
+			request.setAttribute("success", "true");
+			request.setAttribute("showMsg", true);
 			myself = updateBean(values, changes, myself); // Update the bean
 			break;
 		}
-
-		System.out.println(returnCode);
-
-		request.setAttribute("tempMsg", tempMsg);
 		request.setAttribute("id", Integer.toString(myself.getId()));
 
 		doGet(request, response);

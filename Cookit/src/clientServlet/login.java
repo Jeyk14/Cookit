@@ -171,7 +171,7 @@ public class login extends HttpServlet {
 						response.addCookie(new Cookie("cookitPass", (String) result[0][7]));
 					}
 
-					request.setAttribute("cookieMsg", false);
+					request.getSession().setAttribute("cookieMsg", false);
 
 					if (myself.isConfirmado() == false) {
 						header = "confirmEmail";

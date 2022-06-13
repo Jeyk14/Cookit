@@ -3,11 +3,17 @@
 <%
 	BeanUsuario myself = (BeanUsuario) session.getAttribute("myself");
 	String curPage = (String) session.getAttribute("curPage");
+	
+	boolean cookieMsg = true;
 
-if (curPage == null) { // <----- ???
-	session.setAttribute("curPage", "recipe");
-	curPage = "recipe";
-}
+	if (curPage == null) { // <----- ???
+		session.setAttribute("curPage", "recipe");
+		curPage = "recipe";
+	}
+	
+	if(session.getAttribute("cookieMsg") != null){
+		cookieMsg = (boolean) session.getAttribute("cookieMsg");
+	}
 %>
 
 <div class="header fixed-top ">
@@ -71,3 +77,10 @@ if (curPage == null) { // <----- ???
 
 </div>
 </div>
+
+<% if(cookieMsg){ %>
+	<div class="cookieMsg">
+		<h5>De parte del equipo de Cookit, valoramos su privacidad</h5>
+		<p>Este sitio web utiliza cookies, si continúa navegando acepta nuestra política de Cookies</p>
+	</div>
+<% session.setAttribute("cookieMsg", false);} %>

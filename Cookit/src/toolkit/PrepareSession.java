@@ -15,9 +15,6 @@ import dbConnection.SimpleQuery;
 
 public class PrepareSession {
 
-	// TODO: Add this function to every servlet
-	// TODO: Add the cookie policy message
-
 	public static void prepare(HttpServletRequest req, HttpServletResponse res) {
 
 		HttpSession sess = req.getSession();
@@ -77,6 +74,8 @@ public class PrepareSession {
 					auxCal.setTime((java.sql.Date) results[0][7]);
 					myself.setCreacion(auxCal);
 					myself.setConfirmado((boolean) results[0][8]);
+					
+					req.getSession().setAttribute("cookieMsg", false);
 
 					sess.setAttribute("myself", myself);
 					sess.setAttribute("cookieMsg", false);

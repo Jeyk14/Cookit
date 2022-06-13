@@ -20,9 +20,6 @@ import dbConnection.SimpleQuery;
 import toolkit.PrepareSession;
 import toolkit.typeCkecker;
 
-/**
- * Servlet implementation class inicio
- */
 @WebServlet("/index")
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;

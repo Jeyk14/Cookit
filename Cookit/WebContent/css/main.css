@@ -290,7 +290,7 @@ a {
 width: 26%;
 left: 37.5%;
 top: 20%;
--webkit-animation: disappear 3s forwards;
+-webkit-animation: disappear 5s forwards;
 animation: disappear 5s forwards;
 cursor: default;
 pointer-events: none;
@@ -313,5 +313,29 @@ padding: 10px;
 @-webkit-keyframes disappear {
     0%   {opacity: 1;}
     90%  {opacity: 1;}
+    100% {opacity: 0; display: hidden;}
+}
+
+.cookieMsg {
+	position: fixed;
+	left: 0px;
+	bottom: 0px;
+	z-index: 99;
+	width: 30%;
+	background-color: var(--color-gre);
+	margin: 0px 0px 2vw 2vw;
+	padding: 1vw;
+	-webkit-animation: disappear 10s forwards;
+	animation: disappear 10s forwards;
+}
+
+@keyframes disappear {
+    0%   {opacity: 1;}
+    95%  {opacity: 1;}
+    100% {opacity: 0; display: hidden;}
+}
+@-webkit-keyframes disappear {
+    0%   {opacity: 1;}
+    95%  {opacity: 1;}
     100% {opacity: 0; display: hidden;}
 }

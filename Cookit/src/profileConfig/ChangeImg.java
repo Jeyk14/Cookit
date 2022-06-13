@@ -43,22 +43,43 @@ public class ChangeImg extends HttpServlet {
 
 		int isExito = 0;
 
-		Connect con;
+//		Connect con;
 		SimpleQuery query;
+		String table = "";
 		String target = request.getParameter("target");
 		String id = request.getParameter("id");
 		BeanUsuario myself = new BeanUsuario();
+		
+		switch(target) {
+		case "usuario":
+		case "user":
+		case "u":
+		case "usr":
+			table = "cookit.cliente";
+			break;
+		case "receta":
+		case "publicacion":
+		case "recipe":
+		case "rec":
+			table = "cookit.receta";
+			break;
+		default:
+			table = "";
+			break;
+		}
 
 		if (request.getSession().getAttribute("myself") != null) {
 			myself = (BeanUsuario) request.getSession().getAttribute("myself");
 		}
+		
+		System.out.println("Tabla "+table+" e ID "+id);
 
 		// ---------------------------------------
 
-		if (target != null && id != null && request.getPart("image") != null) {
+		if (id != null && request.getPart("image") != null) {
 			// target and ID are not null
 
-			if (checkTarget(target) && typeCkecker.isInt(id)) {
+			if (table.length() > 2 && typeCkecker.isInt(id)) {
 				// target exist + id is an number
 
 				if (id.equals(Integer.toString(myself.getId()))) {
@@ -82,26 +103,30 @@ public class ChangeImg extends HttpServlet {
 							if (tamanoFichero > tamanoMax) {
 								// The size of the IMG is under the max permitted size
 								request.setAttribute("tempMsg",
-										"El archivo es demasiado grande (tamaño máximo: " + (tamanoMax / 1000) + "kB");
+										"El archivo es demasiado grande (tama&ntilde;o m&aacute;ximo: " + (tamanoMax / 1000) + "kB");
 								request.setAttribute("success", false);
+								request.setAttribute("showMsg", true);
+								System.out.println("Too big sempai uwu");
 							} else {
 
 								// isExito = modeloImg.modificar("imagen", stream, bean.getId());
-								con = new Connect("a21_jortnu", "a21_jortnu", "a21_jortnu");
-								con.openConnection();
-								query = new SimpleQuery(con.getConexion());
-								isExito = query.updateOne("cookit." + target, "img", "inputStream", stream,
-										" id = " + id);
-								con.closeConnection();
+									query = new SimpleQuery("a21_jortnu", "a21_jortnu", "a21_jortnu");
+									isExito = query.updateOne(table, "img", "inputStream", stream,
+											" id = " + id);
+									query.closeConnection();
 
 								if (isExito > 0) {
 									// image uploaded
-									request.setAttribute("tempMsg", "Se ha subido la imagen con éxito");
-									request.setAttribute("success", true);
+									request.setAttribute("tempMsg", "Se ha subido la imagen con %eacute;xito");
+									request.setAttribute("success", "true");
+									request.setAttribute("showMsg", true);
+									System.out.println("Imagen de usuario actualizada");
 								} else {
 									// image not uploaded
-									request.setAttribute("tempMsg", "Ha ocurrido un error en la BD");
-									request.setAttribute("success", false);
+									request.setAttribute("tempMsg", "Ha ocurrido un error en los servidores de Cookit!<br>Lamentamos mucho el inconveniente, vuelva a intentarlo m&aacute;s tarde");
+									request.setAttribute("success", "false");
+									request.setAttribute("showMsg", true);
+									System.out.println("Error en la BD al subir la imagen de "+id);
 								}
 
 							}
@@ -109,39 +134,22 @@ public class ChangeImg extends HttpServlet {
 						} else {
 
 							// The file is not an image
-							request.getSession().setAttribute("mensajeError", "El archivo NO es una imagen");
+							request.setAttribute("tempMsg", "El fichero no es una imagen");
+							request.setAttribute("success", "false");
+							request.setAttribute("showMsg", true);
+							System.out.println("No se ha subido una imagen");
 
 						}
 
-					} // (tipoForm.indexOf("multipart/form-data") >= 0)
+					} else {System.out.println("Sin multipart");} // (tipoForm.indexOf("multipart/form-data") >= 0)
 
-				} // id.equals(Integer.toString(myself.getId()))
+				} else {System.out.println("No ID");} // id.equals(Integer.toString(myself.getId()))
 
-			} // checkTarget(target) && typeCkecker.isInt(id)
+			} else {System.out.println("Tipo erróneo?");} // checkTarget(target) && typeCkecker.isInt(id)
 
-		} // target != null && id != null
+		} else {System.out.println("Ni entra bro...");} // target != null && id != null
 
 		doGet(request, response);
-	}
-
-	private boolean checkTarget(String target) {
-		boolean valid = false;
-
-		if (target != null) {
-			switch (target) {
-			case "usuario":
-			case "receta":
-				valid = true;
-				break;
-			default:
-				valid = false;
-				break;
-			}
-		} else {
-			valid = false;
-		}
-
-		return valid;
 	}
 
 }

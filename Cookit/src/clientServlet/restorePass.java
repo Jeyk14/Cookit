@@ -47,7 +47,6 @@ public class restorePass extends HttpServlet {
 		request.getRequestDispatcher(header).forward(request, response);
 	}
 	
-	// TODO: Make the user confirm the email and then show the password change in the same jsp 
 	// Show/hide the pass change fields with a sess attribute
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
