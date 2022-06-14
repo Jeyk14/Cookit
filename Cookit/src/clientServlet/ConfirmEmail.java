@@ -15,7 +15,7 @@ import dbConnection.SimpleQuery;
 import toolkit.YahooEmail;
 
 @WebServlet("/confirmEmail")
-public class confirmEmail extends HttpServlet {
+public class ConfirmEmail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	// A user with an unconfirmed email logged -> ask to confirm email until they do confirm it

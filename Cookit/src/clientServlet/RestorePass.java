@@ -13,7 +13,7 @@ import toolkit.RandNum;
 import toolkit.YahooEmail;
 
 @WebServlet("/restorePass")
-public class restorePass extends HttpServlet {
+public class RestorePass extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

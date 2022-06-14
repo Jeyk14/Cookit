@@ -9,7 +9,7 @@ public class BeanComentario {
 	private int id_usuario;
 	private Calendar fecha;
 	private String texto;
-	private boolean editable;
+	private String estado;
 	private boolean editado;
 	
 	public BeanComentario() {
@@ -18,17 +18,17 @@ public class BeanComentario {
 		id_usuario = 0;
 		fecha = null;
 		texto = "";
-		editable = false;
+		estado = "";
 		editado = false;	
 	}
 	
-	public BeanComentario(int id, int id_publicacion, int id_usuario, Calendar fecha, String texto, boolean editable, boolean editado) {
+	public BeanComentario(int id, int id_publicacion, int id_usuario, Calendar fecha, String texto, String estado, boolean editado) {
 		this.id = id;
 		this.id_publicacion = id_publicacion;
 		this.id_usuario = id_usuario;
 		this.fecha = fecha;
 		this.texto = texto;
-		this.editable = editable;
+		this.estado = estado;
 		this.editado = editado;
 		
 	}
@@ -73,12 +73,12 @@ public class BeanComentario {
 		this.texto = texto;
 	}
 
-	public boolean isEditable() {
-		return editable;
+	public String getEstado() {
+		return estado;
 	}
 
-	public void setEditable(boolean editable) {
-		this.editable = editable;
+	public void setEstado(String editable) {
+		this.estado = editable;
 	}
 
 	public boolean isEditado() {

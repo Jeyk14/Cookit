@@ -1,3 +1,4 @@
+<%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="data.BeanUsuario"%>
@@ -66,17 +67,13 @@
 
     <jsp:include page="prebuilt/header.jsp" />
     <jsp:include page="prebuilt/goup.jsp" />
+    <jsp:include page="prebuilt/tempMsg.jsp" />
 
     <div id="content" style="margin-top: 6em;">
 
         <div class="recipe">
 
             <div class="recipe-content">
-                
-                <%-- 
-                <div class="recipe-subtitle">
-                	<h5><%= recipe.getSubtitulo() %></h5>
-                </div>--%>
 
                 <div class="recipe-info">
 
@@ -124,14 +121,14 @@
                             <p>
                                 Palabras clave (tags)
                             </p>
-                            <textarea><%= recipe.getTags() %></textarea>
+                            <textarea readonly><%= recipe.getTags() %></textarea>
                         </div>
 
                         <div class="ingredients">
                             <p>
                                 Ingredientes
                             </p>
-                            <textarea><%= recipe.getIngredientes() %></textarea>
+                            <textarea readonly><%= recipe.getIngredientes() %></textarea>
                         </div>
 
                     </div>
@@ -142,7 +139,7 @@
                     <div>
                         <p>Procedimiento de preparación en X minutos</p>
                     </div>
-                    <textarea><%= recipe.getProcedimiento() %></textarea>
+                    <textarea readonly><%= recipe.getProcedimiento() %></textarea>
                 </div>
 
             </div>
@@ -170,14 +167,14 @@
         <div class="separator"></div>
 
         <div class="add-comment">
-            <form>
+            <form action="uploadComment?post=<%= recipe.getIdPublicacion() %>" method="post">
                 <div class="new-comment">
                     <div class="write-comment">
-                        <h4>Añadir comentario:</h4>
+                        <h4>Añadir comentario <span id="comm-length">0/250</span></h4>
                     </div>
 
                     <div class="comment-body">
-                        <textarea name="comment"></textarea>
+                        <textarea id="comment" name="comment" required></textarea>
                     </div>
                     <div class="comment-options">
                         <input type="submit" value="Guardar comentario">
@@ -188,7 +185,7 @@
 
         <div class="comment-rows" id="comments">
         
-        <% while(comments[contCom] != null && contCom > 20){ %>
+        <% while(comments[contCom] != null && contCom < 20){ %>
         
         	<div class="comment">
                 <div class="comment-header">
@@ -196,26 +193,29 @@
                         <p><%= users[contCom].getNombre() %></p>
                     </div>
                     <div class="comment-date">
-                        <p><%= comments[contCom].getFecha() %></p>
+                        <p><%= comments[contCom].getFecha().get(Calendar.DATE)+"/"+comments[contCom].getFecha().get(Calendar.MONTH)+"/"+comments[contCom].getFecha().get(Calendar.YEAR) %></p>
                     </div>
                 </div>
 
                 <div class="comment-body">
-                    <textarea><%= comments[contCom].getTexto() %></textarea>
+                    <textarea readonly><%= comments[contCom].getTexto() %></textarea>
                 </div>
-                <div class="comment-edit">
-                    <div class="delete?id_com=<%= comments[contCom].getId() %>&id_user=<%= users[contCom].getId() %>"><a href=""><button>Borrar</button></a></div>
-                    <div class="edit" id="edit_<%= contCom %>"><button>Editar</button></div>
-                </div>
+                <% if(users[contCom].getId() == myself.getId()){ %>
+	                <div class="comment-edit">
+	                    <div class="delete"><a href="delete?id_com=<%= comments[contCom].getId() %>&id_user=<%= users[contCom].getId() %>"><button>Borrar</button></a></div>
+	                </div>
+                <% } %>
             </div>
         
-        <% } %>
+        <% contCom ++; } %>
 
         </div>
 
     </div>
 
    <jsp:include page="prebuilt/footer.jsp"/>
+   
+   <script src="js/commLength.js"></script>
 
 </body>
 

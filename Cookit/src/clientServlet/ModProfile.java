@@ -13,7 +13,7 @@ import dbConnection.SimpleQuery;
 import toolkit.PrepareSession;
 
 @WebServlet("/modProfile")
-public class modProfile extends HttpServlet {
+public class ModProfile extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

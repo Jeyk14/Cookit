@@ -22,7 +22,7 @@ import toolkit.typeCkecker;
 
 @MultipartConfig
 @WebServlet("/uploadRecipe")
-public class uploadRecipe extends HttpServlet {
+public class UploadRecipe extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

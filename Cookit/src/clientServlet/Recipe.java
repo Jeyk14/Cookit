@@ -94,7 +94,7 @@ public class Recipe extends HttpServlet {
 
 				results = simpleQuery.select(
 						"cookit.comentario AS com INNER JOIN cookit.usuario AS usu ON com.id_usuario = usu.id",
-						new String[] { "com.id", "usu.nombre", "usu.id", "com.fecha", "com.editable", "com.texto",
+						new String[] { "com.id", "usu.nombre", "usu.id", "com.fecha", "com.estado", "com.texto",
 								"com.editado" },
 						"com.id_publicacion = " + id, "", 20, 0);
 
@@ -111,7 +111,7 @@ public class Recipe extends HttpServlet {
 					auxCal = new GregorianCalendar();
 					auxCal.setTime((java.sql.Date) results[i][3]);
 					comments[i].setFecha(auxCal);
-					comments[i].setEditable((boolean) results[i][4]);
+					comments[i].setEstado((String) results[i][4]);
 					comments[i].setTexto((String) results[i][5]);
 					comments[i].setEditado((boolean) results[i][6]);
 

@@ -25,7 +25,7 @@ import toolkit.typeCkecker;
  * Servlet implementation class profile
  */
 @WebServlet("/profile")
-public class profile extends HttpServlet {
+public class Profile extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
