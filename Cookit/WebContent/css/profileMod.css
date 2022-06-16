@@ -1,5 +1,17 @@
+.profile-mod {
+	/*width: 100%;*/
+	margin-top: 25px;
+}
+
+/*
 .profile-info {
     width: 340px;
+}
+*/
+
+.profile-config {
+	background-color: white;
+	padding: 4vw;
 }
 
 .profile-info input[type="submit"]{

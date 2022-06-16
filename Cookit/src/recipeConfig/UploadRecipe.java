@@ -46,8 +46,7 @@ public class UploadRecipe extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// if save -> add the recipe to the database with the hidden status
-		// TODO: if upload now -> check all data and insert into database -> profile
-
+		
 		SimpleQuery simpleQuery;
 
 		BeanReceta savedRecipe = null;
@@ -118,14 +117,14 @@ public class UploadRecipe extends HttpServlet {
 
 					if (fileSize > maxSize) {
 						// The size of the IMG is under the max permitted size
-						tempMsg = "El archivo es demasiado grande (tama&ntilde;o m&aacute;ximo: " + (maxSize / 1000) + "kB)";
+						tempMsg = "<br>El archivo es demasiado grande (tama&ntilde;o m&aacute;ximo: " + (maxSize / 1000) + "kB)";
 						success = false;
 						image = null;
 					}
 
 				} else {
 					// The file is not an image
-					tempMsg = "El fichero no es una imagen";
+					tempMsg = "<br>El fichero no es una imagen";
 					success = false;
 					image = null;
 				}
@@ -138,40 +137,40 @@ public class UploadRecipe extends HttpServlet {
 
 			if (title.length() > 30 || title.length() < 2) {
 				success = false;
-				tempMsg = "El t&iacute;tulo debe tener entre 2 y 30 caracteres";
+				tempMsg = "<br>- El t&iacute;tulo debe tener entre 2 y 30 caracteres";
 			}
 
 			if (subtitle.length() > 80) {
 				success = false;
-				tempMsg = "El subt&iacute;tulo no debe tener m&aacute;s de 30 caracteres";
+				tempMsg = "<br>- El subt&iacute;tulo no debe tener m&aacute;s de 30 caracteres";
 			}
 
 			if (tags.length() > 200) {
 				success = false;
-				tempMsg = "Las palabras clave superan el l&iacute;mite de caracteres";
+				tempMsg = "<br>Las palabras clave superan el l&iacute;mite de caracteres";
 			}
 
 			if (!typeCkecker.isInt(time)) {
 				success = false;
-				tempMsg = "El tiempo de preparaci&iacute;n debe ser un n&uacute;mero";
+				tempMsg = "<br>El tiempo de preparaci&iacute;n debe ser un n&uacute;mero";
 			}
 
-			if (ingredients.length() > 400 || ingredients.length() < 0) {
+			if (ingredients.length() > 750 || ingredients.length() < 0) {
 				success = false;
-				tempMsg = "Los ingredientes superan el l&iacute;mite de 400 caracteres";
+				tempMsg = "<br>Los ingredientes superan el l&iacute;mite de 750 caracteres";
 			}
 
 			if (procedure.length() > 500) {
 				success = false;
-				tempMsg = "El procedimiento supera el l&iacute;mite de 400 caracteres";
+				tempMsg = "<br>El procedimiento supera el l&iacute;mite de 400 caracteres";
 			}
 
 			if (!typeCkecker.isInt(category)) {
 				success = false;
-				tempMsg = "Hay un problema con la categor&iacute;a elegida, vuelva a intentarlo";
+				tempMsg = "<br>Hay un problema con la categor&iacute;a elegida, vuelva a intentarlo";
 			} else if (Integer.valueOf(category) < 1 || Integer.valueOf(category) > 6) {
 				success = false;
-				tempMsg = "La categor&iacute;a no es correcta";
+				tempMsg = "<br>La categor&iacute;a no es correcta";
 			}
 
 			// if all data correct -> decide either to upload or to update
@@ -194,28 +193,45 @@ public class UploadRecipe extends HttpServlet {
 					
 					if (inserted > 0) {
 						// the post was inserted -> insert the recipe
+						
+						inserted = 0;
 
 						lastId = (int) simpleQuery.selectOne("cookit.receta", "id", "", "id desc", 0, 0);
 						lastId++;
 						
 						if(fileSize > 0) {
-							simpleQuery.insert("cookit.receta",
+							inserted = simpleQuery.insert("cookit.receta",
 									new String[] { "id", "id_publicacion", "id_categoria", "img", "procedimiento", "tiempo", "ingredientes", "tags" },
 									new String[] { "int", "int", "int", "stream", "string", "int", "string", "string" },
 									new Object[] { lastIdAux, lastIdAux, categoryInt, image, procedure, timeInt, ingredients,
 											tags });
 						} else {
-							simpleQuery.insert("cookit.receta",
+							inserted = simpleQuery.insert("cookit.receta",
 									new String[] { "id", "id_publicacion", "id_categoria", "procedimiento", "tiempo", "ingredientes", "tags" },
 									new String[] { "int", "int", "int", "string", "int", "string", "string" },
 									new Object[] { lastIdAux, lastIdAux, categoryInt, procedure, timeInt, ingredients,
 											tags });
 							}
 
-						
-						request.getSession().removeAttribute("savedRecipe");
-						
-						request.getSession().setAttribute("allDone", 1);
+						if(inserted > 0) {
+							// the recipe was also inserted
+							
+							request.setAttribute("tempMsg", "Se ha subido tu publicaci&oacute;n");
+							request.setAttribute("success", "true");
+							request.setAttribute("showMsg", true);
+							
+							request.getSession().removeAttribute("savedRecipe");
+							
+							request.getSession().setAttribute("allDone", 1);
+							
+						} else {
+							// the recipe was not inserted
+							
+							request.setAttribute("tempMsg", "Hubo un problema procesando los datos de su receta, vuelva a intentarlo m&aacute;s tarde");
+							request.setAttribute("success", "false");
+							request.setAttribute("showMsg", true);
+							
+						}
 
 					}
 
@@ -251,6 +267,10 @@ public class UploadRecipe extends HttpServlet {
 
 					simpleQuery.closeConnection();
 					
+					request.setAttribute("tempMsg", "Se ha subido tu publicaci&oacute;n");
+					request.setAttribute("success", "true");
+					request.setAttribute("showMsg", true);
+					
 					request.getSession().removeAttribute("savedRecipe");
 					request.getSession().setAttribute("allDone", 1);
 
@@ -259,8 +279,9 @@ public class UploadRecipe extends HttpServlet {
 			} else {
 				// Something went wrong -> do nothing + show message to the user
 
-				request.setAttribute("tempMsg", tempMsg);
-				request.setAttribute("success", success);
+				request.setAttribute("tempMsg", "No hemos podido añadir tu receta, se encontraron los siguientes problemas:"+tempMsg);
+				request.setAttribute("success", "false");
+				request.setAttribute("showMsg", true);
 
 			}
 
@@ -317,6 +338,10 @@ public class UploadRecipe extends HttpServlet {
 				savedRecipe.setImg(Convert.toByteArray(image, fileSize));
 				savedRecipe.setIdPublicacion((int) resultado[0][0]);
 				
+				request.setAttribute("tempMsg", "Publicaci&oacute;n guardada con &eacute;xito");
+				request.setAttribute("success", "true");
+				request.setAttribute("showMsg", true);
+				
 				request.getSession().setAttribute("savedRecipe", savedRecipe);
 
 			} else {
@@ -351,6 +376,10 @@ public class UploadRecipe extends HttpServlet {
 										"ingredientes", "tags" },
 								new String[] { "int", "int", "int", "string", "int", "string", "string" },
 								new Object[] { lastId, lastId, categoryInt, procedure, timeInt, ingredients, tags });
+						
+						request.setAttribute("tempMsg", "Publicaci&oacute;n guardada con &eacute;xito");
+						request.setAttribute("success", "true");
+						request.setAttribute("showMsg", true);
 					}
 
 					simpleQuery.closeConnection();

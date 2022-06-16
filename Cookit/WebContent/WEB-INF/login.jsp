@@ -13,17 +13,19 @@
     <jsp:include page="prebuilt/boostrap.jsp" />
     
 </head>
-<body>
+<body class="login-body">
 
 	<jsp:include page="prebuilt/tempMsg.jsp" />
 	
 	<div class="side-img"></div>
 
-	<div class="login">
+	<div class="login d-flex justify-content-center align-items-center">
 	
 		<div class="login-content">
+		
+		<div class="exit-log"><a href="index" title="Salir de aqu&iacute;"><i class="bi bi-x-circle-fill"></i></a></div>
 	
-	           <h2 class="form-title">Iniciar sesión en cookit</h2>
+	           <h2 class="form-title">Iniciar sesión en Cookit!</h2>
 	
 	           <form class="log-form" action="login" method="post" accept-charset="utf-8">
 	
@@ -37,13 +39,14 @@
 	                   <input type="password" id="pass" name="pass" value="jeykantonio" required>
 	               </div>
 	
-	               <div class="log-option">
-	                   <div class="remember-me">
+	               <div class="row">
+	                   <div class=" float-left row-6 text-left">
 	                       <input type="checkbox" name="rememberme" />
 	                       <label for="remember-me" id="remember-me">Recuerdame</label>
 	                   </div>
-	
-	                   <a class="forgot" href="restorePass"><p>He olvidado mi contraseña</p></a>
+						<div class="float-right row-6">
+	                   		<a class="link" href="restorePass"><p>He olvidado mi contraseña</p></a>
+	               		</div>
 	               </div>
 	               
 	               <input type="submit" class="button-login" value="INICIAR SESIÓN">
@@ -54,6 +57,13 @@
 	
 	       </div>
 
+    </div>
+    
+    <div style=" display:none;position: fixed;right:0px;bottom:0px;background-color:#ffffff99;padding:3em;">
+    	<p>jeykantonio@gmail.com - jeykantonio</p>
+    	<p>sofiasaragota@ejemplo.com - sofigota</p>
+    	<p>ajarana@ejemplo.com - ajarana</p>
+    	<p>sandraoliveira@ejemplo.com - sandraoli</p>
     </div>
 
 </body>

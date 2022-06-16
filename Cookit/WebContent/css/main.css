@@ -33,6 +33,10 @@ html {
 
 body {
 	background-color: white;
+	background-image: url("../img/Cookit_fondo.png");
+	background-size: 125px;
+	background-repeat: repeat;
+	background-attachment: fixed;
     padding-top: var(--header-height);
 }
 
@@ -90,6 +94,12 @@ a {
 }
 
 /**/
+
+.link, .link > * {
+    margin: 0px;
+    color: var(--color-yel) !important;
+    text-decoration: none !important;
+}
 
 #content {
     max-width: 1024px;

@@ -25,11 +25,11 @@
 
 <div id="index-search" class="search-form collapse row">
 	<form action="index" method="post" class="col-6">
-		<div class="mb-2" title="Busca por palabras el título, un tag o un ingrediente de una publicación">
-			<label for="title-search"> Buscar: </label> <input type="text" id="cookit-search" name="title" />
+		<div class="mb-2 row" title="Busca por palabras el título, un tag o un ingrediente de una publicación">
+			<label class="col-3" for="title-search"> Buscar: </label> <input class="col" type="text" id="cookit-search" name="title" />
 		</div>
 
-		<div class="mb-2">
+		<div class="mb-2 row">
 			<select name="order" id="order">
 				<option value="none">Sin ordenar</option>
 				<option value="dateasc" <% if(orderType.equals("dateasc")){out.print("selected");} %>>Recetas más recientes</option>

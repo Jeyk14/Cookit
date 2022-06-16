@@ -32,4 +32,25 @@ showMsg : boolean		If true, then show tempMsg and turn back to false*/
 
 mailCode : String		The code sent to the email of the user to confirm it
 tempUsr : BeanUsuario	Used to reset password
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Congelar una taza leche en la nevera. varias horas antes de empezar la receta. En una batidora, meter 3 fresas cortadas por la mitad, dos a tres cucharadas de miel según lo dulce que lo quieras y el zumo exprimido de media lima. Batir hasta que quede líquido. Meter la mezcla en el congelador por 10~15 minutos hasta que esté bien fría pero no congelada. Hecho esto, machaca la leche congelada hasta hacer trocitos, mete todo en la licuadora una vez más hasta que quede cremoso y sirve en un cono o tarrina
 	  

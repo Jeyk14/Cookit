@@ -1,10 +1,10 @@
 
 /* SPECIAL DISH */
 .special {
-    display: flex;
+    /*display: flex;*/
     background-color: var(--cream);
-    width: 75%;
-    height: 275px;
+    /*width: 50%;*/
+    /*height: 275px;*/
     position: relative;
     margin: auto;
     border: 5px solid var(--color-red);
@@ -13,7 +13,7 @@
 }
 
 .special-alert {
-    background-color: var(--color-yel);
+    background-color: var(--color-red);
     color: white;
     font-weight: bold;
     animation-name: bounce;
@@ -21,7 +21,8 @@
     animation-iteration-count: infinite;
     position: absolute;
     text-align: center;
-    width: 40%;
+    width: 50%;
+    min-width: max-content;
     left: 25%;
     top: -15px;
     box-shadow: 4px 4px var(--color-yel);
@@ -36,14 +37,14 @@
   }
 
 .special-alert > * {
-    background-color: var(--color-red) ;
+    /*background-color: var(--color-red) ;*/
     margin: 0;
     font-size: 2.5em;
 }
 
 .special-img {
-    float: left;
-    height: 100%;
+    /*float: left;*/
+    height: auto;
     width: auto;
 }
 
@@ -57,11 +58,12 @@
 
 .rating {
     display: flex;
-    position: absolute;
+    /*position: absolute;*/
     right: 10%;
     top: 10%;
     background-color: var(--color-red);
     border-radius: 50%;
+    width: max-content;
 }
 
 .rating img {
@@ -96,8 +98,8 @@
   }
 
 .special-title {
-    position: absolute;
-    width: 50%;
+   /* position: absolute;*/
+    /*width: 50%;*/
     right: 5%;
     top: 40%;
     text-align: center;

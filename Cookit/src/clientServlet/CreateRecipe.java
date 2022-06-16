@@ -17,6 +17,8 @@ public class CreateRecipe extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		// TODO: IMPORTANT The post is inserted before the recipe, it may cause troubles
 
 		String header = "WEB-INF/createRecipe.jsp";
 		Object[][] auxResult;
@@ -25,9 +27,7 @@ public class CreateRecipe extends HttpServlet {
 		BeanUsuario myself;
 		
 		SimpleQuery simpleQuery;
-		
-		//TODO: If there is an ID URL parameter -> modify recipe if it belongs to the logged user 
-		
+				
 		int lastId = 0; // The last recipe ID to autoincrement
 		int idPost = 0; // The ID of a post withoout recipe
 
@@ -78,11 +78,14 @@ public class CreateRecipe extends HttpServlet {
 					
 					if(idPost != 0) {
 						// A post exists without a recipe -> DISGUSTING -> create a recipe for said post
+						
 						lastId = (int) simpleQuery.selectOne("cookit.receta", "id", "", "id desc", 1, 0);
+						
 						simpleQuery.insert("cookit.receta",
 								new String[] {"id", "id_publicacion ", "id_categoria", "procedimiento", "tiempo", "ingredientes", "tags"}, 
 								new String[] {"int", "int", "int", "string", "int", "string", "string"},
 								new Object[] {lastId +1, idPost, 1, "", 10, "", ""});
+						
 					} // else -> no post, no recipe -> proceed without loading anything
 					
 				}

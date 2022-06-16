@@ -133,10 +133,10 @@ public class UploadComment extends HttpServlet {
 
 						inserted = sq.insert("cookit.comentario",
 								new String[] { "id", "id_publicacion", "id_usuario", "fecha", "texto", "estado",
-										"editado" },
-								new String[] { "int", "int", "int", "calendar", "string", "string", "boolean" },
-								new Object[] { 1, Integer.parseInt(id_post), myself.getId(), hoy, comment,
-										"publicado", false });
+										"editado", "hora", "minuto" },
+								new String[] { "int", "int", "int", "calendar", "string", "string", "boolean", "int", "int" },
+								new Object[] { oldId+1, Integer.parseInt(id_post), myself.getId(), hoy, comment,
+										"publicado", false, hoy.get(Calendar.HOUR_OF_DAY), hoy.get(Calendar.MINUTE) });
 
 						if (inserted < 1) {
 

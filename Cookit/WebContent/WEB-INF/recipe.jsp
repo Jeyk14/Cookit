@@ -166,22 +166,24 @@
 
         <div class="separator"></div>
 
-        <div class="add-comment">
-            <form action="uploadComment?post=<%= recipe.getIdPublicacion() %>" method="post">
-                <div class="new-comment">
-                    <div class="write-comment">
-                        <h4>Añadir comentario <span id="comm-length">0/250</span></h4>
-                    </div>
-
-                    <div class="comment-body">
-                        <textarea id="comment" name="comment" required></textarea>
-                    </div>
-                    <div class="comment-options">
-                        <input type="submit" value="Guardar comentario">
-                    </div>
-                </div>
-            </form>
-        </div>
+		<% if(myself != null){ %>
+	        <div class="add-comment">
+	            <form action="uploadComment?post=<%= recipe.getIdPublicacion() %>" method="post">
+	                <div class="new-comment">
+	                    <div class="write-comment">
+	                        <h4>Añadir comentario <span id="length-display">0</span>/250</h4>
+	                    </div>
+	
+	                    <div class="comment-body">
+	                        <textarea id="length-target" name="comment" required></textarea>
+	                    </div>
+	                    <div class="comment-options">
+	                        <input type="submit" value="Publicar comentario">
+	                    </div>
+	                </div>
+	            </form>
+	        </div>
+        <% } %>
 
         <div class="comment-rows" id="comments">
         
@@ -193,18 +195,18 @@
                         <p><%= users[contCom].getNombre() %></p>
                     </div>
                     <div class="comment-date">
-                        <p><%= comments[contCom].getFecha().get(Calendar.DATE)+"/"+comments[contCom].getFecha().get(Calendar.MONTH)+"/"+comments[contCom].getFecha().get(Calendar.YEAR) %></p>
+                        <p><%= comments[contCom].getFecha().get(Calendar.DATE)+"/"+comments[contCom].getFecha().get(Calendar.MONTH)+"/"+comments[contCom].getFecha().get(Calendar.YEAR) + " a las " + comments[contCom].getHora()+":"+comments[contCom].getMinuto() %></p>
                     </div>
                 </div>
 
                 <div class="comment-body">
                     <textarea readonly><%= comments[contCom].getTexto() %></textarea>
                 </div>
-                <% if(users[contCom].getId() == myself.getId()){ %>
+                <% if(myself != null){ if(users[contCom].getId() == myself.getId()){ %>
 	                <div class="comment-edit">
-	                    <div class="delete"><a href="delete?id_com=<%= comments[contCom].getId() %>&id_user=<%= users[contCom].getId() %>"><button>Borrar</button></a></div>
+	                    <div class="delete"><a href="deleteComment?id-delete=<%= comments[contCom].getId() %>&post=<%= recipe.getIdPublicacion() %>"><button>Borrar</button></a></div>
 	                </div>
-                <% } %>
+                <% } } %>
             </div>
         
         <% contCom ++; } %>
@@ -215,7 +217,7 @@
 
    <jsp:include page="prebuilt/footer.jsp"/>
    
-   <script src="js/commLength.js"></script>
+   <script src="js/length.js"></script>
 
 </body>
 

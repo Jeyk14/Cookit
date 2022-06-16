@@ -95,8 +95,8 @@ public class Recipe extends HttpServlet {
 				results = simpleQuery.select(
 						"cookit.comentario AS com INNER JOIN cookit.usuario AS usu ON com.id_usuario = usu.id",
 						new String[] { "com.id", "usu.nombre", "usu.id", "com.fecha", "com.estado", "com.texto",
-								"com.editado" },
-						"com.id_publicacion = " + id, "", 20, 0);
+								"com.editado", "com.hora", "com.minuto" },
+						"com.id_publicacion = " + id, "com.fecha desc, com.hora desc, com.minuto desc", 20, 0);
 
 				System.out.println(simpleQuery.getLastQuery());
 
@@ -114,6 +114,8 @@ public class Recipe extends HttpServlet {
 					comments[i].setEstado((String) results[i][4]);
 					comments[i].setTexto((String) results[i][5]);
 					comments[i].setEditado((boolean) results[i][6]);
+					comments[i].setHora((int) results[i][7]);
+					comments[i].setMinuto((int) results[i][8]);
 
 				}
 

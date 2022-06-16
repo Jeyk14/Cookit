@@ -76,7 +76,7 @@ public class UploadImg extends HttpServlet {
 							// The uploaded file is an image
 
 							if (tamanoFichero > tamanoMax) {
-								// The size of the IMG is under the max permitted size
+								// The size of the IMG is not under the max permitted size
 								request.setAttribute("tempMsg",
 										"El archivo es demasiado grande (tamaño máximo: " + (tamanoMax / 1000) + "kB");
 								request.setAttribute("success", false);

@@ -1,15 +1,17 @@
 .profile {
 	width: 100%;
 	margin-top: 25px;
+	padding: 8vh 0px 8vh 0px;
+	background-color: white;
 }
-
+/*
 .profile-content {
 	width: 100%;
 	height: auto;
 	display: flex;
 	justify-content: center;
 	font-size: 100%;
-}
+}*/
 
 .profile-pic {
 	text-align: center;

@@ -56,10 +56,6 @@ public class Profile extends HttpServlet {
 
 		BeanReceta[] recipeList = new BeanReceta[9]; // this user's recipes
 		BeanCategoria[] catList = new BeanCategoria[9];
-//		String queryRecipe = "SELECT rec.id, pub.fecha, cat.nombre, pub.titulo, rec.tiempo, rec.tags, pub.id, pub.estrellas, pub.estado "
-//				+ "FROM cookit.publicacion AS pub INNER JOIN cookit.receta as rec ON pub.id = rec.id_publicacion "
-//				+ "INNER JOIN cookit.usuario AS usu ON pub.id_usuario = usu.id "
-//				+ "INNER JOIN cookit.categoria AS cat ON rec.id_categoria = cat.id WHERE usu.id = ";
 
 		Object[][] result = null;
 

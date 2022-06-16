@@ -26,7 +26,7 @@ public class ChangePass extends HttpServlet {
 		// if something went wrong with the pass -> back to mod
 		// else -> back to profile
 		if(request.getAttribute("success") != null) {
-			if((boolean) request.getAttribute("success") == false) {
+			if((boolean) request.getAttribute("success").equals("false")) {
 				header = "modProfile";
 				request.getSession().setAttribute("curPage", "profileMod");
 			}
@@ -58,8 +58,9 @@ public class ChangePass extends HttpServlet {
 		if (oldPass != null && newPass != null && repepass != null) {
 			if (oldPass.isEmpty() || newPass.isEmpty() || repepass.isEmpty()) {
 				// A neccessary field is empty -> do nothing
-				request.setAttribute("tempMsg", "Uno de los campos de contraseña está vacío");
-				request.setAttribute("success", false);
+				request.setAttribute("tempMsg", "Uno de los campos de contrase&ntilde;a est&aacute; vac&iacute;o");
+				request.setAttribute("success", "false");
+				request.setAttribute("showMsg", true);
 			} else {
 
 				oldStored = (String) simpleQuery.selectOne("cookit.usuario", "pass", "id = " + myself.getId(), "", 0, 0);
@@ -79,26 +80,30 @@ public class ChangePass extends HttpServlet {
 
 						System.out.println("newsalt " + newSalt);
 
-						request.setAttribute("tempMsg", "contraseña actualizada con éxito");
-						request.setAttribute("success", true);
+						request.setAttribute("tempMsg", "Contrase&ntilde;a actualizada con &eacute;xito");
+						request.setAttribute("success", "true");
+						request.setAttribute("showMsg", true);
 
 					} else {
 						// repeated password != new password -> do nothing
-						request.setAttribute("tempMsg", "Las contraseñas no coinciden");
-						request.setAttribute("success", false);
+						request.setAttribute("tempMsg", "Las contrase&ntilde;as no coinciden");
+						request.setAttribute("success", "false");
+						request.setAttribute("showMsg", true);
 					}
 
 				} else {
 					// actual pass != pass given -> do nothing
-					request.setAttribute("tempMsg", "La contraseña proporcionada no es corrects");
-					request.setAttribute("success", false);
+					request.setAttribute("tempMsg", "La contrase&ntilde;a proporcionada no es correcta");
+					request.setAttribute("success", "false");
+					request.setAttribute("showMsg", true);
 				}
 
 			}
 		} else {
 			// The field are null -> do nothing
 			request.setAttribute("tempMsg", "Ha ocurrido un problema, vuelva a intentarlo");
-			request.setAttribute("success", false);
+			request.setAttribute("success", "false");
+			request.setAttribute("showMsg", true);
 		}
 
 		if (!newPass.equals(repepass))

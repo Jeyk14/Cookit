@@ -11,6 +11,8 @@ public class BeanComentario {
 	private String texto;
 	private String estado;
 	private boolean editado;
+	private int minuto;
+	private int hora;
 	
 	public BeanComentario() {
 		id = 0;
@@ -20,9 +22,11 @@ public class BeanComentario {
 		texto = "";
 		estado = "";
 		editado = false;	
+		hora = 0;
+		minuto = 0;
 	}
 	
-	public BeanComentario(int id, int id_publicacion, int id_usuario, Calendar fecha, String texto, String estado, boolean editado) {
+	public BeanComentario(int id, int id_publicacion, int id_usuario, Calendar fecha, String texto, String estado, boolean editado, int hora, int minuto) {
 		this.id = id;
 		this.id_publicacion = id_publicacion;
 		this.id_usuario = id_usuario;
@@ -30,6 +34,8 @@ public class BeanComentario {
 		this.texto = texto;
 		this.estado = estado;
 		this.editado = editado;
+		this.hora = hora;
+		this.minuto = minuto;
 		
 	}
 
@@ -88,6 +94,21 @@ public class BeanComentario {
 	public void setEditado(boolean editado) {
 		this.editado = editado;
 	}
-	
+
+	public int getMinuto() {
+		return minuto;
+	}
+
+	public void setMinuto(int minuto) {
+		this.minuto = minuto;
+	}
+
+	public int getHora() {
+		return hora;
+	}
+
+	public void setHora(int hora) {
+		this.hora = hora;
+	}
 
 }

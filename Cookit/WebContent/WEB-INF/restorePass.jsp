@@ -14,13 +14,16 @@
     <jsp:include page="prebuilt/boostrap.jsp" />
     
 </head>
-<body>
+<body  class="login-body">
 
 	<jsp:include page="prebuilt/tempMsg.jsp" />
 
-	<div class="login">
+	<div class="login d-flex justify-content-center align-items-center">
 	
 		<div class="login-content">
+		
+				<div class="exit-log"><a href="index" title="Salir de aqu&iacute;"><i class="bi bi-x-circle-fill"></i></a></div>
+		
 
             <h2 class="form-title recovery-title">Recuperar contraseña</h2>
             <h4 class="form-subtitle">Envía un codigo de verificación a tu correo electrónico para saber que eres tu y sólo tu</h4>
@@ -40,11 +43,11 @@
 		                   <label for="recovery-code">Código de recuperacion</label>
 		                   <input type="text" id="code" name="recovery-code" >
 		                  
-		                   <input type="submit" class="button-login" name="submit" value="RESTAURAR MI CONTRASEÑA">
+		                   <input type="submit" class="button-login d-block mx-auto" name="submit" value="RESTAURAR MI CONTRASEÑA">
 		               </form>
 	            </div>
 	        </div>
-
+	       
 		</div>
 	
 	</div>

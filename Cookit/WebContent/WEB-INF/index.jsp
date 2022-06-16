@@ -66,13 +66,13 @@
 
 					if (rowCont == 0) {
 			%>
-			<div class="cookit-row row">
+			<div class="cookit-row row my-0">
 				<%
 					}
 				%>
 
 
-				<div class="col-md-4" align="center">
+				<div class="col-lg-4 my-4" align="center">
 					<!-- start column -->
 
 					<div class="cookit-column">
@@ -169,24 +169,24 @@
 	</div>
 	<!-- end #content -->
 
-	<div class="pageSelect">
-		<div class="prePage">
-			<a <%if (pag > 1) {
-	out.print("href='index?pag=" + pag + "'");
-}%>><button>P&aacute;gina
-					anterior</button></a>
+	<div class="pageSelect d-flex flex-row justify-content-center">
+	
+		<div class="prePage p-4">
+			<a <%if (pag > 1) { out.print("href='index?pag=" + pag + "'"); }%>>
+				<button style="height: max-content;">P&aacute;gina anterior</button>
+			</a>
 		</div>
 
-		<div class="curPage">
-			<p>
-				Página
-				<%=pag%></p>
+		<div class="curPage p-4 text-center">
+			<p>Página <%=pag%></p>
 		</div>
 
-		<div class="nextPage">
-			<a href='index?pag=<%=pag + 1%>'><button>P&aacute;gina
-					siguiente</button></a>
+		<div class="nextPage p-4">
+			<a href='index?pag=<%=pag + 1%>'>
+				<button style="height: max-content;">P&aacute;gina siguiente</button>
+			</a>
 		</div>
+		
 	</div>
 
 	<jsp:include page="prebuilt/goup.jsp" />

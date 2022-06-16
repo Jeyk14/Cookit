@@ -38,6 +38,7 @@
 	<div id="content">
 
         <jsp:include page="prebuilt/header.jsp" />
+        <jsp:include page="prebuilt/tempMsg.jsp" />
 
         <div class="recipe">
             <form action="uploadRecipe" method="POST" enctype="multipart/form-data">
@@ -93,9 +94,9 @@
                 </div>
 
                 <div class="procedure"
-                    title="Para mantener las recetas f&aacute;ciles de seguir, resumelas en 1.000 caracteres">
-                    <label>*Procedimiento</label>
-                    <textarea rows="10" cols="75" name="procedure" required><% if(load){ out.print(savedRecipe.getProcedimiento());} %></textarea>
+                    title="Para mantener las recetas f&aacute;ciles de seguir, resumelas en 750 caracteres">
+                    <label>*Procedimiento (<span id="length-display">0</span>/750)</label>
+                    <textarea rows="10" cols="75" id="length-target" name="procedure" required><% if(load){ out.print(savedRecipe.getProcedimiento());} %></textarea>
                 </div>
 
                 <div class="form-options">
@@ -116,6 +117,7 @@
     <jsp:include page="prebuilt/footer.jsp" />
     
     <script src="js/previewImg.js"></script>
+    <script src="js/length.js"></script>
 
 </body>
 </html>

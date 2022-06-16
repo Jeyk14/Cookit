@@ -42,24 +42,32 @@
 
         <jsp:include page="prebuilt/header.jsp" />
 
-        <div class="profile">
+        <div class="profile-mod">
 
             <div class="profile-content">
 
+				<div class="row">
                 <form action="changeImg?target=user&id=<%= myself.getId() %>" method="POST" enctype="multipart/form-data">
                     <div class="profile-pic">
                         <img src="loadImg?target=user&id=<%= myself.getId() %>" id="preview">
                     </div>
-                    <div class="img-buttons">
-                        <button style="display:block;width:120px;"
+                    
+                    <div class="img-buttons d-flex flex-row justify-content-center">
+                        <button class="p-6" style="display:block;width:120px;"
                             onclick="event.preventDefault(); document.getElementById('getFile').click()">Elegir
                             imagen</button>
+                            <div class="p-2"></div>
                         <input type='file' id="getFile" name="image" style="display:none" required>
-                        <input type="submit" value="Guardar imagen">
+                        <input class="p-6" type="submit" value="Guardar imagen">
                     </div>
+                    
                 </form>
+                </div>
 
-                <div class="profile-info">
+                <div class="profile-info row">
+                	<div class="col"></div>
+                	
+                	<div class="profile-config col-8 col-md-6">
 
                     <form action="changeProfile" method="POST" accept-charset="UTF-8">
 
@@ -124,9 +132,12 @@
                     </form>
 
                 </div>
-
+                <div class="col"></div>
+				</div>
             </div>
 
+        </div>
+        
         </div>
         
         <script src="js/previewImg.js"></script>

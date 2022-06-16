@@ -235,26 +235,25 @@ if (request.getAttribute("pag") != null) {
 			}
 		%>
 
-		<div class="pageSelect">
-			<div class="prePage">
-				<a
-					<%if (pag > 1) {
-	out.print("href='profile?id=" + user.getId() + "&pag=" + pag + "'");
-}%>><button>P&aacute;gina
-						anterior</button></a>
-			</div>
-
-			<div class="curPage">
-				<p>
-					Página
-					<%=pag%></p>
-			</div>
-
-			<div class="nextPage">
-				<a href="profile?id=<%=user.getId()%>&pag=<%=pag + 1%>"><button>P&aacute;gina
-						siguiente</button></a>
-			</div>
+		<div class="pageSelect d-flex flex-row justify-content-center">
+	
+		<div class="prePage p-4">
+			<a <%if (pag > 1) { out.print("href='profile?pag=" + pag + "'"); }%>>
+				<button style="height: max-content;">P&aacute;gina anterior</button>
+			</a>
 		</div>
+
+		<div class="curPage p-4 text-center">
+			<p>Página <%=pag%></p>
+		</div>
+
+		<div class="nextPage p-4">
+			<a href='profile?pag=<%=pag + 1%>'>
+				<button style="height: max-content;">P&aacute;gina siguiente</button>
+			</a>
+		</div>
+		
+	</div>
 
 		<%
 			} else { //User not found

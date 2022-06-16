@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import data.BeanUsuario;
-import dbConnection.Connect;
 import dbConnection.SimpleQuery;
 import toolkit.typeCkecker;
 
@@ -48,14 +47,14 @@ public class ChangeImg extends HttpServlet {
 		String table = "";
 		String target = request.getParameter("target");
 		String id = request.getParameter("id");
-		BeanUsuario myself = new BeanUsuario();
+		BeanUsuario myself = (BeanUsuario) request.getSession().getAttribute("myself");
 		
 		switch(target) {
 		case "usuario":
 		case "user":
 		case "u":
 		case "usr":
-			table = "cookit.cliente";
+			table = "cookit.usuario";
 			break;
 		case "receta":
 		case "publicacion":
@@ -67,16 +66,12 @@ public class ChangeImg extends HttpServlet {
 			table = "";
 			break;
 		}
-
-		if (request.getSession().getAttribute("myself") != null) {
-			myself = (BeanUsuario) request.getSession().getAttribute("myself");
-		}
 		
 		System.out.println("Tabla "+table+" e ID "+id);
 
 		// ---------------------------------------
 
-		if (id != null && request.getPart("image") != null) {
+		if (myself!= null && id != null && request.getPart("image") != null) {
 			// target and ID are not null
 
 			if (table.length() > 2 && typeCkecker.isInt(id)) {
@@ -111,13 +106,13 @@ public class ChangeImg extends HttpServlet {
 
 								// isExito = modeloImg.modificar("imagen", stream, bean.getId());
 									query = new SimpleQuery("a21_jortnu", "a21_jortnu", "a21_jortnu");
-									isExito = query.updateOne(table, "img", "inputStream", stream,
+									isExito = query.updateOne(table, "img", "stream", stream,
 											" id = " + id);
 									query.closeConnection();
 
 								if (isExito > 0) {
 									// image uploaded
-									request.setAttribute("tempMsg", "Se ha subido la imagen con %eacute;xito");
+									request.setAttribute("tempMsg", "Se ha subido la imagen con &eacute;xito");
 									request.setAttribute("success", "true");
 									request.setAttribute("showMsg", true);
 									System.out.println("Imagen de usuario actualizada");

@@ -21,7 +21,7 @@
 
 	<div class="col-3">
 		<div class="logo">
-			<img src="img/placeholder.png">
+			<img src="img/logo.png">
 		</div>
 	</div>
 
